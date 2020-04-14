@@ -2,6 +2,7 @@
 using NLog;
 using Quartz;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,17 @@ namespace SolBo.Agent.Jobs
     public class BuyDeepSellHighJob : IJob
     {
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
+
+        private readonly IStorageService _storageService;
+        private readonly ICalculationService _calculationService;
+
+        public BuyDeepSellHighJob(
+            IStorageService storageService,
+            ICalculationService calculationService)
+        {
+            _storageService = storageService;
+            _calculationService = calculationService;
+        }
 
         public async Task Execute(IJobExecutionContext context)
         {
@@ -28,6 +40,10 @@ namespace SolBo.Agent.Jobs
                 if (priceAvg.Success)
                 {
                     Logger.Info($"Average price from last {priceAvg.Data.Minutes}min for {activeStrategy.Symbol} on {exchange.Name} is {priceAvg.Data.Price}");
+
+                    _storageService.SaveValue(priceAvg.Data.Price);
+
+                    Logger.Info($"Average price is {_calculationService.CalculateAverage(_storageService.GetValues())}");
                 }
                 else
                 {

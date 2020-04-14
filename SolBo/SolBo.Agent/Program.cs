@@ -2,6 +2,7 @@
 using Quartz;
 using Quartz.Impl;
 using SolBo.Agent.DI;
+using SolBo.Agent.Factories;
 using SolBo.Agent.Jobs;
 using SolBo.Shared.Domain.Configs;
 using System;
@@ -32,11 +33,15 @@ namespace SolBo.Agent
 
             try
             {
-                var servicesProvider = DependencyProvider.Get(configuration);
+                var servicesProvider = DependencyProvider.Get(app);
+
+                var jobFactory = new JobFactory(servicesProvider);
 
                 _schedulerFactory = new StdSchedulerFactory();
 
                 _scheduler = await _schedulerFactory.GetScheduler();
+
+                _scheduler.JobFactory = jobFactory;
 
                 await _scheduler.Start();
 
