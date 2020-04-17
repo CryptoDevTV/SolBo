@@ -39,11 +39,22 @@ namespace SolBo.Agent.Jobs
 
                 if (priceAvg.Success)
                 {
-                    Logger.Info($"Average price from last {priceAvg.Data.Minutes}min for {activeStrategy.Symbol} on {exchange.Name} is {priceAvg.Data.Price}");
+                    var price = decimal.Round(priceAvg.Data.Price, 2);
 
-                    _storageService.SaveValue(priceAvg.Data.Price);
+                    Logger.Info($"Average price from last {priceAvg.Data.Minutes}min for {activeStrategy.Symbol} on {exchange.Name} is {price}");
 
-                    Logger.Info($"Average price is {_calculationService.CalculateAverage(_storageService.GetValues())}");
+                    _storageService.SaveValue(price);
+
+                    var storedPriceAverage = _calculationService.CalculateAverage(_storageService.GetValues());
+
+                    Logger.Info($"Average price is {storedPriceAverage}");
+
+                    var canIbuy = _calculationService.IsGoodToBuy(activeStrategy.BidRatio, storedPriceAverage, price);
+
+                    if(canIbuy)
+                    {
+
+                    }
                 }
                 else
                 {
