@@ -7,5 +7,7 @@
         public string StoragePath { get; set; }
         public int BidRatio { get; set; }
         public int AskRatio { get; set; }
+        public int Average { get; set; }
+        public int Ticker { get; set; }
     }
 }

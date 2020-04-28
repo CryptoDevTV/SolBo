@@ -1,6 +1,7 @@
 ﻿using Binance.Net;
 using NLog;
 using Quartz;
+using SolBo.Shared.Contexts;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Services;
 using System.Collections.Generic;
@@ -15,14 +16,14 @@ namespace SolBo.Agent.Jobs
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
         private readonly IStorageService _storageService;
-        private readonly ICalculationService _calculationService;
+        private readonly IMarketService _marketService;
 
         public BuyDeepSellHighJob(
             IStorageService storageService,
-            ICalculationService calculationService)
+            IMarketService marketService)
         {
             _storageService = storageService;
-            _calculationService = calculationService;
+            _marketService = marketService;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -31,25 +32,27 @@ namespace SolBo.Agent.Jobs
 
             var strategy = context.JobDetail.JobDataMap["Strategy"] as Strategy;
 
-            var activeStrategy = strategy.Available.FirstOrDefault(s => s.Id == strategy.ActiveId);
+            var availableStrategy = strategy.Available.FirstOrDefault(s => s.Id == strategy.ActiveId);
 
             using (var client = new BinanceClient())
             {
-                var priceAvg = await client.GetCurrentAvgPriceAsync(activeStrategy.Symbol);
+                var tickerContext = new TickerContext(client);
 
-                if (priceAvg.Success)
+                var currentAvgPrice = await tickerContext.GetPriceValue(availableStrategy);
+
+                if (currentAvgPrice.Success)
                 {
-                    var price = decimal.Round(priceAvg.Data.Price, 2);
+                    var price = currentAvgPrice.Result;
 
-                    Logger.Info($"Average price from last {priceAvg.Data.Minutes}min for {activeStrategy.Symbol} on {exchange.Name} is {price}");
+                    Logger.Info($"Average price ({availableStrategy.Ticker}) for {availableStrategy.Symbol} on {exchange.Name} is {price}");
 
                     _storageService.SaveValue(price);
 
-                    var storedPriceAverage = _calculationService.CalculateAverage(_storageService.GetValues());
+                    var storedPriceAverage = AverageContext.Average(_storageService.GetValues(), availableStrategy.Average);
 
-                    Logger.Info($"Average price is {storedPriceAverage}");
+                    Logger.Info($"Average price for last {availableStrategy.Average} is {storedPriceAverage}");
 
-                    var canIbuy = _calculationService.IsGoodToBuy(activeStrategy.BidRatio, storedPriceAverage, price);
+                    var canIbuy = _marketService.IsGoodToBuy(availableStrategy.BidRatio, storedPriceAverage, price);
 
                     if(canIbuy)
                     {
@@ -58,7 +61,7 @@ namespace SolBo.Agent.Jobs
                 }
                 else
                 {
-                    Logger.Warn(priceAvg.Error.Message);
+                    Logger.Warn(currentAvgPrice.Message);
                 }
             }
         }

@@ -41,7 +41,7 @@ namespace SolBo.Agent.DI
                 s => new FileStorageService(selectedStrategy.StoragePath)
                 );
 
-            services.AddTransient<ICalculationService, AverageAllCalculationService>();
+            services.AddTransient<IMarketService, MarketService>();
             #endregion
 
             var serviceProvider = services.BuildServiceProvider();

@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SolBo.Shared.Services.Implementations
 {
-    public class AverageAllCalculationService : ICalculationService
+    public class MarketService : IMarketService
     {
-        public decimal CalculateAverage(IEnumerable<decimal> values)
-            => decimal.Round(values.Average(), 2);
-
         public bool IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice)
             => storedPriceAverage > currentPrice
             ? 100 - (currentPrice / storedPriceAverage * 100) >= percentPriceDrop
