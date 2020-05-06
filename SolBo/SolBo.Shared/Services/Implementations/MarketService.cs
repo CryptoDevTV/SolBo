@@ -1,26 +1,29 @@
-﻿using System;
+﻿using SolBo.Shared.Services.Responses;
 
 namespace SolBo.Shared.Services.Implementations
 {
     public class MarketService : IMarketService
     {
-        public bool IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice)
-            => storedPriceAverage > currentPrice
-            ? 100 - (currentPrice / storedPriceAverage * 100) >= percentPriceDrop
-            : false;
-
-        public bool IsGoodToSell(int percentPriceRise, decimal storedPriceAverage, decimal currentPrice)
+        public MarketResponse IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice)
         {
-            if (storedPriceAverage < currentPrice)
+            return new MarketResponse
             {
-                var div = currentPrice / storedPriceAverage;
+                IsReadyForMarket = storedPriceAverage > currentPrice
+                    ? 100 - (currentPrice / storedPriceAverage * 100) >= percentPriceDrop
+                    : false,
+                PercentChanged = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
+            };
+        }
 
-                var dec = decimal.Round(div - Math.Truncate(div), 2);
-
-                return dec * 100 > percentPriceRise;
-            }
-            else
-                return false;
+        public MarketResponse IsGoodToSell(int percentPriceRise, decimal storedPriceAverage, decimal currentPrice)
+        {
+            return new MarketResponse
+            {
+                IsReadyForMarket = currentPrice > storedPriceAverage
+                    ? 100 - ((storedPriceAverage * 100) / currentPrice) >= percentPriceRise
+                    : false,
+                PercentChanged = decimal.Round(100 - ((storedPriceAverage * 100) / currentPrice), 2)
+            };
         }
     }
 }

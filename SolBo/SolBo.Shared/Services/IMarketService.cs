@@ -1,8 +1,10 @@
-﻿namespace SolBo.Shared.Services
+﻿using SolBo.Shared.Services.Responses;
+
+namespace SolBo.Shared.Services
 {
     public interface IMarketService
     {
-        bool IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice);
-        bool IsGoodToSell(int percentPriceRise, decimal storedPriceAverage, decimal currentPrice);
+        MarketResponse IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice);
+        MarketResponse IsGoodToSell(int percentPriceRise, decimal storedPriceAverage, decimal currentPrice);
     }
 }

@@ -6,5 +6,6 @@ namespace SolBo.Shared.Services
     {
         void SaveValue(decimal val);
         ICollection<decimal> GetValues();
+        void SetPath(string path);
     }
 }

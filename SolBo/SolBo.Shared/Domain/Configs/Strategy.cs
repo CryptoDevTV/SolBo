@@ -6,6 +6,9 @@ namespace SolBo.Shared.Domain.Configs
     {
         public int ActiveId { get; set; }
         public int IntervalInMinutes { get; set; }
+        public int TestMode { get; set; }
         public IEnumerable<AvailableStrategy> Available { get; set; }
+
+        public bool IsNotInTestMode => TestMode == 0;
     }
 }

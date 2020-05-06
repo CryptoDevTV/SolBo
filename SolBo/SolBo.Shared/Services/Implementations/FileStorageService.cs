@@ -6,12 +6,7 @@ namespace SolBo.Shared.Services.Implementations
 {
     public class FileStorageService : IStorageService
     {
-        private readonly string _filePath;
-
-        public FileStorageService(string filePath)
-        {
-            _filePath = filePath;
-        }
+        private string _filePath;
 
         public ICollection<decimal> GetValues()
         {
@@ -32,6 +27,11 @@ namespace SolBo.Shared.Services.Implementations
         {
             using StreamWriter writer = new StreamWriter(_filePath, true);
             writer.WriteLine(val);
+        }
+
+        public void SetPath(string path)
+        {
+            _filePath = path;
         }
     }
 }

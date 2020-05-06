@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Binance.Net;
+using Binance.Net.Objects;
+using CryptoExchange.Net.Authentication;
+using Microsoft.Extensions.Configuration;
 using Quartz;
 using Quartz.Impl;
 using SolBo.Agent.DI;
@@ -6,7 +9,9 @@ using SolBo.Agent.Factories;
 using SolBo.Agent.Jobs;
 using SolBo.Shared.Domain.Configs;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SolBo.Agent
@@ -45,13 +50,21 @@ namespace SolBo.Agent
 
                 await _scheduler.Start();
 
+                #region Exchange Configuration
+                var exchange = (app.Exchanges as IList<Exchange>).FirstOrDefault();
+
+                BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+                {
+                    ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret)
+                });
+                #endregion
+
                 #region Buy Deep Sell High
                 IJobDetail bdshJob = JobBuilder.Create<BuyDeepSellHighJob>()
                     .WithIdentity("BuyDeepSellHighJob")
                     .Build();
 
                 bdshJob.JobDataMap["Strategy"] = app.Strategy;
-                bdshJob.JobDataMap["Exchanges"] = app.Exchanges;
 
                 var bdshBuilder = TriggerBuilder.Create()
                     .WithIdentity("BuyDeepSellHighJobTrigger")

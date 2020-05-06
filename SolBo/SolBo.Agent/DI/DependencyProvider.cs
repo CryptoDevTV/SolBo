@@ -6,7 +6,6 @@ using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Services;
 using SolBo.Shared.Services.Implementations;
 using System;
-using System.Linq;
 
 namespace SolBo.Agent.DI
 {
@@ -34,12 +33,7 @@ namespace SolBo.Agent.DI
             #endregion
 
             #region Services
-            var selectedStrategy = app.Strategy.Available
-                .FirstOrDefault(s => s.Id == app.Strategy.ActiveId);
-
-            services.AddTransient<IStorageService>(
-                s => new FileStorageService(selectedStrategy.StoragePath)
-                );
+            services.AddTransient<IStorageService, FileStorageService>();
 
             services.AddTransient<IMarketService, MarketService>();
             #endregion
