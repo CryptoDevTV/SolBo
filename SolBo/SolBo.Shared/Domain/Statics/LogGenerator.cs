@@ -20,6 +20,15 @@ namespace SolBo.Shared.Domain.Statics
 
         public static string SellTest => "Sold in test mode";
 
+        public static string SellResultStart(long orderId)
+            => $"START selling order ({orderId})";
+
+        public static string SellResult(BinanceOrderTrade item)
+            => $"Order filled with Quantity ({item.Quantity}), Price ({item.Price}), Commission ({item.Commission} {item.CommissionAsset})";
+
+        public static string SellResultEnd(long orderId)
+            => $"END selling order ({orderId})";
+
         public static string BuyOrder(MarketResponse marketResponse)
             => $"Buy order ({marketResponse.IsReadyForMarket}), price change ({marketResponse.PercentChanged}%)";
 
@@ -29,13 +38,13 @@ namespace SolBo.Shared.Domain.Statics
         public static string BuyTest => "Buy in test mode";
 
         public static string BuyResultStart(long orderId)
-            => $"START order ({orderId})";
+            => $"START buying order ({orderId})";
 
         public static string BuyResult(BinanceOrderTrade item)
             => $"Order filled with Quantity ({item.Quantity}), Price ({item.Price}), Commission ({item.Commission} {item.CommissionAsset})";
 
         public static string BuyResultEnd(long orderId)
-            => $"END order ({orderId})";
+            => $"END buying order ({orderId})";
 
         public static string WarnSymbol(string symbol)
             => $"Provided symbol {symbol} is not supported on this exchange";

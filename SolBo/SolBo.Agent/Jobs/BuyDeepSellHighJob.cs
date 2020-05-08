@@ -5,7 +5,9 @@ using Quartz;
 using SolBo.Shared.Contexts;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
+using SolBo.Shared.Utils;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,7 +77,46 @@ namespace SolBo.Agent.Jobs
 
                                     Logger.Info(LogGenerator.AveragePrice(availableStrategy, storedPriceAverage));
 
-                                    // availableBase here
+                                    if (availableBase > 0.0m)
+                                    {
+                                        // SELL BASE
+                                        var sellOrder = _marketService.IsGoodToSell(availableStrategy.SellPercentageUp, storedPriceAverage, price);
+
+                                        Logger.Info(LogGenerator.SellOrder(sellOrder));
+
+                                        if (sellOrder.IsReadyForMarket)
+                                        {
+                                            Logger.Info(LogGenerator.SellOrderReady(price, sellOrder, availableStrategy));
+
+                                            if (strategy.IsNotInTestMode)
+                                            {
+                                                var sellOrderResult = await client.PlaceOrderAsync(
+                                                    availableStrategy.Symbol,
+                                                    OrderSide.Sell,
+                                                    OrderType.Market,
+                                                    quantity: availableBase);
+
+                                                if (sellOrderResult.Success)
+                                                {
+                                                    Logger.Info(LogGenerator.SellResultStart(sellOrderResult.Data.OrderId));
+
+                                                    if (sellOrderResult.Data.Fills.AnyAndNotNull())
+                                                    {
+                                                        foreach (var item in sellOrderResult.Data.Fills)
+                                                        {
+                                                            Logger.Info(LogGenerator.SellResult(item));
+                                                        }
+                                                    }
+
+                                                    Logger.Info(LogGenerator.SellResultEnd(sellOrderResult.Data.OrderId));
+                                                }
+                                                else
+                                                    Logger.Warn(sellOrderResult.Error.Message);
+                                            }
+                                            else
+                                                Logger.Info(LogGenerator.SellTest);
+                                        }
+                                    }
 
                                     if (availableQuote > 0.0m && availableQuote > symbol.MinNotionalFilter.MinNotional)
                                     {
@@ -100,9 +141,12 @@ namespace SolBo.Agent.Jobs
                                                 {
                                                     Logger.Info(LogGenerator.BuyResultStart(buyOrderResult.Data.OrderId));
 
-                                                    foreach (var item in buyOrderResult.Data.Fills)
+                                                    if (buyOrderResult.Data.Fills.AnyAndNotNull())
                                                     {
-                                                        Logger.Info(LogGenerator.BuyResult(item));
+                                                        foreach (var item in buyOrderResult.Data.Fills)
+                                                        {
+                                                            Logger.Info(LogGenerator.BuyResult(item));
+                                                        }
                                                     }
 
                                                     Logger.Info(LogGenerator.BuyResultEnd(buyOrderResult.Data.OrderId));
