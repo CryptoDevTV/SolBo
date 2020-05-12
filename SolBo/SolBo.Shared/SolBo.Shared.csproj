@@ -8,8 +8,4 @@
     <PackageReference Include="Binance.Net" Version="5.0.10" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
-
 </Project>
