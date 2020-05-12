@@ -25,5 +25,16 @@ namespace SolBo.Shared.Services.Implementations
                 PercentChanged = decimal.Round(100 - ((storedPriceAverage * 100) / currentPrice), 2)
             };
         }
+
+        public MarketResponse IsStopLossReached(int percentStopLoss, decimal storedPriceAverage, decimal currentPrice)
+        {
+            return new MarketResponse
+            {
+                IsReadyForMarket = storedPriceAverage > currentPrice
+                    ? 100 - (currentPrice / storedPriceAverage * 100) >= percentStopLoss
+                    : false,
+                PercentChanged = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
+            };
+        }
     }
 }

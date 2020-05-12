@@ -7,7 +7,6 @@ using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
-using SolBo.Shared.Utils;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,8 +76,57 @@ namespace SolBo.Agent.Jobs
 
                                     Logger.Info(LogGenerator.AveragePrice(availableStrategy, storedPriceAverage));
 
-                                    if (availableBase > 0.0m)
+                                    if (availableBase > 0.0m && availableBase > symbol.MinNotionalFilter.MinNotional)
                                     {
+                                        // STOP LOSS
+                                        var stopLossOrder = _marketService.IsStopLossReached(availableStrategy.StopLossPercentageDown, storedPriceAverage, price);
+
+                                        Logger.Info(LogGenerator.StopLossOrder(stopLossOrder));
+
+                                        if (stopLossOrder.IsReadyForMarket)
+                                        {
+                                            Logger.Info(LogGenerator.StopLossOrderReady(price, stopLossOrder, availableStrategy));
+
+                                            if (strategy.IsNotInTestMode)
+                                            {
+                                                var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
+                                                var stopLossPrice = BinanceHelpers.ClampPrice(symbol.PriceFilter.MinPrice, symbol.PriceFilter.MaxPrice, price);
+
+                                                var minNotional = quantity * stopLossPrice;
+
+                                                if (minNotional > symbol.MinNotionalFilter.MinNotional)
+                                                {
+                                                    var stopLossOrderResult = await client.PlaceOrderAsync(
+                                                        availableStrategy.Symbol,
+                                                        OrderSide.Sell,
+                                                        OrderType.StopLossLimit,
+                                                        quantity: quantity,
+                                                        stopPrice: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
+                                                        price: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
+                                                        timeInForce: TimeInForce.GoodTillCancel);
+
+                                                    if (stopLossOrderResult.Success)
+                                                    {
+                                                        Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
+
+                                                        if (stopLossOrderResult.Data.Fills.AnyAndNotNull())
+                                                        {
+                                                            foreach (var item in stopLossOrderResult.Data.Fills)
+                                                            {
+                                                                Logger.Info(LogGenerator.StopLossResult(item));
+                                                            }
+                                                        }
+
+                                                        Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
+                                                    }
+                                                    else
+                                                        Logger.Warn(stopLossOrderResult.Error.Message);
+                                                }
+                                            }
+                                            else
+                                                Logger.Info(LogGenerator.StopLossTest);
+                                        }
+
                                         // SELL BASE
                                         var sellOrder = _marketService.IsGoodToSell(availableStrategy.SellPercentageUp, storedPriceAverage, price);
 

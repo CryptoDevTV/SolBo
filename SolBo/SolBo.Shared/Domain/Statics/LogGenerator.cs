@@ -12,6 +12,23 @@ namespace SolBo.Shared.Domain.Statics
         public static string AveragePrice(AvailableStrategy availableStrategy, decimal storedPriceAverage)
             => $"Average price for last {availableStrategy.Average} is {storedPriceAverage}";
 
+        public static string StopLossOrder(MarketResponse marketResponse)
+            => $"Stop Loss order ({marketResponse.IsReadyForMarket}), price change ({marketResponse.PercentChanged}%)";
+
+        public static string StopLossOrderReady(decimal price, MarketResponse marketResponse, AvailableStrategy availableStrategy)
+            => $"Price ({price}) dropped ({marketResponse.PercentChanged}%) > ({availableStrategy.StopLossPercentageDown}%), selling all {availableStrategy.Symbol}";
+
+        public static string StopLossTest => "Stop Loss in test mode";
+
+        public static string StopLossResultStart(long orderId)
+            => $"(STOP LOSS) START selling order ({orderId})";
+
+        public static string StopLossResult(BinanceOrderTrade item)
+            => $"Order filled with Quantity ({item.Quantity}), Price ({item.Price}), Commission ({item.Commission} {item.CommissionAsset})";
+
+        public static string StopLossResultEnd(long orderId)
+            => $"(STOP LOSS) END selling order ({orderId})";
+
         public static string SellOrder(MarketResponse marketResponse)
             => $"Sell order ({marketResponse.IsReadyForMarket}), price change ({marketResponse.PercentChanged}%)";
 

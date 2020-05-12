@@ -9,5 +9,6 @@
         public int SellPercentageUp { get; set; }
         public int Average { get; set; }
         public int Ticker { get; set; }
+        public int StopLossPercentageDown { get; set; }
     }
 }

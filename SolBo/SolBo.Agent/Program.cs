@@ -2,6 +2,7 @@
 using Binance.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using Microsoft.Extensions.Configuration;
+using NLog;
 using Quartz;
 using Quartz.Impl;
 using SolBo.Agent.DI;
@@ -22,6 +23,8 @@ namespace SolBo.Agent
 
         private static ISchedulerFactory _schedulerFactory;
         private static IScheduler _scheduler;
+
+        private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
         static async Task<int> Main()
         {
@@ -53,10 +56,17 @@ namespace SolBo.Agent
                 #region Exchange Configuration
                 var exchange = (app.Exchanges as IList<Exchange>).FirstOrDefault();
 
-                BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+                if(exchange.IsInTestMode)
                 {
-                    ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret)
-                });
+                    Logger.Warn($"No ApiKey and ApiSecret provided, be sure to set 'testmode = 1' in 'appsettings.solbo.json' file");
+                }
+                else
+                {
+                    BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+                    {
+                        ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret)
+                    });
+                }
                 #endregion
 
                 #region Buy Deep Sell High
