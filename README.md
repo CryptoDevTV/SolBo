@@ -84,6 +84,10 @@ Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego
 }
 ```
 
+## Instalacja i uruchomienie bota
+
+Do napisania :)
+
 ## Kontakt
 
 ✉️ [https://cryptodev.tv/](https://cryptodev.tv/) - konkretna i techniczna wiedza o kryptowalutach
