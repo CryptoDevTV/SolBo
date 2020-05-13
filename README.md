@@ -20,7 +20,13 @@ W strategii tej bot śledzi cenę zdefiniowanego symbolu (np. `BTCUSDT`), poprze
 
 ## Opis pliku konfiguracyjnego
 
-W celu poprawnego skonfigurowania bota należy odpowiednio i zgodnie z własnym poziomem wiedzy i doświadczenia uzupełnić plik: `appsettings.solbo.json`.
+W celu poprawnego skonfigurowania bota należy odpowiednio i zgodnie z własnym poziomem wiedzy i doświadczenia uzupełnić plik: `appsettings.solbo.json`. Plik należy uzupełnić po dokładnym zrozumieniu tego w jaki sposób działa strategia wykorzystywana przez bota.
+
+### Parametry konfiguracyjne
+
+Parametr 	| Opis 	| Przykładowa wartość 	| Typ
+------------|-------|-----------------------|-----
+**name**	|nazwa bota|solbot|opcjonalne
 
 ```
 {
