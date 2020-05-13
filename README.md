@@ -9,11 +9,48 @@ Program ten udostępniony jest w celach edukacyjnych i pokazuje kroki jakie nale
 
 ### 1. Buy deep sell high
 
+W strategii tej bot śledzi cenę zdefiniowanego symbolu (np. `BTCUSDT`), poprzez okresowe jej pobieranie z giełdy. W momencie kiedy cena spadnie o zadeklarowany procent, bot składa na giełdzie zlecenie **BUY** typu **MARKET**. Bot dalej śledzi cenę tego symbolu i czeka na jej wzrost o zadeklarowany procent, kiedy cena ta osiągnie określony pułap bot składa na giełdzie zlecenie **SELL** typu **MARKET**. Bot realizuje również zlecenie **STOP LOSS**, jeśli po zakupie, cena spadnie o zadeklarowany procent.
+
 - Bot powinien śledzić cenę określonej kryptowaluty w stosunku do zdefiniowanej waluty,
 - Bot śledzi zdefiniowaną kryptowalutę poprzez okresowe pobieranie jej ceny,
 - Bot przechowuje średnią cenę śledzonej kryptowaluty,
 - Bot składa zlecenie kupna w momencie obniżenia średniej ceny o zdefiniowaną wartość określoną w procentach,
-- Bot składa zlecenie sprzedaży, po zrealizowaniu zlecenia zakupu z ceną większą o określoną wartość wyrażoną w procentach
+- Bot składa zlecenie sprzedaży, po zrealizowaniu zlecenia zakupu z ceną większą o określoną wartość wyrażoną w procentach,
+- Bot posiada możliwość ustawienia zlecenia typu STOP LOSS.
+
+## Opis pliku konfiguracyjnego
+
+W celu poprawnego skonfigurowania bota należy odpowiednio i zgodnie z własnym poziomem wiedzy i doświadczenia uzupełnić plik: `appsettings.solbo.json`.
+
+```
+{
+  "name": "solbot",
+  "exchanges": [
+    {
+      "name": "Binance",
+      "apikey": "",
+      "apisecret": ""
+    }
+  ],
+  "strategy": {
+    "activeid": 1,
+    "intervalinminutes": 1,
+    "testmode": 0,
+    "available": [
+      {
+        "id": 1,
+        "symbol": "ETHBTC",
+        "storagepath": "C:\\solbo\\",
+        "ticker": 0,
+        "average": 5,
+        "buypercentagedown": 2,
+        "sellpercentageup": 3,
+        "stoplosspercentagedown": 10
+      }
+    ]
+  }
+}
+```
 
 ## Kontakt
 
