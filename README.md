@@ -28,8 +28,8 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 ------------|-------|-----------------------|-----
 **name**	|nazwa bota|solbot|opcjonalne
 **exchanges/name**|nazwa giełdy|binance|opcjonalne
-**exchanges/apikey**|parametr do pobrania z giełdy|aSqaS0a5qkjy9fe05Fu40yeM0kB506xXWAZ70bb9Crdk55fEzBN99hA7uLUqs01J|opcjonalny gdy **strategy/testmode** ma wartość 1
-**exchanges/apisecret**|parametr do pobrania z giełdy|0bb9eM0kB506Crdk55aS0a5qkjy9fe05fEzBN99hA7uLUqs01JaSqFu40yxXWAZ7|opcjonalny gdy **strategy/testmode** ma wartość 1
+**exchanges/apikey**|parametr do pobrania z giełdy|aSqaS0a5qkjy9fe05F....|opcjonalny gdy **strategy/testmode** ma wartość 1
+**exchanges/apisecret**|parametr do pobrania z giełdy|0bb9eM0kB506Crdk5....|opcjonalny gdy **strategy/testmode** ma wartość 1
 **strategy/activeid**|wartość pola **id** aktywnej strategii bota|stała wartość: **1**|obowiązkowe
 **strategy/intervalinminutes**|czas w minutach, co jaki bot będzie odpytywał giełde o cenę|5|obowiązkowe
 **strategy/testmode**|aktywacja trybu testowego lub działanie produkcyjne|**1** - tryb testowy, **0** - tryb produkcyjny|obowiązkowe
