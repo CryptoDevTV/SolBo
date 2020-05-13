@@ -27,6 +27,9 @@ W celu poprawnego skonfigurowania bota należy odpowiednio i zgodnie z własnym 
 Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 ------------|-------|-----------------------|-----
 **name**	|nazwa bota|solbot|opcjonalne
+**exchanges/name**|nazwa giełdy|binance|opcjonalne
+**exchanges/apikey**|parametr do pobrania z giełdy|aSqaS0a5qkjy9fe05Fu40yeM0kB506xXWAZ70bb9Crdk55fEzBN99hA7uLUqs01J|opcjonalny gdy **strategy/testmode** ma wartość 1
+**exchanges/apisecret**|parametr do pobrania z giełdy|0bb9eM0kB506Crdk55aS0a5qkjy9fe05fEzBN99hA7uLUqs01JaSqFu40yxXWAZ7\opcjonalny gdy **strategy/testmode** ma wartość 1
 
 ```
 {
