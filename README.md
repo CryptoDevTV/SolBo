@@ -43,8 +43,9 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/ticker**|pole określające rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
-**strategy/available/sellpercentageup**|wartość procentowa określająca wzrost średniej ceny po której bot składa zlecenie `SELL`||obowiązkowe
-**strategy/available/stoplosspercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`||obowiązkowe
+**strategy/available/sellpercentageup**|wartość procentowa określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
+**strategy/available/stoplosspercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`|10|obowiązkowe
+**strategy/available/fundpercentage**|część kapitału posiadanego na giełdze, którym bot będzie operował wyrażona w procentach|80|obowiązkowe
 
 #### Tryb testowy
 
@@ -53,6 +54,8 @@ Bot posiada tryb testowy, który "emuluje" składanie zleceń na giełdzie, tech
 #### Tryb produkcyjny
 
 Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego strategii. Wymaga podania wartości dla **exchanges/apikey** i **exchanges/apisecret** zgodnie z danymi pochodzącymi ze strony giełdy. Dane te dla własnego konta na Binance należy pobrać z sekcji [API Management](https://www.binance.com/en/usercenter/settings/api-management).
+
+#### Przykładowa zawartość pliku
 
 ```
 {
@@ -77,7 +80,8 @@ Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego
         "average": 5,
         "buypercentagedown": 2,
         "sellpercentageup": 3,
-        "stoplosspercentagedown": 10
+        "stoplosspercentagedown": 10,
+		"fundpercentage": 80
       }
     ]
   }
