@@ -8,6 +8,7 @@ using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,214 +33,232 @@ namespace SolBo.Agent.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var strategy = context.JobDetail.JobDataMap["Strategy"] as Strategy;
-
-            var availableStrategy = strategy.Available.FirstOrDefault(s => s.Id == strategy.ActiveId);
-
-            if (!(availableStrategy is null))
+            try
             {
-                _storageService.SetPath(Path.Combine(availableStrategy.StoragePath, $"{availableStrategy.Symbol}.txt"));
+                var strategy = context.JobDetail.JobDataMap["Strategy"] as Strategy;
 
-                using (var client = new BinanceClient())
+                var availableStrategy = strategy.Available.FirstOrDefault(s => s.Id == strategy.ActiveId);
+
+                if (!(availableStrategy is null))
                 {
-                    var tickerContext = new TickerContext(client);
+                    _storageService.SetPath(Path.Combine(availableStrategy.StoragePath, $"{availableStrategy.Symbol}.txt"));
 
-                    var accountInfo = await client.GetAccountInfoAsync();
-
-                    if (accountInfo.Success)
+                    using (var client = new BinanceClient())
                     {
-                        var exchangeInfo = await client.GetExchangeInfoAsync();
+                        var tickerContext = new TickerContext(client);
 
-                        if (exchangeInfo.Success)
+                        var accountInfo = await client.GetAccountInfoAsync();
+
+                        if (accountInfo.Success)
                         {
-                            var symbol = exchangeInfo.Data.Symbols
-                                .FirstOrDefault(e => e.Name == availableStrategy.Symbol);
+                            var exchangeInfo = await client.GetExchangeInfoAsync();
 
-                            if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
+                            if (exchangeInfo.Success)
                             {
-                                var baseAsset = symbol.BaseAsset;
-                                var quoteAsset = symbol.QuoteAsset;
+                                var symbol = exchangeInfo.Data.Symbols
+                                    .FirstOrDefault(e => e.Name == availableStrategy.Symbol);
 
-                                var currentPrice = await tickerContext.GetPriceValue(availableStrategy);
-
-                                if (currentPrice.Success)
+                                if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
                                 {
-                                    var price = currentPrice.Result;
+                                    var baseAsset = symbol.BaseAsset;
+                                    var quoteAsset = symbol.QuoteAsset;
 
-                                    var availableBase = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == baseAsset).Free;
-                                    var availableQuote = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == quoteAsset).Free;
+                                    var currentPrice = await tickerContext.GetPriceValue(availableStrategy);
 
-                                    availableQuote = _marketService.AvailableQuote(availableStrategy.FundPercentage, availableQuote, symbol.QuoteAssetPrecision).QuoteAssetToTrade;
-
-                                    Logger.Info(LogGenerator.CurrentPrice(availableStrategy, price, availableQuote));
-
-                                    _storageService.SaveValue(price);
-
-                                    var storedPriceAverage = AverageContext.Average(_storageService.GetValues(), 4, availableStrategy.Average);
-
-                                    Logger.Info(LogGenerator.AveragePrice(availableStrategy, storedPriceAverage));
-
-                                    if (availableBase > 0.0m && availableBase > symbol.MinNotionalFilter.MinNotional)
+                                    if (currentPrice.Success)
                                     {
-                                        // STOP LOSS
-                                        var stopLossOrder = _marketService.IsStopLossReached(availableStrategy.StopLossPercentageDown, storedPriceAverage, price);
+                                        var price = currentPrice.Result;
 
-                                        Logger.Info(LogGenerator.StopLossOrder(stopLossOrder));
+                                        var availableBase = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == baseAsset).Free;
+                                        var availableQuote = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == quoteAsset).Free;
 
-                                        if (stopLossOrder.IsReadyForMarket)
+                                        availableQuote = _marketService.AvailableQuote(availableStrategy.FundPercentage, availableQuote, symbol.QuoteAssetPrecision).QuoteAssetToTrade;
+
+                                        Logger.Info(LogGenerator.CurrentPrice(availableStrategy, price, availableQuote));
+
+                                        _storageService.SaveValue(price);
+
+                                        var storedPriceAverage = AverageContext.Average(_storageService.GetValues(), 4, availableStrategy.Average);
+
+                                        Logger.Info(LogGenerator.AveragePrice(availableStrategy, storedPriceAverage));
+
+                                        if (availableBase > 0.0m && availableBase > symbol.MinNotionalFilter.MinNotional)
                                         {
-                                            Logger.Info(LogGenerator.StopLossOrderReady(price, stopLossOrder, availableStrategy));
+                                            // STOP LOSS
+                                            var stopLossOrder = _marketService.IsStopLossReached(availableStrategy.StopLossPercentageDown, storedPriceAverage, price);
 
-                                            if (strategy.IsNotInTestMode)
+                                            Logger.Info(LogGenerator.StopLossOrder(stopLossOrder));
+
+                                            if (stopLossOrder.IsReadyForMarket)
                                             {
-                                                WebCallResult<BinancePlacedOrder> stopLossOrderResult = null;
+                                                Logger.Info(LogGenerator.StopLossOrderReady(price, stopLossOrder, availableStrategy));
 
-                                                var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
-
-                                                if (availableStrategy.StopLossType == 0)
+                                                if (strategy.IsNotInTestMode)
                                                 {
-                                                    stopLossOrderResult = await client.PlaceOrderAsync(
+                                                    WebCallResult<BinancePlacedOrder> stopLossOrderResult = null;
+
+                                                    var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
+
+                                                    if (availableStrategy.StopLossType == 0)
+                                                    {
+                                                        var minNotional = quantity * price;
+
+                                                        if (minNotional > symbol.MinNotionalFilter.MinNotional)
+                                                        {
+                                                            stopLossOrderResult = await client.PlaceOrderAsync(
+                                                                availableStrategy.Symbol,
+                                                                OrderSide.Sell,
+                                                                OrderType.Market,
+                                                                quantity: quantity);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        var stopLossPrice = BinanceHelpers.ClampPrice(symbol.PriceFilter.MinPrice, symbol.PriceFilter.MaxPrice, price);
+
+                                                        var minNotional = quantity * stopLossPrice;
+
+                                                        if (minNotional > symbol.MinNotionalFilter.MinNotional)
+                                                        {
+                                                            stopLossOrderResult = await client.PlaceOrderAsync(
+                                                                availableStrategy.Symbol,
+                                                                OrderSide.Sell,
+                                                                OrderType.StopLossLimit,
+                                                                quantity: quantity,
+                                                                stopPrice: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
+                                                                price: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
+                                                                timeInForce: TimeInForce.GoodTillCancel);
+                                                        }
+                                                    }
+
+                                                    if (!(stopLossOrderResult is null))
+                                                    {
+                                                        if (stopLossOrderResult.Success)
+                                                        {
+                                                            Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
+
+                                                            if (stopLossOrderResult.Data.Fills.AnyAndNotNull())
+                                                            {
+                                                                foreach (var item in stopLossOrderResult.Data.Fills)
+                                                                {
+                                                                    Logger.Info(LogGenerator.StopLossResult(item));
+                                                                }
+                                                            }
+
+                                                            Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
+                                                        }
+                                                        else
+                                                            Logger.Warn(stopLossOrderResult.Error.Message);
+                                                    }
+                                                }
+                                                else
+                                                    Logger.Info(LogGenerator.StopLossTest);
+                                            }
+
+                                            // SELL BASE
+                                            var sellOrder = _marketService.IsGoodToSell(availableStrategy.SellPercentageUp, storedPriceAverage, price);
+
+                                            Logger.Info(LogGenerator.SellOrder(sellOrder));
+
+                                            if (sellOrder.IsReadyForMarket)
+                                            {
+                                                Logger.Info(LogGenerator.SellOrderReady(price, sellOrder, availableStrategy));
+
+                                                if (strategy.IsNotInTestMode)
+                                                {
+                                                    var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
+
+                                                    var sellOrderResult = await client.PlaceOrderAsync(
                                                         availableStrategy.Symbol,
                                                         OrderSide.Sell,
                                                         OrderType.Market,
                                                         quantity: quantity);
+
+                                                    if (sellOrderResult.Success)
+                                                    {
+                                                        Logger.Info(LogGenerator.SellResultStart(sellOrderResult.Data.OrderId));
+
+                                                        if (sellOrderResult.Data.Fills.AnyAndNotNull())
+                                                        {
+                                                            foreach (var item in sellOrderResult.Data.Fills)
+                                                            {
+                                                                Logger.Info(LogGenerator.SellResult(item));
+                                                            }
+                                                        }
+
+                                                        Logger.Info(LogGenerator.SellResultEnd(sellOrderResult.Data.OrderId));
+                                                    }
+                                                    else
+                                                        Logger.Warn(sellOrderResult.Error.Message);
                                                 }
                                                 else
+                                                    Logger.Info(LogGenerator.SellTest);
+                                            }
+                                        }
+
+                                        if (availableQuote > 0.0m && availableQuote > symbol.MinNotionalFilter.MinNotional)
+                                        {
+                                            // BUY - SPEND QUOTE
+                                            var buyOrder = _marketService.IsGoodToBuy(availableStrategy.BuyPercentageDown, storedPriceAverage, price);
+
+                                            Logger.Info(LogGenerator.BuyOrder(buyOrder));
+
+                                            if (buyOrder.IsReadyForMarket)
+                                            {
+                                                Logger.Info(LogGenerator.BuyOrderReady(price, buyOrder, availableStrategy));
+
+                                                if (strategy.IsNotInTestMode)
                                                 {
-                                                    var stopLossPrice = BinanceHelpers.ClampPrice(symbol.PriceFilter.MinPrice, symbol.PriceFilter.MaxPrice, price);
+                                                    var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableQuote);
 
-                                                    var minNotional = quantity * stopLossPrice;
-
-                                                    stopLossOrderResult = await client.PlaceOrderAsync(
+                                                    var buyOrderResult = await client.PlaceOrderAsync(
                                                         availableStrategy.Symbol,
-                                                        OrderSide.Sell,
-                                                        OrderType.StopLossLimit,
-                                                        quantity: quantity,
-                                                        stopPrice: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
-                                                        price: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
-                                                        timeInForce: TimeInForce.GoodTillCancel);
-                                                }
+                                                        OrderSide.Buy,
+                                                        OrderType.Market,
+                                                        quoteOrderQuantity: availableQuote);
 
-                                                if (stopLossOrderResult.Success)
-                                                {
-                                                    Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
-
-                                                    if (stopLossOrderResult.Data.Fills.AnyAndNotNull())
+                                                    if (buyOrderResult.Success)
                                                     {
-                                                        foreach (var item in stopLossOrderResult.Data.Fills)
-                                                        {
-                                                            Logger.Info(LogGenerator.StopLossResult(item));
-                                                        }
-                                                    }
+                                                        Logger.Info(LogGenerator.BuyResultStart(buyOrderResult.Data.OrderId));
 
-                                                    Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
+                                                        if (buyOrderResult.Data.Fills.AnyAndNotNull())
+                                                        {
+                                                            foreach (var item in buyOrderResult.Data.Fills)
+                                                            {
+                                                                Logger.Info(LogGenerator.BuyResult(item));
+                                                            }
+                                                        }
+
+                                                        Logger.Info(LogGenerator.BuyResultEnd(buyOrderResult.Data.OrderId));
+                                                    }
+                                                    else
+                                                        Logger.Warn(buyOrderResult.Error.Message);
                                                 }
                                                 else
-                                                    Logger.Warn(stopLossOrderResult.Error.Message);
+                                                    Logger.Info(LogGenerator.BuyTest);
                                             }
-                                            else
-                                                Logger.Info(LogGenerator.StopLossTest);
                                         }
-
-                                        // SELL BASE
-                                        var sellOrder = _marketService.IsGoodToSell(availableStrategy.SellPercentageUp, storedPriceAverage, price);
-
-                                        Logger.Info(LogGenerator.SellOrder(sellOrder));
-
-                                        if (sellOrder.IsReadyForMarket)
-                                        {
-                                            Logger.Info(LogGenerator.SellOrderReady(price, sellOrder, availableStrategy));
-
-                                            if (strategy.IsNotInTestMode)
-                                            {
-                                                var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
-
-                                                var sellOrderResult = await client.PlaceOrderAsync(
-                                                    availableStrategy.Symbol,
-                                                    OrderSide.Sell,
-                                                    OrderType.Market,
-                                                    quantity: quantity);
-
-                                                if (sellOrderResult.Success)
-                                                {
-                                                    Logger.Info(LogGenerator.SellResultStart(sellOrderResult.Data.OrderId));
-
-                                                    if (sellOrderResult.Data.Fills.AnyAndNotNull())
-                                                    {
-                                                        foreach (var item in sellOrderResult.Data.Fills)
-                                                        {
-                                                            Logger.Info(LogGenerator.SellResult(item));
-                                                        }
-                                                    }
-
-                                                    Logger.Info(LogGenerator.SellResultEnd(sellOrderResult.Data.OrderId));
-                                                }
-                                                else
-                                                    Logger.Warn(sellOrderResult.Error.Message);
-                                            }
-                                            else
-                                                Logger.Info(LogGenerator.SellTest);
-                                        }
-                                    }
-
-                                    if (availableQuote > 0.0m && availableQuote > symbol.MinNotionalFilter.MinNotional)
-                                    {
-                                        // BUY - SPEND QUOTE
-                                        var buyOrder = _marketService.IsGoodToBuy(availableStrategy.BuyPercentageDown, storedPriceAverage, price);
-
-                                        Logger.Info(LogGenerator.BuyOrder(buyOrder));
-
-                                        if (buyOrder.IsReadyForMarket)
-                                        {
-                                            Logger.Info(LogGenerator.BuyOrderReady(price, buyOrder, availableStrategy));
-
-                                            if (strategy.IsNotInTestMode)
-                                            {
-                                                var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableQuote);
-
-                                                var buyOrderResult = await client.PlaceOrderAsync(
-                                                    availableStrategy.Symbol,
-                                                    OrderSide.Buy,
-                                                    OrderType.Market,
-                                                    quoteOrderQuantity: availableQuote);
-
-                                                if (buyOrderResult.Success)
-                                                {
-                                                    Logger.Info(LogGenerator.BuyResultStart(buyOrderResult.Data.OrderId));
-
-                                                    if (buyOrderResult.Data.Fills.AnyAndNotNull())
-                                                    {
-                                                        foreach (var item in buyOrderResult.Data.Fills)
-                                                        {
-                                                            Logger.Info(LogGenerator.BuyResult(item));
-                                                        }
-                                                    }
-
-                                                    Logger.Info(LogGenerator.BuyResultEnd(buyOrderResult.Data.OrderId));
-                                                }
-                                                else
-                                                    Logger.Warn(buyOrderResult.Error.Message);
-                                            }
-                                            else
-                                                Logger.Info(LogGenerator.BuyTest);
-                                        }
+                                        else
+                                            Logger.Warn(LogGenerator.WarnFilterMinNotional(quoteAsset, availableQuote, symbol.MinNotionalFilter.MinNotional));
                                     }
                                     else
-                                        Logger.Warn(LogGenerator.WarnFilterMinNotional(quoteAsset, availableQuote, symbol.MinNotionalFilter.MinNotional));
+                                        Logger.Warn(currentPrice.Message);
                                 }
                                 else
-                                    Logger.Warn(currentPrice.Message);
+                                    Logger.Warn(LogGenerator.WarnSymbol(availableStrategy.Symbol));
                             }
-                            else
-                                Logger.Warn(LogGenerator.WarnSymbol(availableStrategy.Symbol));
                         }
+                        else
+                            Logger.Warn(LogGenerator.WarnKeys);
                     }
-                    else
-                        Logger.Warn(LogGenerator.WarnKeys);
                 }
+                else
+                    Logger.Warn(LogGenerator.WarnStrategy);
             }
-            else
-                Logger.Warn(LogGenerator.WarnStrategy);
+            catch (Exception e)
+            {
+                Logger.Fatal($"{e.Message}");
+            }
         }
     }
 }

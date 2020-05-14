@@ -50,7 +50,7 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 
 #### Tryb testowy
 
-Bot posiada tryb testowy, który "emuluje" składanie zleceń na giełdzie, techniczne zapisy kroków wykonanych przez bota można śledzić w pliku zapisywanym zgodnie z wartością parametru **strategy/available/storagepath**. Tryb ten jest mocno sugerowany do użycia w pierwszym etapie korzystania z bota i nie wymaga nawet rejestracji na giełdzie. Zapisy dokonywane przez bota w pliku mogą posłużyć analizie i weryfikacji poprawności działania bota w połączeniu z wykresem giełdy.
+Bot posiada tryb testowy, który "emuluje" składanie zleceń na giełdzie, techniczne zapisy kroków wykonanych przez bota można śledzić w pliku zapisywanym zgodnie z wartością parametru **strategy/available/storagepath**. Tryb ten jest mocno sugerowany do użycia w pierwszym etapie korzystania z bota. Zapisy dokonywane przez bota w pliku mogą posłużyć analizie i weryfikacji poprawności działania bota w połączeniu z wykresem giełdy.
 
 #### Tryb produkcyjny
 

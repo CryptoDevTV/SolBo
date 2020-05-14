@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 
 namespace SolBo.Agent
@@ -26,8 +27,12 @@ namespace SolBo.Agent
 
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static async Task<int> Main()
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
+
             NLog.LogManager.Configuration.Variables["fileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
             NLog.LogManager.Configuration.Variables["archiveFileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
 
@@ -56,7 +61,7 @@ namespace SolBo.Agent
                 #region Exchange Configuration
                 var exchange = (app.Exchanges as IList<Exchange>).FirstOrDefault();
 
-                if(exchange.IsInTestMode)
+                if (exchange.IsInTestMode)
                 {
                     Logger.Warn($"No ApiKey and ApiSecret provided, be sure to set 'testmode = 1' in 'appsettings.solbo.json' file");
                 }
@@ -93,14 +98,21 @@ namespace SolBo.Agent
 
                 Console.ReadKey();
             }
-            catch (SchedulerException)
+            catch (SchedulerException ex)
             {
-
+                Logger.Fatal($"{ex.Message}");
             }
 
             NLog.LogManager.Shutdown();
 
             return 0;
+        }
+
+        static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            Logger.Fatal($"{e.Message}");
+            Logger.Fatal($"{args.IsTerminating}");
         }
     }
 }
