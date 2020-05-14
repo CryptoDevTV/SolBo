@@ -68,7 +68,9 @@ namespace SolBo.Agent.Jobs
                                     var availableBase = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == baseAsset).Free;
                                     var availableQuote = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == quoteAsset).Free;
 
-                                    Logger.Info(LogGenerator.CurrentPrice(availableStrategy, price));
+                                    availableQuote = _marketService.AvailableQuote(availableStrategy.FundPercentage, availableQuote, symbol.QuoteAssetPrecision).QuoteAssetToTrade;
+
+                                    Logger.Info(LogGenerator.CurrentPrice(availableStrategy, price, availableQuote));
 
                                     _storageService.SaveValue(price);
 

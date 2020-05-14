@@ -4,6 +4,20 @@ namespace SolBo.Shared.Services.Implementations
 {
     public class MarketService : IMarketService
     {
+        public FundResponse AvailableQuote(int fundPercentage, decimal availableQuote, int precision)
+        {
+            var result = new FundResponse();
+
+            if (fundPercentage > 0 && fundPercentage < 100)
+            {
+                result.QuoteAssetToTrade = decimal.Round(availableQuote * fundPercentage / 100, precision);
+            }
+            else
+                result.QuoteAssetToTrade = availableQuote;
+
+            return result;
+        }
+
         public MarketResponse IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice)
         {
             return new MarketResponse

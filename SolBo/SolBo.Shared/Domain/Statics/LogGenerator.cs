@@ -6,8 +6,8 @@ namespace SolBo.Shared.Domain.Statics
 {
     public static class LogGenerator
     {
-        public static string CurrentPrice(AvailableStrategy availableStrategy, decimal price)
-            => $"Current price ({availableStrategy.Ticker}) for {availableStrategy.Symbol} is {price}";
+        public static string CurrentPrice(AvailableStrategy availableStrategy, decimal price, decimal availableQuote)
+            => $"Current price ({availableStrategy.Ticker}) for {availableStrategy.Symbol} is {price}. Available to trade: ";
 
         public static string AveragePrice(AvailableStrategy availableStrategy, decimal storedPriceAverage)
             => $"Average price for last {availableStrategy.Average} is {storedPriceAverage}";

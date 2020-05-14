@@ -10,5 +10,6 @@
         public int Average { get; set; }
         public int Ticker { get; set; }
         public int StopLossPercentageDown { get; set; }
+        public int FundPercentage { get; set; }
     }
 }

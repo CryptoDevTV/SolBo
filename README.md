@@ -81,7 +81,7 @@ Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego
         "buypercentagedown": 2,
         "sellpercentageup": 3,
         "stoplosspercentagedown": 10,
-		"fundpercentage": 80
+        "fundpercentage": 80 
       }
     ]
   }
