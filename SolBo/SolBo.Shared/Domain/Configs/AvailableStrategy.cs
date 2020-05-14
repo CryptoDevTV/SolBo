@@ -11,5 +11,6 @@
         public int Ticker { get; set; }
         public int StopLossPercentageDown { get; set; }
         public int FundPercentage { get; set; }
+        public int StopLossType { get; set; }
     }
 }

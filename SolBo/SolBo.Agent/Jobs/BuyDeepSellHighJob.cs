@@ -1,5 +1,6 @@
 ﻿using Binance.Net;
 using Binance.Net.Objects;
+using CryptoExchange.Net.Objects;
 using NLog;
 using Quartz;
 using SolBo.Shared.Contexts;
@@ -91,14 +92,25 @@ namespace SolBo.Agent.Jobs
 
                                             if (strategy.IsNotInTestMode)
                                             {
+                                                WebCallResult<BinancePlacedOrder> stopLossOrderResult = null;
+
                                                 var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
-                                                var stopLossPrice = BinanceHelpers.ClampPrice(symbol.PriceFilter.MinPrice, symbol.PriceFilter.MaxPrice, price);
 
-                                                var minNotional = quantity * stopLossPrice;
-
-                                                if (minNotional > symbol.MinNotionalFilter.MinNotional)
+                                                if (availableStrategy.StopLossType == 0)
                                                 {
-                                                    var stopLossOrderResult = await client.PlaceOrderAsync(
+                                                    stopLossOrderResult = await client.PlaceOrderAsync(
+                                                        availableStrategy.Symbol,
+                                                        OrderSide.Sell,
+                                                        OrderType.Market,
+                                                        quantity: quantity);
+                                                }
+                                                else
+                                                {
+                                                    var stopLossPrice = BinanceHelpers.ClampPrice(symbol.PriceFilter.MinPrice, symbol.PriceFilter.MaxPrice, price);
+
+                                                    var minNotional = quantity * stopLossPrice;
+
+                                                    stopLossOrderResult = await client.PlaceOrderAsync(
                                                         availableStrategy.Symbol,
                                                         OrderSide.Sell,
                                                         OrderType.StopLossLimit,
@@ -106,24 +118,24 @@ namespace SolBo.Agent.Jobs
                                                         stopPrice: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
                                                         price: BinanceHelpers.FloorPrice(symbol.PriceFilter.TickSize, stopLossPrice),
                                                         timeInForce: TimeInForce.GoodTillCancel);
-
-                                                    if (stopLossOrderResult.Success)
-                                                    {
-                                                        Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
-
-                                                        if (stopLossOrderResult.Data.Fills.AnyAndNotNull())
-                                                        {
-                                                            foreach (var item in stopLossOrderResult.Data.Fills)
-                                                            {
-                                                                Logger.Info(LogGenerator.StopLossResult(item));
-                                                            }
-                                                        }
-
-                                                        Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
-                                                    }
-                                                    else
-                                                        Logger.Warn(stopLossOrderResult.Error.Message);
                                                 }
+
+                                                if (stopLossOrderResult.Success)
+                                                {
+                                                    Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
+
+                                                    if (stopLossOrderResult.Data.Fills.AnyAndNotNull())
+                                                    {
+                                                        foreach (var item in stopLossOrderResult.Data.Fills)
+                                                        {
+                                                            Logger.Info(LogGenerator.StopLossResult(item));
+                                                        }
+                                                    }
+
+                                                    Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
+                                                }
+                                                else
+                                                    Logger.Warn(stopLossOrderResult.Error.Message);
                                             }
                                             else
                                                 Logger.Info(LogGenerator.StopLossTest);
@@ -140,11 +152,13 @@ namespace SolBo.Agent.Jobs
 
                                             if (strategy.IsNotInTestMode)
                                             {
+                                                var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableBase);
+
                                                 var sellOrderResult = await client.PlaceOrderAsync(
                                                     availableStrategy.Symbol,
                                                     OrderSide.Sell,
                                                     OrderType.Market,
-                                                    quantity: availableBase);
+                                                    quantity: quantity);
 
                                                 if (sellOrderResult.Success)
                                                 {
@@ -181,6 +195,8 @@ namespace SolBo.Agent.Jobs
 
                                             if (strategy.IsNotInTestMode)
                                             {
+                                                var quantity = BinanceHelpers.ClampQuantity(symbol.LotSizeFilter.MinQuantity, symbol.LotSizeFilter.MaxQuantity, symbol.LotSizeFilter.StepSize, availableQuote);
+
                                                 var buyOrderResult = await client.PlaceOrderAsync(
                                                     availableStrategy.Symbol,
                                                     OrderSide.Buy,
