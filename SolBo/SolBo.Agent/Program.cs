@@ -1,7 +1,4 @@
-﻿using Binance.Net;
-using Binance.Net.Objects;
-using CryptoExchange.Net.Authentication;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using NLog;
 using Quartz;
 using Quartz.Impl;
@@ -10,9 +7,7 @@ using SolBo.Agent.Factories;
 using SolBo.Agent.Jobs;
 using SolBo.Shared.Domain.Configs;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Permissions;
 using System.Threading.Tasks;
 
@@ -20,7 +15,7 @@ namespace SolBo.Agent
 {
     class Program
     {
-        private static readonly string appId = "solbo";
+        private static readonly string appId = "solbo-runtime";
 
         private static ISchedulerFactory _schedulerFactory;
         private static IScheduler _scheduler;
@@ -33,8 +28,8 @@ namespace SolBo.Agent
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
 
-            NLog.LogManager.Configuration.Variables["fileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
-            NLog.LogManager.Configuration.Variables["archiveFileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
+            LogManager.Configuration.Variables["fileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
+            LogManager.Configuration.Variables["archiveFileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
 
             var cfgBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
@@ -58,35 +53,19 @@ namespace SolBo.Agent
 
                 await _scheduler.Start();
 
-                #region Exchange Configuration
-                var exchange = (app.Exchanges as IList<Exchange>).FirstOrDefault();
-
-                if (exchange.IsInTestMode)
-                {
-                    Logger.Warn($"No ApiKey and ApiSecret provided, be sure to set 'testmode = 1' in 'appsettings.solbo.json' file");
-                }
-                else
-                {
-                    BinanceClient.SetDefaultOptions(new BinanceClientOptions()
-                    {
-                        ApiCredentials = new ApiCredentials(exchange.ApiKey, exchange.ApiSecret)
-                    });
-                }
-                #endregion
-
                 #region Buy Deep Sell High
                 IJobDetail bdshJob = JobBuilder.Create<BuyDeepSellHighJob>()
                     .WithIdentity("BuyDeepSellHighJob")
                     .Build();
 
-                bdshJob.JobDataMap["Strategy"] = app.Strategy;
+                bdshJob.JobDataMap["FileName"] = app.FileName;
 
                 var bdshBuilder = TriggerBuilder.Create()
                     .WithIdentity("BuyDeepSellHighJobTrigger")
                     .StartNow();
 
                 bdshBuilder.WithSimpleSchedule(x => x
-                        .WithIntervalInMinutes(app.Strategy.IntervalInMinutes)
+                        .WithIntervalInMinutes(app.IntervalInMinutes)
                         .RepeatForever());
 
                 var bdshTrigger = bdshBuilder.Build();
@@ -103,7 +82,7 @@ namespace SolBo.Agent
                 Logger.Fatal($"{ex.Message}");
             }
 
-            NLog.LogManager.Shutdown();
+            LogManager.Shutdown();
 
             return 0;
         }

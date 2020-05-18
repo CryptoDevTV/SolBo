@@ -7,7 +7,6 @@ namespace SolBo.Shared.Services.Implementations
     public class FileStorageService : IStorageService
     {
         private string _filePath;
-
         public ICollection<decimal> GetValues()
         {
             var list = new List<decimal>();
@@ -22,13 +21,11 @@ namespace SolBo.Shared.Services.Implementations
 
             return list;
         }
-
         public void SaveValue(decimal val)
         {
             using StreamWriter writer = new StreamWriter(_filePath, true);
             writer.WriteLine(val);
         }
-
         public void SetPath(string path)
         {
             _filePath = path;

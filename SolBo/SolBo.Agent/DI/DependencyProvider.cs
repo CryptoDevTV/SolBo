@@ -36,6 +36,8 @@ namespace SolBo.Agent.DI
             services.AddTransient<IStorageService, FileStorageService>();
 
             services.AddTransient<IMarketService, MarketService>();
+
+            services.AddTransient<ISchedulerService, SchedulerService>();
             #endregion
 
             var serviceProvider = services.BuildServiceProvider();

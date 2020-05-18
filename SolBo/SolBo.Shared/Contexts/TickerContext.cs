@@ -1,6 +1,5 @@
 ﻿using Binance.Net.Interfaces;
 using SolBo.Shared.Domain.Configs;
-using System.Threading.Tasks;
 
 namespace SolBo.Shared.Contexts
 {
@@ -14,13 +13,13 @@ namespace SolBo.Shared.Contexts
             _binanceClient = binanceClient;
         }
 
-        public async Task<TickerContextResponse> GetPriceValue(AvailableStrategy availableStrategy)
+        public TickerContextResponse GetPriceValue(AvailableStrategy availableStrategy)
         {
             var result = new TickerContextResponse();
 
             if (availableStrategy.Ticker == 0)
             {
-                var response = await _binanceClient.GetPriceAsync(availableStrategy.Symbol);
+                var response = _binanceClient.GetPrice(availableStrategy.Symbol);
 
                 if (response.Success)
                 {
@@ -33,7 +32,7 @@ namespace SolBo.Shared.Contexts
             }
             else if (availableStrategy.Ticker == 1)
             {
-                var response = await _binanceClient.GetCurrentAvgPriceAsync(availableStrategy.Symbol);
+                var response = _binanceClient.GetCurrentAvgPrice(availableStrategy.Symbol);
 
                 if (response.Success)
                 {

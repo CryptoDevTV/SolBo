@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Binance.Net" Version="5.0.10" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Rules\Mode\Production\" />
   </ItemGroup>
 
 </Project>

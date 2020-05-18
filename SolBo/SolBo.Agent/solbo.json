@@ -1,16 +1,11 @@
-﻿{
-  "name": "solbot",
-  "exchanges": [
-    {
-      "name": "Binance",
-      "apikey": "",
-      "apisecret": ""
-    }
-  ],
+{
+  "exchange": {
+    "name": "Binance",
+    "apikey": "",
+    "apisecret": ""
+  },
   "strategy": {
     "activeid": 1,
-    "intervalinminutes": 1,
-    "testmode": 0,
     "available": [
       {
         "id": 1,
@@ -22,8 +17,11 @@
         "sellpercentageup": 3,
         "stoplosspercentagedown": 10,
         "stoplosstype": 0,
-        "fundpercentage": 80 
+        "fundpercentage": 80
       }
     ]
+  },
+  "actions": {
+    "bought": 0
   }
 }

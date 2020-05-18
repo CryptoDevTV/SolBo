@@ -9,7 +9,7 @@
     <PackageReference Include="Binance.Net" Version="5.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.3" />
     <PackageReference Include="Quartz" Version="3.0.7" />
   </ItemGroup>
 
@@ -18,10 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.solbo.json">
+    <None Update="appsettings.solbo-runtime.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="solbo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
