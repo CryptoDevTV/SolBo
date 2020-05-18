@@ -13,8 +13,8 @@ namespace SolBo.Shared.Rules.Validation
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => SellPercentageUp: {solbot.Strategy.AvailableStrategy.SellPercentageUp}."
+                    : $"{RuleName} error. Set SellPercentageUp property correctly."
             };
         }
         public bool RulePassed(Solbot solbot)

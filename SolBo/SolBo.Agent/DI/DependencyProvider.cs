@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SolBo.Agent.Jobs;
-using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Services;
 using SolBo.Shared.Services.Implementations;
 using System;
@@ -11,7 +10,7 @@ namespace SolBo.Agent.DI
 {
     public class DependencyProvider
     {
-        public static IServiceProvider Get(App app)
+        public static IServiceProvider Get()
         {
 
             var services = new ServiceCollection();

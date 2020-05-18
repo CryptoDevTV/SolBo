@@ -13,8 +13,8 @@ namespace SolBo.Shared.Rules.Validation
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => Average: {solbot.Strategy.AvailableStrategy.Average}."
+                    : $"{RuleName} error. Set Ticker property correctly."
             };
         }
         public bool RulePassed(Solbot solbot)

@@ -21,9 +21,9 @@ namespace SolBo.Shared.Rules.Storage
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
-            };
+                    ? $"{RuleName} SUCCESS => Storage set."
+                    : $"{RuleName} error. Strage added."
+            }
         }
         public bool RulePassed(Solbot solbot)
         {

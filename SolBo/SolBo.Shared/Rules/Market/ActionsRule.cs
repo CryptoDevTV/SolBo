@@ -13,8 +13,8 @@ namespace SolBo.Shared.Rules.Market
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => Bought: {solbot.Actions.Bought}."
+                    : $"{RuleName} error. Set Bought property correctly."
             };
         }
         public bool RulePassed(Solbot solbot)

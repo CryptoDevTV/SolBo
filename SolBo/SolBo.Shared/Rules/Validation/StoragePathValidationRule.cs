@@ -14,8 +14,8 @@ namespace SolBo.Shared.Rules.Validation
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => Path: {solbot.Strategy.AvailableStrategy.StoragePath}."
+                    : $"{RuleName} error. Set StoragePath property correctly."
             };
         }
 

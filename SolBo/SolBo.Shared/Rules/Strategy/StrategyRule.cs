@@ -13,8 +13,8 @@ namespace SolBo.Shared.Rules.Strategy
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} selected"
-                    : $"{RuleName} not selected"
+                    ? $"{RuleName} SELECTED => Id: {solbot.Strategy.ActiveId}."
+                    : $"{RuleName} not selected. Set ActiveId property correctly."
             };
         }
         public bool RulePassed(Solbot solbot)

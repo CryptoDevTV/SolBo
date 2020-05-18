@@ -41,7 +41,7 @@ namespace SolBo.Agent
 
             try
             {
-                var servicesProvider = DependencyProvider.Get(app);
+                var servicesProvider = DependencyProvider.Get();
 
                 var jobFactory = new JobFactory(servicesProvider);
 

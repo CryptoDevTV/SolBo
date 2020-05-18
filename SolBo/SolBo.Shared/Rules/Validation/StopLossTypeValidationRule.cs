@@ -13,8 +13,8 @@ namespace SolBo.Shared.Rules.Validation
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => StopLossType: {solbot.Strategy.AvailableStrategy.StopLossType}."
+                    : $"{RuleName} error. Set StopLossType property correctly."
             };
         }
         public bool RulePassed(Solbot solbot)
