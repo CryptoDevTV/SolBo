@@ -15,6 +15,7 @@ W strategii tej bot śledzi cenę zdefiniowanego symbolu (np. `BTCUSDT`), poprze
 - Bot śledzi zdefiniowaną kryptowalutę poprzez okresowe pobieranie jej ceny,
 - Bot przechowuje średnią cenę śledzonej kryptowaluty,
 - Bot składa zlecenie kupna w momencie obniżenia średniej ceny o zdefiniowaną wartość określoną w procentach,
+- Bot składa zlecenie kupna określoną wartością salda (nie musi zajmować pozycji all in),
 - Bot składa zlecenie sprzedaży, po zrealizowaniu zlecenia zakupu z ceną większą o określoną wartość wyrażoną w procentach,
 - Bot posiada możliwość ustawienia zlecenia typu STOP LOSS.
 
