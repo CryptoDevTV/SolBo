@@ -22,9 +22,8 @@ namespace SolBo.Shared.Rules.Mode
                 ApiCredentials = new ApiCredentials("apikey", "apisecret")
             });
         }
-
         public string RuleName => "PRODUCTION MODE";
-
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             Logger.Info($"{RuleName} START");
@@ -44,7 +43,6 @@ namespace SolBo.Shared.Rules.Mode
                 Message = "{RuleName} EXECUTED"
             };
         }
-
         public bool RulePassed(Solbot solbot)
             => true;
     }

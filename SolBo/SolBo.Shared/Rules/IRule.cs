@@ -7,5 +7,6 @@ namespace SolBo.Shared.Rules
         bool RulePassed(Solbot solbot);
         ResultRule ExecutedRule(Solbot solbot);
         string RuleName { get; }
+        string Message { get; }
     }
 }

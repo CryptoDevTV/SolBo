@@ -15,38 +15,42 @@ namespace SolBo.Shared.Rules.Mode
         {
             _marketService = marketService;
         }
-
         public string RuleName => "TEST MODE";
-
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
-            _rules.Add(new StopLossStepRule(_marketService));
-            _rules.Add(new StopLossExecuteTestRule());
+            var passed = RulePassed(solbot);
+            var message = passed ? $"{RuleName} EXECUTED" : $"{RuleName} NOT EXECUTED";
 
-            _rules.Add(new SellStepRule(_marketService));
-            _rules.Add(new SellExecuteTestRule());
-
-            _rules.Add(new BuyStepRule(_marketService));
-            _rules.Add(new BuyExecuteTestRule());
-
-            Logger.Info($"{RuleName} START");
-
-            foreach (var item in _rules)
+            if(passed)
             {
-                var result = item.ExecutedRule(solbot);
+                _rules.Add(new StopLossStepRule(_marketService));
+                _rules.Add(new StopLossExecuteTestRule());
 
-                Logger.Info($"{result.Message}");
+                _rules.Add(new SellStepRule(_marketService));
+                _rules.Add(new SellExecuteTestRule());
+
+                _rules.Add(new BuyStepRule(_marketService));
+                _rules.Add(new BuyExecuteTestRule());
+
+                Logger.Info($"{RuleName} START");
+
+                foreach (var item in _rules)
+                {
+                    var result = item.ExecutedRule(solbot);
+
+                    Logger.Info($"{result.Message}");
+                }
+
+                Logger.Info($"{RuleName} END");
             }
-
-            Logger.Info($"{RuleName} END");
 
             return new ResultRule
             {
-                Success = RulePassed(solbot),
-                Message = $"{RuleName} EXECUTED"
+                Success = passed,
+                Message = message
             };
         }
-
         public bool RulePassed(Solbot solbot)
             => true;
     }

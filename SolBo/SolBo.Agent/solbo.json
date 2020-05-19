@@ -12,7 +12,7 @@
         "symbol": "ETHBTC",
         "storagepath": "C:\\solbo\\",
         "ticker": 0,
-        "average": 5,
+        "average": 3,
         "buypercentagedown": 2,
         "sellpercentageup": 3,
         "stoplosspercentagedown": 10,

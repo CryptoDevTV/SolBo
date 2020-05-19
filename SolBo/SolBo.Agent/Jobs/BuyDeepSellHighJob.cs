@@ -22,14 +22,14 @@ namespace SolBo.Agent.Jobs
 
         private readonly IStorageService _storageService;
         private readonly IMarketService _marketService;
-        private readonly ISchedulerService _schedulerService;
+        private readonly IConfigurationService _schedulerService;
 
         private readonly ICollection<IRule> _rules = new HashSet<IRule>();
 
         public BuyDeepSellHighJob(
             IStorageService storageService,
             IMarketService marketService,
-            ISchedulerService schedulerService)
+            IConfigurationService schedulerService)
         {
             _storageService = storageService;
             _marketService = marketService;

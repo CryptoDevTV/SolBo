@@ -5,6 +5,7 @@ namespace SolBo.Shared.Rules.Strategy
     public class StrategyRule : IRule
     {
         public string RuleName => "ACTIVE STRATEGY";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -13,8 +14,8 @@ namespace SolBo.Shared.Rules.Strategy
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} SELECTED => Id: {solbot.Strategy.ActiveId}."
-                    : $"{RuleName} not selected. Set ActiveId property correctly."
+                    ? $"{RuleName} SELECTED => ActiveId: {solbot.Strategy.ActiveId}."
+                    : $"{RuleName} not selected. Set ActiveId."
             };
         }
         public bool RulePassed(Solbot solbot)

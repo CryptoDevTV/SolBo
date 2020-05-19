@@ -1,5 +1,6 @@
 ﻿using SolBo.Shared.Contexts;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
 using System;
@@ -14,6 +15,7 @@ namespace SolBo.Shared.Rules.Market
             _storageService = storageService;
         }
         public string RuleName => "CALCULATE AVERAGE";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -22,14 +24,16 @@ namespace SolBo.Shared.Rules.Market
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => Average: {solbot.Communication.Average.Current}, From last: {solbot.Communication.Average.Count}"
+                    : $"{RuleName} error. {Message}"
             };
         }
         public bool RulePassed(Solbot solbot)
         {
             try
             {
+                var count = _storageService.GetValues().Count;
+
                 var storedPriceAverage = AverageContext.Average(
                     _storageService.GetValues(),
                     4,
@@ -37,13 +41,18 @@ namespace SolBo.Shared.Rules.Market
 
                 solbot.Communication.Average = new PriceMessage
                 {
-                    Current = storedPriceAverage
+                    Current = storedPriceAverage,
+                    Count = count < solbot.Strategy.AvailableStrategy.Average
+                    ? count
+                    : solbot.Strategy.AvailableStrategy.Average
                 };
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Message = e.GetFullMessage();
+
                 return false;
             }
         }

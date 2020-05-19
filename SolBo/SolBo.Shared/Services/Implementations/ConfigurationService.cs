@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SolBo.Shared.Services.Implementations
 {
-    public class SchedulerService : ISchedulerService
+    public class ConfigurationService : IConfigurationService
     {
         private readonly JsonSerializerOptions _options;
-        public SchedulerService()
+        public ConfigurationService()
         {
             _options = new JsonSerializerOptions
             {
@@ -17,9 +17,9 @@ namespace SolBo.Shared.Services.Implementations
                 WriteIndented = true
             };
         }
-        public async Task<SchedulerResponse> GetConfigAsync(string fileName)
+        public async Task<ConfigurationResponse> GetConfigAsync(string fileName)
         {
-            var result = new SchedulerResponse();
+            var result = new ConfigurationResponse();
 
             using (FileStream fs = File.OpenRead(SetPath(fileName)))
             {
@@ -28,9 +28,9 @@ namespace SolBo.Shared.Services.Implementations
 
             return result;
         }
-        public async Task<SchedulerResponse> SetConfigAsync(string fileName, Solbot solbot)
+        public async Task<ConfigurationResponse> SetConfigAsync(string fileName, Solbot solbot)
         {
-            var result = new SchedulerResponse();
+            var result = new ConfigurationResponse();
 
             using (FileStream fs = File.Create(SetPath(fileName)))
             {

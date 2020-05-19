@@ -1,4 +1,5 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
 using System;
 using System.IO;
@@ -13,6 +14,8 @@ namespace SolBo.Shared.Rules.Storage
             _storageService = storageService;
         }
         public string RuleName => "SET STORAGE";
+        public string Message { get; set; }
+        public string StoragePath { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -21,22 +24,26 @@ namespace SolBo.Shared.Rules.Storage
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} SUCCESS => Storage set."
-                    : $"{RuleName} error. Strage added."
-            }
+                    ? $"{RuleName} SUCCESS => Storage Path: {StoragePath}."
+                    : $"{RuleName} error. {Message}"
+            };
         }
         public bool RulePassed(Solbot solbot)
         {
             try
             {
-                _storageService.SetPath(
-                Path.Combine(
-                    solbot.Strategy.AvailableStrategy.StoragePath, $"{solbot.Strategy.AvailableStrategy.Symbol}.txt"));
+                StoragePath = Path.Combine(
+                    solbot.Strategy.AvailableStrategy.StoragePath,
+                    $"{solbot.Strategy.AvailableStrategy.Symbol}.txt");
+
+                _storageService.SetPath(StoragePath);
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Message = e.GetFullMessage();
+
                 return false;
             }
         }

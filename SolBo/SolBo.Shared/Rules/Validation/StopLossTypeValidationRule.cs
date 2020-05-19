@@ -5,6 +5,7 @@ namespace SolBo.Shared.Rules.Validation
     public class StopLossTypeValidationRule : IRule
     {
         public string RuleName => "STOP LOSS TYPE VALIDATION";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -14,7 +15,7 @@ namespace SolBo.Shared.Rules.Validation
                 Success = result,
                 Message = result
                     ? $"{RuleName} SUCCESS => StopLossType: {solbot.Strategy.AvailableStrategy.StopLossType}."
-                    : $"{RuleName} error. Set StopLossType property correctly."
+                    : $"{RuleName} error. Set StopLossType."
             };
         }
         public bool RulePassed(Solbot solbot)

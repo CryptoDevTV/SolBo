@@ -1,6 +1,7 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
+using System;
 
 namespace SolBo.Shared.Rules.Mode
 {
@@ -11,9 +12,8 @@ namespace SolBo.Shared.Rules.Mode
         {
             _marketService = marketService;
         }
-
         public string RuleName => "BUY STEP";
-
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -22,11 +22,10 @@ namespace SolBo.Shared.Rules.Mode
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} reached"
-                    : $"{RuleName} not reached"
+                    ? $"{RuleName} REACHED => {Message}"
+                    : $"{RuleName} not reached. {Message}"
             };
         }
-
         public bool RulePassed(Solbot solbot)
         {
             var result = _marketService.IsGoodToBuy(
@@ -39,6 +38,10 @@ namespace SolBo.Shared.Rules.Mode
                 Change = result.PercentChanged,
                 PriceReached = result.IsReadyForMarket
             };
+
+            Message = result.PercentChanged < 0
+                ? $"Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Buy.Change)}%"
+                : $"Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Buy.Change)}%";
 
             return result.IsReadyForMarket;
         }

@@ -1,4 +1,5 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
 using System;
 
@@ -12,6 +13,7 @@ namespace SolBo.Shared.Rules.Market
             _storageService = storageService;
         }
         public string RuleName => "SAVE PRICE";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -20,8 +22,8 @@ namespace SolBo.Shared.Rules.Market
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => Price: {solbot.Communication.Price.Current}"
+                    : $"{RuleName} error. {Message}"
             };
         }
         public bool RulePassed(Solbot solbot)
@@ -32,8 +34,10 @@ namespace SolBo.Shared.Rules.Market
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Message = e.GetFullMessage();
+
                 return false;
             }
         }

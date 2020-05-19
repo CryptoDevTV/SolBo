@@ -5,6 +5,7 @@ namespace SolBo.Shared.Rules.Validation
     public class TickerValidationRule : IRule
     {
         public string RuleName => "TICKER VALIDATION";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -14,7 +15,7 @@ namespace SolBo.Shared.Rules.Validation
                 Success = result,
                 Message = result
                     ? $"{RuleName} SUCCESS => Ticker: {solbot.Strategy.AvailableStrategy.Ticker}"
-                    : $"{RuleName} error. Set Ticker property correctly."
+                    : $"{RuleName} error. Set Ticker."
             };
         }
         public bool RulePassed(Solbot solbot)

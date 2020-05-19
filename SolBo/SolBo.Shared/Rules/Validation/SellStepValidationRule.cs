@@ -5,6 +5,7 @@ namespace SolBo.Shared.Rules.Validation
     public class SellStepValidationRule : IRule
     {
         public string RuleName => "SELL PERCENTAGE VALIDATION";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -14,7 +15,7 @@ namespace SolBo.Shared.Rules.Validation
                 Success = result,
                 Message = result
                     ? $"{RuleName} SUCCESS => SellPercentageUp: {solbot.Strategy.AvailableStrategy.SellPercentageUp}."
-                    : $"{RuleName} error. Set SellPercentageUp property correctly."
+                    : $"{RuleName} error. Set SellPercentageUp."
             };
         }
         public bool RulePassed(Solbot solbot)

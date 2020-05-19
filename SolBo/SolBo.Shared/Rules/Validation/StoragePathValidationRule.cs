@@ -6,6 +6,7 @@ namespace SolBo.Shared.Rules.Validation
     public class StoragePathValidationRule : IRule
     {
         public string RuleName => "STORAGE PATH VALIDATION";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -14,8 +15,8 @@ namespace SolBo.Shared.Rules.Validation
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} SUCCESS => Path: {solbot.Strategy.AvailableStrategy.StoragePath}."
-                    : $"{RuleName} error. Set StoragePath property correctly."
+                    ? $"{RuleName} SUCCESS => StoragePath: {solbot.Strategy.AvailableStrategy.StoragePath}."
+                    : $"{RuleName} error. Set StoragePath."
             };
         }
 

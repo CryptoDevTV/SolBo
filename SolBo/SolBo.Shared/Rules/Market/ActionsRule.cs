@@ -5,6 +5,7 @@ namespace SolBo.Shared.Rules.Market
     public class ActionsRule : IRule
     {
         public string RuleName => "BOUGHT VALIDATION";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -14,7 +15,7 @@ namespace SolBo.Shared.Rules.Market
                 Success = result,
                 Message = result
                     ? $"{RuleName} SUCCESS => Bought: {solbot.Actions.Bought}."
-                    : $"{RuleName} error. Set Bought property correctly."
+                    : $"{RuleName} error. Set Bought."
             };
         }
         public bool RulePassed(Solbot solbot)

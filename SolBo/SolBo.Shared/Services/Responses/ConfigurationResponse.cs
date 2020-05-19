@@ -2,7 +2,7 @@
 
 namespace SolBo.Shared.Services.Responses
 {
-    public class SchedulerResponse
+    public class ConfigurationResponse
     {
         public Solbot SolBotConfig { get; set; }
         public bool WriteSuccess { get; set; }

@@ -5,6 +5,7 @@ namespace SolBo.Shared.Rules.Validation
     public class AverageValidationRule : IRule
     {
         public string RuleName => "AVERAGE VALIDATION";
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -14,7 +15,7 @@ namespace SolBo.Shared.Rules.Validation
                 Success = result,
                 Message = result
                     ? $"{RuleName} SUCCESS => Average: {solbot.Strategy.AvailableStrategy.Average}."
-                    : $"{RuleName} error. Set Ticker property correctly."
+                    : $"{RuleName} error. Set Average."
             };
         }
         public bool RulePassed(Solbot solbot)

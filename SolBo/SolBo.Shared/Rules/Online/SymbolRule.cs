@@ -1,7 +1,9 @@
 ﻿using Binance.Net.Interfaces;
 using Binance.Net.Objects;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Messages.Rules;
+using System;
 using System.Linq;
 
 namespace SolBo.Shared.Rules.Online
@@ -13,9 +15,8 @@ namespace SolBo.Shared.Rules.Online
         {
             _binanceClient = binanceClient;
         }
-
         public string RuleName => "SYMBOL VALIDATION";
-
+        public string Message { get; set; }
         public ResultRule ExecutedRule(Solbot solbot)
         {
             var result = RulePassed(solbot);
@@ -24,37 +25,53 @@ namespace SolBo.Shared.Rules.Online
             {
                 Success = result,
                 Message = result
-                    ? $"{RuleName} success"
-                    : $"{RuleName} error"
+                    ? $"{RuleName} SUCCESS => Symbol: {solbot.Strategy.AvailableStrategy.Symbol}"
+                    : $"{RuleName} error. {Message}"
             };
         }
 
         public bool RulePassed(Solbot solbot)
         {
-            var exchangeInfo = _binanceClient.GetExchangeInfo();
-
-            if (exchangeInfo.Success)
+            try
             {
-                var symbol = exchangeInfo
-                    .Data
-                    .Symbols
-                    .FirstOrDefault(e => e.Name == solbot.Strategy.AvailableStrategy.Symbol);
+                var exchangeInfo = _binanceClient.GetExchangeInfo();
 
-                if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
+                if (exchangeInfo.Success)
                 {
-                    solbot.Communication = new Communication
-                    {
-                        Symbol = new SymbolMessage
-                        {
-                            BaseAsset = symbol.BaseAsset,
-                            QuoteAsset = symbol.QuoteAsset
-                        }
-                    };
+                    var symbol = exchangeInfo
+                        .Data
+                        .Symbols
+                        .FirstOrDefault(e => e.Name == solbot.Strategy.AvailableStrategy.Symbol);
 
-                    return true;
+                    if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
+                    {
+                        solbot.Communication = new Communication
+                        {
+                            Symbol = new SymbolMessage
+                            {
+                                BaseAsset = symbol.BaseAsset,
+                                QuoteAsset = symbol.QuoteAsset
+                            }
+                        };
+
+                        return true;
+                    }
+
+                    Message = $"Symbol: {solbot.Strategy.AvailableStrategy.Symbol} not exist on {solbot.Exchange.Name}.";
+
+                    return false;
                 }
+
+                Message = exchangeInfo.Error.Message;
+
+                return false;
             }
-            return false;
+            catch (Exception e)
+            {
+                Message = e.GetFullMessage();
+
+                return false;
+            }
         }
     }
 }
