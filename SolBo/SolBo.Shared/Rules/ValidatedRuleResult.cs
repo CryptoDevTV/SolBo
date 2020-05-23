@@ -1,4 +1,6 @@
-﻿namespace SolBo.Shared.Rules
+﻿using SolBo.Shared.Domain.Statics;
+
+namespace SolBo.Shared.Rules
 {
     public class ValidatedRuleResult : IRuleResult
     {
@@ -7,8 +9,8 @@
             {
                 Success = result,
                 Message = result
-                    ? $"Validation SUCCESS => {ruleAttribute}" 
-                    : $"Validation ERROR => {ruleAttribute} => Value => {attributeValue} => BAD"
+                    ? LogGenerator.ValidationSuccess(ruleAttribute)
+                    : LogGenerator.ValidationError(ruleAttribute, attributeValue)
             };
         protected ValidatedRuleResult() { }
         public string Message { get; private set; }

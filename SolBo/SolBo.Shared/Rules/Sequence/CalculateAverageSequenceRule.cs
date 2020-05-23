@@ -1,6 +1,6 @@
 ﻿using SolBo.Shared.Contexts;
 using SolBo.Shared.Domain.Configs;
-using SolBo.Shared.Extensions;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
 using System;
@@ -36,12 +36,12 @@ namespace SolBo.Shared.Rules.Sequence
                 };
 
                 result.Success = true;
-                result.Message = $"{SequenceName} SUCCESS => {storedPriceAverage}";
+                result.Message = LogGenerator.SequenceSuccess(SequenceName, $"{storedPriceAverage}");
             }
             catch (Exception e)
             {
                 result.Success = false;
-                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
+                result.Message = LogGenerator.SequenceException(SequenceName, e);
             }
             return result;
         }

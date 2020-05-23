@@ -1,18 +1,17 @@
 ﻿using Binance.Net.Interfaces;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Statics;
 
 namespace SolBo.Shared.Contexts
 {
     public class TickerContext
     {
         private IBinanceClient _binanceClient;
-
         public TickerContext(
             IBinanceClient binanceClient)
         {
             _binanceClient = binanceClient;
         }
-
         public TickerContextResponse GetPriceValue(AvailableStrategy availableStrategy)
         {
             var result = new TickerContextResponse();
@@ -45,7 +44,7 @@ namespace SolBo.Shared.Contexts
             }
             else
             {
-                result.Message = "Bad ticker definition";
+                result.Message = LogGenerator.ErrorTicker;
             }
             return result;
         }

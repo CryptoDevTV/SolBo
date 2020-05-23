@@ -1,6 +1,7 @@
 ﻿using Binance.Net;
 using NLog;
 using Quartz;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Rules;
 using SolBo.Shared.Rules.Mode;
 using SolBo.Shared.Rules.Sequence;
@@ -88,9 +89,9 @@ namespace SolBo.Agent.Jobs
                     var saveConfig = await _schedulerService.SetConfigAsync(configFileName, solbot);
 
                     if (saveConfig.WriteSuccess)
-                        Logger.Trace($"Save config success");
+                        Logger.Trace(LogGenerator.SaveSuccess);
                     else
-                        Logger.Error($"Save config error");
+                        Logger.Error(LogGenerator.SaveError);
                 }
             }
             catch (Exception e)

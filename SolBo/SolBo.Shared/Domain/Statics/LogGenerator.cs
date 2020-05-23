@@ -1,11 +1,46 @@
 ﻿using Binance.Net.Objects;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Services.Responses;
+using System;
 
 namespace SolBo.Shared.Domain.Statics
 {
     public static class LogGenerator
     {
+        public static string ErrorTicker => "Bad ticker definition";
+
+        public static string ValidationSuccess(string ruleAttribute)
+            => $"Validation SUCCESS => {ruleAttribute}";
+
+        public static string ValidationError(string ruleAttribute, string attributeValue)
+            => $"Validation ERROR => {ruleAttribute} => Value => {attributeValue} => BAD";
+
+        public static string SaveSuccess => "Save SUCCESS";
+        public static string SaveError => "Save ERROR";
+
+        public static string SequenceSuccess(string sequenceName, string attribute)
+            => $"{sequenceName} SUCCESS => {attribute}";
+        public static string SequenceError(string sequenceName, string attribute)
+            => $"{sequenceName} ERROR => {attribute}";
+        public static string SequenceException(string sequenceName, Exception e)
+            => $"{sequenceName} EXCEPTION => {e.GetFullMessage()}";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static string CurrentPrice(AvailableStrategy availableStrategy, decimal price, decimal availableQuote)
             => $"Current price ({availableStrategy.Ticker}) for {availableStrategy.Symbol} is {price}. Available to trade: {availableQuote} ({availableStrategy.FundPercentage}%)";
 

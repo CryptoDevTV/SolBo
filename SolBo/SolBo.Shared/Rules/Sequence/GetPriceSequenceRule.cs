@@ -1,7 +1,7 @@
 ﻿using Binance.Net.Interfaces;
 using SolBo.Shared.Contexts;
 using SolBo.Shared.Domain.Configs;
-using SolBo.Shared.Extensions;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using System;
 
@@ -31,18 +31,18 @@ namespace SolBo.Shared.Rules.Sequence
                         Current = currentPrice.Result
                     };
                     result.Success = true;
-                    result.Message = $"{SequenceName} SUCCESS => {currentPrice.Result}";
+                    result.Message = LogGenerator.SequenceSuccess(SequenceName, $"{currentPrice.Result}");
                 }
                 else
                 {
                     result.Success = false;
-                    result.Message = $"{SequenceName} ERROR => {currentPrice.Message}";
+                    result.Message = LogGenerator.SequenceError(SequenceName, currentPrice.Message);
                 }
             }
             catch (Exception e)
             {
                 result.Success = false;
-                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
+                result.Message = LogGenerator.SequenceException(SequenceName, e);
             }
             return result;
         }

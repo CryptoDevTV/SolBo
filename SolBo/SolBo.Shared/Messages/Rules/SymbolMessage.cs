@@ -6,8 +6,5 @@ namespace SolBo.Shared.Messages.Rules
     {
         public string BaseAsset { get; set; }
         public string QuoteAsset { get; set; }
-
-        public string ToJson()
-            => JsonSerializer.Serialize(this);
     }
 }

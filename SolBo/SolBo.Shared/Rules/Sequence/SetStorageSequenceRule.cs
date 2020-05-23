@@ -1,8 +1,7 @@
 ﻿using SolBo.Shared.Domain.Configs;
-using SolBo.Shared.Extensions;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Services;
 using System;
-using System.IO;
 
 namespace SolBo.Shared.Rules.Sequence
 {
@@ -16,9 +15,7 @@ namespace SolBo.Shared.Rules.Sequence
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var storagePath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    $"{solbot.Strategy.AvailableStrategy.Symbol}.txt");
+            var storagePath = GlobalConfig.PriceFile(solbot.Strategy.AvailableStrategy.Symbol);
 
             var result = new SequencedRuleResult();
             try
@@ -26,12 +23,12 @@ namespace SolBo.Shared.Rules.Sequence
                 _storageService.SetPath(storagePath);
 
                 result.Success = true;
-                result.Message = $"{SequenceName} SUCCESS => {storagePath}";
+                result.Message = LogGenerator.SequenceSuccess(SequenceName, storagePath);
             }
             catch (Exception e)
             {
                 result.Success = false;
-                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
+                result.Message = LogGenerator.SequenceException(SequenceName, e);
             }
             return result;
         }

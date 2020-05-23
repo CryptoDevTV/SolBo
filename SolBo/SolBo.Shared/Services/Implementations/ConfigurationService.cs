@@ -1,4 +1,5 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Services.Responses;
 using System.IO;
 using System.Text.Json;
@@ -21,7 +22,7 @@ namespace SolBo.Shared.Services.Implementations
         {
             var result = new ConfigurationResponse();
 
-            using (FileStream fs = File.OpenRead(SetPath(fileName)))
+            using (FileStream fs = File.OpenRead(GlobalConfig.AppFile(fileName)))
             {
                 result.SolBotConfig = await JsonSerializer.DeserializeAsync<Solbot>(fs, _options);
             }
@@ -32,7 +33,7 @@ namespace SolBo.Shared.Services.Implementations
         {
             var result = new ConfigurationResponse();
 
-            using (FileStream fs = File.Create(SetPath(fileName)))
+            using (FileStream fs = File.Create(GlobalConfig.AppFile(fileName)))
             {
                 await JsonSerializer.SerializeAsync(fs, solbot, options: _options);
             }
@@ -41,7 +42,5 @@ namespace SolBo.Shared.Services.Implementations
 
             return result;
         }
-        private string SetPath(string fileName)
-            => Path.Combine(Directory.GetCurrentDirectory(), $"{fileName}.json");
     }
 }

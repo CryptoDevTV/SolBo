@@ -1,7 +1,7 @@
 ﻿using Binance.Net.Interfaces;
 using Binance.Net.Objects;
 using SolBo.Shared.Domain.Configs;
-using SolBo.Shared.Extensions;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using System;
 using System.Linq;
@@ -41,24 +41,24 @@ namespace SolBo.Shared.Rules.Sequence
                             }
                         };
                         result.Success = true;
-                        result.Message = $"{SequenceName} SUCCESS => {solbot.Strategy.AvailableStrategy.Symbol}";
+                        result.Message = LogGenerator.SequenceSuccess(SequenceName, solbot.Strategy.AvailableStrategy.Symbol);
                     }
                     else
                     {
                         result.Success = false;
-                        result.Message = $"{SequenceName} ERROR => {solbot.Strategy.AvailableStrategy.Symbol} not exist on {solbot.Exchange.Name}.";
+                        result.Message = LogGenerator.SequenceError(SequenceName, solbot.Strategy.AvailableStrategy.Symbol);
                     }
                 }
                 else
                 {
                     result.Success = false;
-                    result.Message = $"{SequenceName} ERROR => {exchangeInfo.Error.Message}";
+                    result.Message = LogGenerator.SequenceError(SequenceName, exchangeInfo.Error.Message);
                 }
             }
             catch (Exception e)
             {
                 result.Success = false;
-                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
+                result.Message = LogGenerator.SequenceException(SequenceName, e);
             }
             return result;
         }
