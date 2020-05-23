@@ -47,8 +47,6 @@ namespace SolBo.Agent.Jobs
                     var solbot = readConfig.SolBotConfig;
 
                     _rules.Add(new StrategyValidationRule());
-
-                    _rules.Add(new StoragePathValidationRule());
                     _rules.Add(new TickerValidationRule());
                     _rules.Add(new AverageValidationRule());
                     _rules.Add(new BuyStepValidationRule());

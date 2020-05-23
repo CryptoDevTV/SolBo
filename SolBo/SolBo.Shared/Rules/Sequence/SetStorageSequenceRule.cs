@@ -17,7 +17,7 @@ namespace SolBo.Shared.Rules.Sequence
         public IRuleResult RuleExecuted(Solbot solbot)
         {
             var storagePath = Path.Combine(
-                    solbot.Strategy.AvailableStrategy.StoragePath,
+                    Directory.GetCurrentDirectory(),
                     $"{solbot.Strategy.AvailableStrategy.Symbol}.txt");
 
             var result = new SequencedRuleResult();

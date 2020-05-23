@@ -60,7 +60,6 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/activeid**|wartość pola **id** aktywnej strategii bota|stała wartość: **1**|obowiązkowe
 **strategy/available/id**|identyfikator strategii|stała wartość: **1**|obowiązkowe
 **strategy/available/symbol**|symbol opisujący parę walutową (dostępną na giełdzie) np.`ETHBTC` gdzie `ETH` to base asset, a `BTC` to quote asset|`ETHBTC`|obowiązkowe
-**strategy/available/storagepath**|ścieżka gdzie bot będzie zapisywał kroki, które wykonuje|Windows: `C:\\solbo\\`|obowiązkowe
 **strategy/available/ticker**|pole określające rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
@@ -86,7 +85,6 @@ Użytkownik nie powinien samodzielnie modyfikować parametru **actions/bought**.
       {
         "id": 1,
         "symbol": "ETHBTC",
-        "storagepath": "C:\\solbo\\",
         "ticker": 0,
         "average": 5,
         "buypercentagedown": 2,
@@ -109,7 +107,7 @@ Bot zostanie uruchomiony w trybie testowym (puste wartości parametrów **exchan
 
 ## Tryb testowy
 
-Bot posiada tryb testowy, który "emuluje" składanie zleceń na giełdzie, techniczne zapisy kroków wykonanych przez bota można śledzić w pliku zapisywanym zgodnie z wartością parametru **strategy/available/storagepath** i nazwą zgodną z wartością parametru **strategy/available/symbol**. Tryb ten jest mocno sugerowany do użycia w pierwszym etapie korzystania z bota. Zapisy dokonywane przez bota w pliku mogą posłużyć analizie i weryfikacji poprawności działania bota w połączeniu z wykresem giełdy.
+Bot posiada tryb testowy, który "emuluje" składanie zleceń na giełdzie, techniczne zapisy kroków wykonanych przez bota można śledzić w pliku zapisywanym w katalogu instalacyjnym / uruchomieniowym i nazwą zgodną z wartością parametru **strategy/available/symbol**. Tryb ten jest mocno sugerowany do użycia w pierwszym etapie korzystania z bota. Zapisy dokonywane przez bota w pliku mogą posłużyć analizie i weryfikacji poprawności działania bota w połączeniu z wykresem giełdy.
 
 Tryb ten jest automatycznie aktywowany poprzez pozostawienie pustych parametrów **exchange/apikey** i **exchange/apisecret**.
 

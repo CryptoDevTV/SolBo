@@ -4,7 +4,6 @@
     {
         public int Id { get; set; }
         public string Symbol { get; set; }
-        public string StoragePath { get; set; }
         public int BuyPercentageDown { get; set; }
         public int SellPercentageUp { get; set; }
         public int Average { get; set; }

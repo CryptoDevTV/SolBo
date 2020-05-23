@@ -10,7 +10,6 @@
       {
         "id": 1,
         "symbol": "ETHBTC",
-        "storagepath": "C:\\solbo\\",
         "ticker": 0,
         "average": 3,
         "buypercentagedown": 2,
