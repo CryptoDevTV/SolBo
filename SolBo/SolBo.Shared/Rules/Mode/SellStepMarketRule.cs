@@ -1,13 +1,14 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
-using System;
 
 namespace SolBo.Shared.Rules.Mode
 {
     public class SellStepMarketRule : IMarketRule
     {
-        public string OrderName => "SELL";
+        public MarketOrderType MarketOrder => MarketOrderType.SELLING;
         private readonly IMarketService _marketService;
         public SellStepMarketRule(IMarketService marketService)
         {
@@ -30,8 +31,8 @@ namespace SolBo.Shared.Rules.Mode
             {
                 Success = result.IsReadyForMarket,
                 Message = result.PercentChanged > 0
-                    ? $"{OrderName} => Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Sell.Change)}%"
-                    : $"{OrderName} => Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Sell.Change)}%"
+                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.Sell.Change)
+                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.Sell.Change)
             };
         }
     }

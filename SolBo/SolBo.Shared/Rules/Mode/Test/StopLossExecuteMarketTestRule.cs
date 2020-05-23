@@ -1,10 +1,12 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 
 namespace SolBo.Shared.Rules.Mode.Test
 {
     public class StopLossExecuteMarketTestRule : IMarketRule
     {
-        public string OrderName => "STOPLOSS";
+        public MarketOrderType MarketOrder => MarketOrderType.STOPLOSS;
         public IRuleResult RuleExecuted(Solbot solbot)
         {
             var result = solbot.Communication.StopLoss.PriceReached && solbot.Actions.Bought == 1;
@@ -19,8 +21,8 @@ namespace SolBo.Shared.Rules.Mode.Test
             {
                 Success = result,
                 Message = result
-                    ? $"{OrderName} => Price reached ({solbot.Communication.StopLoss.PriceReached}), bought before ({solbot.Actions.Bought}), stop loss type ({solbot.Strategy.AvailableStrategy.StopLossType})"
-                    : $"{OrderName} => Price reached ({ solbot.Communication.StopLoss.PriceReached}), bought before ({ solbot.Actions.Bought})"
+                    ? LogGenerator.ExecuteMarketSuccess(MarketOrder, solbot.Communication.StopLoss.PriceReached, solbot.Actions.Bought)
+                    : LogGenerator.ExecuteMarketError(MarketOrder, solbot.Communication.StopLoss.PriceReached, solbot.Actions.Bought)
             };
         }
     }

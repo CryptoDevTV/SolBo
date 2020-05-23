@@ -3,6 +3,7 @@ using Binance.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using NLog;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Services;
 using System.Collections.Generic;
 
@@ -23,10 +24,10 @@ namespace SolBo.Shared.Rules.Mode
                 ApiCredentials = new ApiCredentials("apikey", "apisecret")
             });
         }
-        
+
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            Logger.Info($"{ModeName} START");
+            Logger.Info(LogGenerator.ModeStart(ModeName));
 
             foreach (var item in _rules)
             {
@@ -35,11 +36,11 @@ namespace SolBo.Shared.Rules.Mode
                 Logger.Info($"{result.Message}");
             }
 
-            Logger.Info($"{ModeName} END");
+            Logger.Info(LogGenerator.ModeEnd(ModeName));
 
             return new ModeRuleResult
             {
-                Message = $"{ModeName} EXECUTED",
+                Message = LogGenerator.ModeExecuted(ModeName),
                 Success = true
             };
         }

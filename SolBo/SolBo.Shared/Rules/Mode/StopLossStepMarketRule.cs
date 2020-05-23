@@ -1,13 +1,14 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
-using System;
 
 namespace SolBo.Shared.Rules.Mode
 {
     public class StopLossStepMarketRule : IMarketRule
     {
-        public string OrderName => "STOPLOSS";
+        public MarketOrderType MarketOrder => MarketOrderType.STOPLOSS;
         private readonly IMarketService _marketService;
         public StopLossStepMarketRule(IMarketService marketService)
         {
@@ -15,7 +16,7 @@ namespace SolBo.Shared.Rules.Mode
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            if(solbot.Strategy.AvailableStrategy.StopLossPercentageDown == 0)
+            if (solbot.Strategy.AvailableStrategy.StopLossPercentageDown == 0)
             {
                 solbot.Communication.StopLoss = new PercentageMessage
                 {
@@ -26,15 +27,15 @@ namespace SolBo.Shared.Rules.Mode
                 return new MarketRuleResult()
                 {
                     Success = false,
-                    Message = $"{OrderName} => OFF"
+                    Message = LogGenerator.Off(MarketOrder)
                 };
             }
             else
             {
                 var result = _marketService.IsStopLossReached(
-                solbot.Strategy.AvailableStrategy.StopLossPercentageDown,
-                solbot.Communication.Average.Current,
-                solbot.Communication.Price.Current);
+                    solbot.Strategy.AvailableStrategy.StopLossPercentageDown,
+                    solbot.Communication.Average.Current,
+                    solbot.Communication.Price.Current);
 
                 solbot.Communication.StopLoss = new PercentageMessage
                 {
@@ -46,8 +47,8 @@ namespace SolBo.Shared.Rules.Mode
                 {
                     Success = result.IsReadyForMarket,
                     Message = result.PercentChanged < 0
-                        ? $"{OrderName} => Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.StopLoss.Change)}%"
-                        : $"{OrderName} => Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.StopLoss.Change)}%"
+                        ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.StopLoss.Change)
+                        : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.StopLoss.Change)
                 };
             }
         }

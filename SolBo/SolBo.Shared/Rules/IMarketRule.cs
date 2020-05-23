@@ -1,7 +1,9 @@
-﻿namespace SolBo.Shared.Rules
+﻿using SolBo.Shared.Domain.Enums;
+
+namespace SolBo.Shared.Rules
 {
     public interface IMarketRule : IRule
     {
-        string OrderName { get; }
+        MarketOrderType MarketOrder { get; }
     }
 }

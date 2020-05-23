@@ -1,10 +1,12 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 
 namespace SolBo.Shared.Rules.Mode.Test
 {
     public class BuyExecuteMarketTestRule : IMarketRule
     {
-        public string OrderName => "BUY";
+        public MarketOrderType MarketOrder => MarketOrderType.BUYING;
         public IRuleResult RuleExecuted(Solbot solbot)
         {
             var result = solbot.Communication.Buy.PriceReached && solbot.Actions.Bought == 0;
@@ -19,8 +21,8 @@ namespace SolBo.Shared.Rules.Mode.Test
             {
                 Success = result,
                 Message = result
-                    ? $"{OrderName} => Price reached ({solbot.Communication.Buy.PriceReached}), bought before ({solbot.Actions.Bought}), buying ({solbot.Strategy.AvailableStrategy.Symbol}), using ({solbot.Strategy.AvailableStrategy.FundPercentage}%)"
-                    : $"{OrderName} => Price reached ({solbot.Communication.Buy.PriceReached}), bought before ({solbot.Actions.Bought})"
+                    ? LogGenerator.ExecuteMarketSuccess(MarketOrder, solbot.Communication.Buy.PriceReached, solbot.Actions.Bought)
+                    : LogGenerator.ExecuteMarketError(MarketOrder, solbot.Communication.Buy.PriceReached, solbot.Actions.Bought)
             };
         }
     }
