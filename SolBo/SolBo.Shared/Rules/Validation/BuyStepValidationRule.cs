@@ -2,22 +2,14 @@
 
 namespace SolBo.Shared.Rules.Validation
 {
-    public class BuyStepValidationRule : IRule
+    public class BuyStepValidationRule : IValidatedRule
     {
-        public string RuleName => "BUY PERCENTAGE VALIDATION";
-        public string Message { get; set; }
-        public ResultRule ExecutedRule(Solbot solbot)
-        {
-            var result = RulePassed(solbot);
-
-            return new ResultRule
-            {
-                Success = result,
-                Message = result
-                    ? $"{RuleName} SUCCESS => BuyPercentageDown: {solbot.Strategy.AvailableStrategy.BuyPercentageDown}."
-                    : $"{RuleName} error. Set BuyPercentageDown."
-            };
-        }
+        public string RuleAttribute => "BuyPercentageDown";
+        public IRuleResult RuleExecuted(Solbot solbot)
+            => ValidatedRuleResult.New(
+                RulePassed(solbot),
+                RuleAttribute,
+                $"{solbot.Strategy.AvailableStrategy.BuyPercentageDown}");
         public bool RulePassed(Solbot solbot)
             => solbot.Strategy.AvailableStrategy.BuyPercentageDown > 0;
     }

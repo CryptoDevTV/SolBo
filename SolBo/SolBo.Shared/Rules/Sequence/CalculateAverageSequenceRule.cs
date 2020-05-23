@@ -5,31 +5,18 @@ using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
 using System;
 
-namespace SolBo.Shared.Rules.Market
+namespace SolBo.Shared.Rules.Sequence
 {
-    public class CalculateAverageRule : IRule
+    public class CalculateAverageSequenceRule : ISequencedRule
     {
         private readonly IStorageService _storageService;
-        public CalculateAverageRule(IStorageService storageService)
+        public CalculateAverageSequenceRule(IStorageService storageService)
         {
             _storageService = storageService;
         }
-        public string RuleName => "CALCULATE AVERAGE";
-        public string Message { get; set; }
-        public ResultRule ExecutedRule(Solbot solbot)
+        public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var result = RulePassed(solbot);
-
-            return new ResultRule
-            {
-                Success = result,
-                Message = result
-                    ? $"{RuleName} SUCCESS => Average: {solbot.Communication.Average.Current}, From last: {solbot.Communication.Average.Count}"
-                    : $"{RuleName} error. {Message}"
-            };
-        }
-        public bool RulePassed(Solbot solbot)
-        {
+            var result = new SequencedRuleResult();
             try
             {
                 var count = _storageService.GetValues().Count;
@@ -46,15 +33,12 @@ namespace SolBo.Shared.Rules.Market
                     ? count
                     : solbot.Strategy.AvailableStrategy.Average
                 };
-
-                return true;
             }
             catch (Exception e)
             {
-                Message = e.GetFullMessage();
-
-                return false;
+                result.Message = e.GetFullMessage();
             }
+            return result;
         }
     }
 }

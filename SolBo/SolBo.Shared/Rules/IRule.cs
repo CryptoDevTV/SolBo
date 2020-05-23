@@ -4,9 +4,6 @@ namespace SolBo.Shared.Rules
 {
     public interface IRule
     {
-        bool RulePassed(Solbot solbot);
-        ResultRule ExecutedRule(Solbot solbot);
-        string RuleName { get; }
-        string Message { get; }
+        IRuleResult RuleExecuted(Solbot solbot);
     }
 }

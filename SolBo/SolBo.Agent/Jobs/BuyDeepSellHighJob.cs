@@ -2,12 +2,10 @@
 using NLog;
 using Quartz;
 using SolBo.Shared.Rules;
-using SolBo.Shared.Rules.Market;
 using SolBo.Shared.Rules.Mode;
-using SolBo.Shared.Rules.Online;
-using SolBo.Shared.Rules.Storage;
-using SolBo.Shared.Rules.Strategy;
+using SolBo.Shared.Rules.Sequence;
 using SolBo.Shared.Rules.Validation;
+using SolBo.Shared.Rules.Validation.Generated;
 using SolBo.Shared.Services;
 using System;
 using System.Collections.Generic;
@@ -48,7 +46,7 @@ namespace SolBo.Agent.Jobs
                 {
                     var solbot = readConfig.SolBotConfig;
 
-                    _rules.Add(new StrategyRule());
+                    _rules.Add(new StrategyValidationRule());
 
                     _rules.Add(new StoragePathValidationRule());
                     _rules.Add(new TickerValidationRule());
@@ -58,16 +56,16 @@ namespace SolBo.Agent.Jobs
                     _rules.Add(new StopLossStepValidationRule());
                     _rules.Add(new StopLossTypeValidationRule());
                     _rules.Add(new FundStepValidationRule());
-                    _rules.Add(new ActionsRule());
+                    _rules.Add(new BoughtValidationRule());
 
-                    _rules.Add(new SetStorageRule(_storageService));
+                    _rules.Add(new SetStorageSequenceRule(_storageService));
 
                     using (var client = new BinanceClient())
                     {
-                        _rules.Add(new SymbolRule(client));
-                        _rules.Add(new GetPriceRule(client));
-                        _rules.Add(new SavePriceRule(_storageService));
-                        _rules.Add(new CalculateAverageRule(_storageService));
+                        _rules.Add(new SymbolSequenceRule(client));
+                        _rules.Add(new GetPriceSequenceRule(client));
+                        _rules.Add(new SavePriceSequenceRule(_storageService));
+                        _rules.Add(new CalculateAverageSequenceRule(_storageService));
 
                         if (solbot.Exchange.IsInTestMode)
                             _rules.Add(new ModeTestRule(_marketService));
@@ -76,7 +74,7 @@ namespace SolBo.Agent.Jobs
 
                         foreach (var item in _rules)
                         {
-                            var result = item.ExecutedRule(solbot);
+                            var result = item.RuleExecuted(solbot);
 
                             if (result.Success)
                                 Logger.Trace($"{result.Message}");

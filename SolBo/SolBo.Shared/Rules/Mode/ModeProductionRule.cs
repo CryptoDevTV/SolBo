@@ -8,8 +8,9 @@ using System.Collections.Generic;
 
 namespace SolBo.Shared.Rules.Mode
 {
-    public class ModeProductionRule : IRule
+    public class ModeProductionRule : IModeRule
     {
+        public string ModeName => "PRODUCTION MODE";
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         private readonly IMarketService _marketService;
         private readonly ICollection<IRule> _rules = new HashSet<IRule>();
@@ -22,28 +23,24 @@ namespace SolBo.Shared.Rules.Mode
                 ApiCredentials = new ApiCredentials("apikey", "apisecret")
             });
         }
-        public string RuleName => "PRODUCTION MODE";
-        public string Message { get; set; }
-        public ResultRule ExecutedRule(Solbot solbot)
+        
+        public IRuleResult RuleExecuted(Solbot solbot)
         {
-            Logger.Info($"{RuleName} START");
+            Logger.Info($"{ModeName} START");
 
             foreach (var item in _rules)
             {
-                var result = item.ExecutedRule(solbot);
+                var result = item.RuleExecuted(solbot);
 
                 Logger.Info($"{result.Message}");
             }
 
-            Logger.Info($"{RuleName} END");
+            Logger.Info($"{ModeName} END");
 
-            return new ResultRule
+            return new ModeRuleResult
             {
-                Success = RulePassed(solbot),
-                Message = "{RuleName} EXECUTED"
+                Message = $"{ModeName} EXECUTED"
             };
         }
-        public bool RulePassed(Solbot solbot)
-            => true;
     }
 }

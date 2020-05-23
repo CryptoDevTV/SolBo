@@ -2,15 +2,15 @@
 
 namespace SolBo.Shared.Rules.Validation
 {
-    public class StopLossStepValidationRule : IValidatedRule
+    public class StrategyValidationRule : IValidatedRule
     {
-        public string RuleAttribute => "StopLossPercentageDown";
+        public string RuleAttribute => "ActiveId";
         public IRuleResult RuleExecuted(Solbot solbot)
             => ValidatedRuleResult.New(
                 RulePassed(solbot),
                 RuleAttribute,
-                $"{solbot.Strategy.AvailableStrategy.StopLossPercentageDown}");
+                $"{solbot.Strategy.ActiveId}");
         public bool RulePassed(Solbot solbot)
-            => solbot.Strategy.AvailableStrategy.StopLossPercentageDown > 0;
+            => !(solbot.Strategy.AvailableStrategy is null);
     }
 }

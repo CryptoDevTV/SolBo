@@ -6,32 +6,18 @@ using SolBo.Shared.Messages.Rules;
 using System;
 using System.Linq;
 
-namespace SolBo.Shared.Rules.Online
+namespace SolBo.Shared.Rules.Sequence
 {
-    public class SymbolRule : IRule
+    public class SymbolSequenceRule : ISequencedRule
     {
         private readonly IBinanceClient _binanceClient;
-        public SymbolRule(IBinanceClient binanceClient)
+        public SymbolSequenceRule(IBinanceClient binanceClient)
         {
             _binanceClient = binanceClient;
         }
-        public string RuleName => "SYMBOL VALIDATION";
-        public string Message { get; set; }
-        public ResultRule ExecutedRule(Solbot solbot)
+        public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var result = RulePassed(solbot);
-
-            return new ResultRule
-            {
-                Success = result,
-                Message = result
-                    ? $"{RuleName} SUCCESS => Symbol: {solbot.Strategy.AvailableStrategy.Symbol}"
-                    : $"{RuleName} error. {Message}"
-            };
-        }
-
-        public bool RulePassed(Solbot solbot)
-        {
+            var result = new SequencedRuleResult();
             try
             {
                 var exchangeInfo = _binanceClient.GetExchangeInfo();
@@ -53,25 +39,18 @@ namespace SolBo.Shared.Rules.Online
                                 QuoteAsset = symbol.QuoteAsset
                             }
                         };
-
-                        return true;
                     }
-
-                    Message = $"Symbol: {solbot.Strategy.AvailableStrategy.Symbol} not exist on {solbot.Exchange.Name}.";
-
-                    return false;
+                    else
+                        result.Message = $"Symbol: {solbot.Strategy.AvailableStrategy.Symbol} not exist on {solbot.Exchange.Name}.";
                 }
-
-                Message = exchangeInfo.Error.Message;
-
-                return false;
+                else
+                    result.Message = exchangeInfo.Error.Message;
             }
             catch (Exception e)
             {
-                Message = e.GetFullMessage();
-
-                return false;
+                result.Message = e.GetFullMessage();
             }
+            return result;
         }
     }
 }

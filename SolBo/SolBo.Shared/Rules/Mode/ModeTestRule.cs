@@ -6,52 +6,42 @@ using System.Collections.Generic;
 
 namespace SolBo.Shared.Rules.Mode
 {
-    public class ModeTestRule : IRule
+    public class ModeTestRule : IModeRule
     {
+        public string ModeName => "TEST MODE";
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         private readonly IMarketService _marketService;
-        private readonly ICollection<IRule> _rules = new HashSet<IRule>();
+        private readonly ICollection<IMarketRule> _rules = new HashSet<IMarketRule>();
         public ModeTestRule(IMarketService marketService)
         {
             _marketService = marketService;
         }
-        public string RuleName => "TEST MODE";
-        public string Message { get; set; }
-        public ResultRule ExecutedRule(Solbot solbot)
+        public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var passed = RulePassed(solbot);
-            var message = passed ? $"{RuleName} EXECUTED" : $"{RuleName} NOT EXECUTED";
+            _rules.Add(new StopLossStepMarketRule(_marketService));
+            _rules.Add(new StopLossExecuteMarketTestRule());
 
-            if(passed)
+            _rules.Add(new SellStepMarketRule(_marketService));
+            _rules.Add(new SellExecuteMarketTestRule());
+
+            _rules.Add(new BuyStepMarketRule(_marketService));
+            _rules.Add(new BuyExecuteMarketTestRule());
+
+            Logger.Info($"{ModeName} START");
+
+            foreach (var item in _rules)
             {
-                _rules.Add(new StopLossStepRule(_marketService));
-                _rules.Add(new StopLossExecuteTestRule());
+                var result = item.RuleExecuted(solbot);
 
-                _rules.Add(new SellStepRule(_marketService));
-                _rules.Add(new SellExecuteTestRule());
-
-                _rules.Add(new BuyStepRule(_marketService));
-                _rules.Add(new BuyExecuteTestRule());
-
-                Logger.Info($"{RuleName} START");
-
-                foreach (var item in _rules)
-                {
-                    var result = item.ExecutedRule(solbot);
-
-                    Logger.Info($"{result.Message}");
-                }
-
-                Logger.Info($"{RuleName} END");
+                Logger.Info($"{result.Message}");
             }
 
-            return new ResultRule
+            Logger.Info($"{ModeName} END");
+
+            return new ModeRuleResult
             {
-                Success = passed,
-                Message = message
+                Message = $"{ModeName} EXECUTED"
             };
         }
-        public bool RulePassed(Solbot solbot)
-            => true;
     }
 }
