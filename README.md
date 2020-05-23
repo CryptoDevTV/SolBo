@@ -65,7 +65,7 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
 **strategy/available/sellpercentageup**|wartość procentowa określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
-**strategy/available/stoplosspercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`|10|obowiązkowe
+**strategy/available/stoplosspercentagedown**|wartość procentowa określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
 **strategy/available/stoplosstype**|typ określający rodzaj składanego zlecenie typu STOP LOSS|**1** - zlecenie typu STOPLOSSLIMIT, **0** - zlecenie typu SELL na MARKET. [Więcej info](https://binance-docs.github.io/apidocs/spot/en/#new-order-trade)|obowiązkowe
 **strategy/available/fundpercentage**|część kapitału posiadanego na giełdze, którym bot będzie operował wyrażona w procentach|80|obowiązkowe
 

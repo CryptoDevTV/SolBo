@@ -11,6 +11,6 @@ namespace SolBo.Shared.Rules.Validation
                 RuleAttribute,
                 $"{solbot.Strategy.AvailableStrategy.StopLossPercentageDown}");
         public bool RulePassed(Solbot solbot)
-            => solbot.Strategy.AvailableStrategy.StopLossPercentageDown > 0;
+            => solbot.Strategy.AvailableStrategy.StopLossPercentageDown >= 0;
     }
 }

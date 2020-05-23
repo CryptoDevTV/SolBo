@@ -15,24 +15,41 @@ namespace SolBo.Shared.Rules.Mode
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var result = _marketService.IsStopLossReached(
+            if(solbot.Strategy.AvailableStrategy.StopLossPercentageDown == 0)
+            {
+                solbot.Communication.StopLoss = new PercentageMessage
+                {
+                    Change = 0,
+                    PriceReached = false
+                };
+
+                return new MarketRuleResult()
+                {
+                    Success = false,
+                    Message = $"{OrderName} => OFF"
+                };
+            }
+            else
+            {
+                var result = _marketService.IsStopLossReached(
                 solbot.Strategy.AvailableStrategy.StopLossPercentageDown,
                 solbot.Communication.Average.Current,
                 solbot.Communication.Price.Current);
 
-            solbot.Communication.StopLoss = new PercentageMessage
-            {
-                Change = result.PercentChanged,
-                PriceReached = result.IsReadyForMarket
-            };
+                solbot.Communication.StopLoss = new PercentageMessage
+                {
+                    Change = result.PercentChanged,
+                    PriceReached = result.IsReadyForMarket
+                };
 
-            return new MarketRuleResult()
-            {
-                Success = result.IsReadyForMarket,
-                Message = result.PercentChanged < 0
-                    ? $"{OrderName} => Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.StopLoss.Change)}%"
-                    : $"{OrderName} => Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.StopLoss.Change)}%"
-            };
+                return new MarketRuleResult()
+                {
+                    Success = result.IsReadyForMarket,
+                    Message = result.PercentChanged < 0
+                        ? $"{OrderName} => Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.StopLoss.Change)}%"
+                        : $"{OrderName} => Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.StopLoss.Change)}%"
+                };
+            }
         }
     }
 }
