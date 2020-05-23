@@ -4,6 +4,7 @@ namespace SolBo.Shared.Rules.Mode.Test
 {
     public class SellExecuteMarketTestRule : IMarketRule
     {
+        public string OrderName => "SELL";
         public IRuleResult RuleExecuted(Solbot solbot)
         {
             var result = solbot.Communication.Sell.PriceReached && solbot.Actions.Bought == 1;
@@ -18,8 +19,8 @@ namespace SolBo.Shared.Rules.Mode.Test
             {
                 Success = result,
                 Message = result
-                    ? $"Price reached ({solbot.Communication.Sell.PriceReached}), bought before ({solbot.Actions.Bought}), selling ({solbot.Strategy.AvailableStrategy.Symbol})"
-                    : $"Price reached ({solbot.Communication.Sell.PriceReached}), bought before ({solbot.Actions.Bought})"
+                    ? $"{OrderName} => Price reached ({solbot.Communication.Sell.PriceReached}), bought before ({solbot.Actions.Bought}), selling ({solbot.Strategy.AvailableStrategy.Symbol})"
+                    : $"{OrderName} => Price reached ({solbot.Communication.Sell.PriceReached}), bought before ({solbot.Actions.Bought})"
             };
         }
     }

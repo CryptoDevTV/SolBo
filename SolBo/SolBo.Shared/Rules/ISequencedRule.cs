@@ -2,5 +2,6 @@
 {
     public interface ISequencedRule : IRule
     {
+        string SequenceName { get; }
     }
 }

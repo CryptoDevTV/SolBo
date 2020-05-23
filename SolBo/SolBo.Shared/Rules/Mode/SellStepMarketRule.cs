@@ -7,6 +7,7 @@ namespace SolBo.Shared.Rules.Mode
 {
     public class SellStepMarketRule : IMarketRule
     {
+        public string OrderName => "SELL";
         private readonly IMarketService _marketService;
         public SellStepMarketRule(IMarketService marketService)
         {
@@ -29,8 +30,8 @@ namespace SolBo.Shared.Rules.Mode
             {
                 Success = result.IsReadyForMarket,
                 Message = result.PercentChanged > 0
-                    ? $"Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Sell.Change)}%"
-                    : $"Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Sell.Change)}%"
+                    ? $"{OrderName} => Price ({solbot.Communication.Price.Current}) increased from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Sell.Change)}%"
+                    : $"{OrderName} => Price ({solbot.Communication.Price.Current}) has fallen from the average ({solbot.Communication.Average.Current}) by {Math.Abs(solbot.Communication.Sell.Change)}%"
             };
         }
     }

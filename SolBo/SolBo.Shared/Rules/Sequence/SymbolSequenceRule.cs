@@ -10,6 +10,7 @@ namespace SolBo.Shared.Rules.Sequence
 {
     public class SymbolSequenceRule : ISequencedRule
     {
+        public string SequenceName => "SYMBOL";
         private readonly IBinanceClient _binanceClient;
         public SymbolSequenceRule(IBinanceClient binanceClient)
         {
@@ -39,16 +40,25 @@ namespace SolBo.Shared.Rules.Sequence
                                 QuoteAsset = symbol.QuoteAsset
                             }
                         };
+                        result.Success = true;
+                        result.Message = $"{SequenceName} SUCCESS => {solbot.Strategy.AvailableStrategy.Symbol}";
                     }
                     else
-                        result.Message = $"Symbol: {solbot.Strategy.AvailableStrategy.Symbol} not exist on {solbot.Exchange.Name}.";
+                    {
+                        result.Success = false;
+                        result.Message = $"{SequenceName} ERROR => {solbot.Strategy.AvailableStrategy.Symbol} not exist on {solbot.Exchange.Name}.";
+                    }
                 }
                 else
-                    result.Message = exchangeInfo.Error.Message;
+                {
+                    result.Success = false;
+                    result.Message = $"{SequenceName} ERROR => {exchangeInfo.Error.Message}";
+                }
             }
             catch (Exception e)
             {
-                result.Message = e.GetFullMessage();
+                result.Success = false;
+                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
             }
             return result;
         }

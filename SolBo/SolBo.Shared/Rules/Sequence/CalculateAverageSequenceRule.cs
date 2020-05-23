@@ -9,6 +9,7 @@ namespace SolBo.Shared.Rules.Sequence
 {
     public class CalculateAverageSequenceRule : ISequencedRule
     {
+        public string SequenceName => "AVERAGE";
         private readonly IStorageService _storageService;
         public CalculateAverageSequenceRule(IStorageService storageService)
         {
@@ -33,10 +34,14 @@ namespace SolBo.Shared.Rules.Sequence
                     ? count
                     : solbot.Strategy.AvailableStrategy.Average
                 };
+
+                result.Success = true;
+                result.Message = $"{SequenceName} SUCCESS => {storedPriceAverage}";
             }
             catch (Exception e)
             {
-                result.Message = e.GetFullMessage();
+                result.Success = false;
+                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
             }
             return result;
         }

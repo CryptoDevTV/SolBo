@@ -8,6 +8,7 @@ namespace SolBo.Shared.Rules.Sequence
 {
     public class SetStorageSequenceRule : ISequencedRule
     {
+        public string SequenceName => "STORAGE";
         private readonly IStorageService _storageService;
         public SetStorageSequenceRule(IStorageService storageService)
         {
@@ -15,18 +16,22 @@ namespace SolBo.Shared.Rules.Sequence
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var result = new SequencedRuleResult();
-            try
-            {
-                var storagePath = Path.Combine(
+            var storagePath = Path.Combine(
                     solbot.Strategy.AvailableStrategy.StoragePath,
                     $"{solbot.Strategy.AvailableStrategy.Symbol}.txt");
 
+            var result = new SequencedRuleResult();
+            try
+            {
                 _storageService.SetPath(storagePath);
+
+                result.Success = true;
+                result.Message = $"{SequenceName} SUCCESS => {storagePath}";
             }
             catch (Exception e)
             {
-                result.Message = e.GetFullMessage();
+                result.Success = false;
+                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
             }
             return result;
         }

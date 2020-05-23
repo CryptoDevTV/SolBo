@@ -9,6 +9,7 @@ namespace SolBo.Shared.Rules.Sequence
 {
     public class GetPriceSequenceRule : ISequencedRule
     {
+        public string SequenceName => "PRICE";
         private readonly IBinanceClient _binanceClient;
         public GetPriceSequenceRule(IBinanceClient binanceClient)
         {
@@ -29,13 +30,19 @@ namespace SolBo.Shared.Rules.Sequence
                     {
                         Current = currentPrice.Result
                     };
+                    result.Success = true;
+                    result.Message = $"{SequenceName} SUCCESS => {currentPrice.Result}";
                 }
                 else
-                    result.Message = currentPrice.Message;
+                {
+                    result.Success = false;
+                    result.Message = $"{SequenceName} ERROR => {currentPrice.Message}";
+                }
             }
             catch (Exception e)
             {
-                result.Message = e.GetFullMessage();
+                result.Success = false;
+                result.Message = $"{SequenceName} ERROR => {e.GetFullMessage()}";
             }
             return result;
         }

@@ -2,5 +2,6 @@
 {
     public interface IMarketRule : IRule
     {
+        string OrderName { get; }
     }
 }

@@ -39,7 +39,8 @@ namespace SolBo.Shared.Rules.Mode
 
             return new ModeRuleResult
             {
-                Message = $"{ModeName} EXECUTED"
+                Message = $"{ModeName} EXECUTED",
+                Success = true
             };
         }
     }

@@ -3,7 +3,6 @@
     public class SequencedRuleResult : IRuleResult
     {
         public string Message { get; set; }
-        public bool Success
-            => string.IsNullOrWhiteSpace(Message);
+        public bool Success { get; set; }
     }
 }
