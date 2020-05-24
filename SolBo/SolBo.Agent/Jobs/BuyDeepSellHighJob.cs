@@ -48,6 +48,7 @@ namespace SolBo.Agent.Jobs
                     var solbot = readConfig.SolBotConfig;
 
                     _rules.Add(new StrategyValidationRule());
+                    _rules.Add(new ModeTypeValidationRule());
                     _rules.Add(new TickerValidationRule());
                     _rules.Add(new AverageValidationRule());
                     _rules.Add(new BuyStepValidationRule());
@@ -65,6 +66,8 @@ namespace SolBo.Agent.Jobs
                         _rules.Add(new GetPriceSequenceRule(client));
                         _rules.Add(new SavePriceSequenceRule(_storageService));
                         _rules.Add(new CalculateAverageSequenceRule(_storageService));
+
+                        _rules.Add(new ModeTypeSequenceRule());
 
                         if (solbot.Exchange.IsInTestMode)
                             _rules.Add(new ModeTestRule(_marketService));

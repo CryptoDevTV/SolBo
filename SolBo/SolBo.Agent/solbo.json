@@ -6,6 +6,7 @@
   },
   "strategy": {
     "activeid": 1,
+    "modetype": 0,
     "available": [
       {
         "id": 1,

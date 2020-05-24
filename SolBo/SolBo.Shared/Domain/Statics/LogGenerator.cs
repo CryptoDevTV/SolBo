@@ -42,5 +42,10 @@ namespace SolBo.Shared.Domain.Statics
             => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought before ({bought})";
         public static string ExecuteMarketError(MarketOrderType orderType, bool priceReached, int bought)
             => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought before ({bought})";
+
+        public static string ModeTypeSuccess(string sequenceName, string attribute)
+            => $"{sequenceName} ON => {attribute}";
+        public static string ModeTypeError(string sequenceName, string attribute)
+            => $"{sequenceName} OFF => {attribute}";
     }
 }

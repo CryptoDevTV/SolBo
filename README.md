@@ -58,9 +58,10 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **exchange/apikey**|parametr do pobrania z giełdy|aSqaS0a5qkjy9fe05F....|opcjonalny
 **exchange/apisecret**|parametr do pobrania z giełdy|0bb9eM0kB506Crdk5....|opcjonalny
 **strategy/activeid**|wartość pola **id** aktywnej strategii bota|stała wartość: **1**|obowiązkowe
+**strategy/modetype**|parametr określający czy bot pracuje (`0`) czy jest w stanie przerwy (`1`)|**0** - bot pracuje i realizuje strategie, **1** - bot śledzi cenę i ją zapisuje, nie analizuje warunków do zleceń, nie składa zleceń|obowiązkowe
 **strategy/available/id**|identyfikator strategii|stała wartość: **1**|obowiązkowe
 **strategy/available/symbol**|symbol opisujący parę walutową (dostępną na giełdzie) np.`ETHBTC` gdzie `ETH` to base asset, a `BTC` to quote asset|`ETHBTC`|obowiązkowe
-**strategy/available/tickertype**|pole określające rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
+**strategy/available/tickertype**|parametr określający rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
 **strategy/available/sellpercentageup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
@@ -81,17 +82,18 @@ Użytkownik nie powinien samodzielnie modyfikować parametru **actions/bought**.
   },
   "strategy": {
     "activeid": 1,
+    "modetype": 0,
     "available": [
       {
         "id": 1,
         "symbol": "ETHBTC",
         "tickertype": 0,
-        "average": 5,
+        "average": 3,
         "buypercentagedown": 2.1,
-        "sellpercentageup": 3.5,
-        "stoplosspercentagedown": 10,
+        "sellpercentageup": 0.5,
+        "stoplosspercentagedown": 10.5,
         "stoplosstype": 0,
-        "fundpercentage": 80.9
+        "fundpercentage": 80.4
       }
     ]
   },
