@@ -4,12 +4,12 @@
     {
         public int Id { get; set; }
         public string Symbol { get; set; }
-        public int BuyPercentageDown { get; set; }
-        public int SellPercentageUp { get; set; }
+        public decimal BuyPercentageDown { get; set; }
+        public decimal SellPercentageUp { get; set; }
         public int Average { get; set; }
         public int Ticker { get; set; }
-        public int StopLossPercentageDown { get; set; }
-        public int FundPercentage { get; set; }
+        public decimal StopLossPercentageDown { get; set; }
+        public decimal FundPercentage { get; set; }
         public int StopLossType { get; set; }
     }
 }

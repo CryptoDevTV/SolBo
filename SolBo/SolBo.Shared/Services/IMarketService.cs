@@ -4,9 +4,9 @@ namespace SolBo.Shared.Services
 {
     public interface IMarketService
     {
-        MarketResponse IsGoodToBuy(int percentPriceDrop, decimal storedPriceAverage, decimal currentPrice);
-        MarketResponse IsGoodToSell(int percentPriceRise, decimal storedPriceAverage, decimal currentPrice);
-        MarketResponse IsStopLossReached(int percentStopLoss, decimal storedPriceAverage, decimal currentPrice);
-        FundResponse AvailableQuote(int fundPercentage, decimal availableQuote, int precision);
+        MarketResponse IsGoodToBuy(decimal percentPriceDrop, decimal storedPriceAverage, decimal currentPrice);
+        MarketResponse IsGoodToSell(decimal percentPriceRise, decimal storedPriceAverage, decimal currentPrice);
+        MarketResponse IsStopLossReached(decimal percentStopLoss, decimal storedPriceAverage, decimal currentPrice);
+        FundResponse AvailableQuote(decimal fundPercentage, decimal availableQuote, int precision);
     }
 }
