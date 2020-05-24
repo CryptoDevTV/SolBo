@@ -60,7 +60,7 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/activeid**|wartość pola **id** aktywnej strategii bota|stała wartość: **1**|obowiązkowe
 **strategy/available/id**|identyfikator strategii|stała wartość: **1**|obowiązkowe
 **strategy/available/symbol**|symbol opisujący parę walutową (dostępną na giełdzie) np.`ETHBTC` gdzie `ETH` to base asset, a `BTC` to quote asset|`ETHBTC`|obowiązkowe
-**strategy/available/ticker**|pole określające rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
+**strategy/available/tickertype**|pole określające rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
 **strategy/available/sellpercentageup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
@@ -85,13 +85,13 @@ Użytkownik nie powinien samodzielnie modyfikować parametru **actions/bought**.
       {
         "id": 1,
         "symbol": "ETHBTC",
-        "ticker": 0,
+        "tickertype": 0,
         "average": 5,
-        "buypercentagedown": 2,
-        "sellpercentageup": 3,
+        "buypercentagedown": 2.1,
+        "sellpercentageup": 3.5,
         "stoplosspercentagedown": 10,
         "stoplosstype": 0,
-        "fundpercentage": 80
+        "fundpercentage": 80.9
       }
     ]
   },

@@ -1,12 +1,13 @@
 ﻿using Binance.Net.Interfaces;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 
 namespace SolBo.Shared.Contexts
 {
     public class TickerContext
     {
-        private IBinanceClient _binanceClient;
+        private readonly IBinanceClient _binanceClient;
         public TickerContext(
             IBinanceClient binanceClient)
         {
@@ -16,7 +17,7 @@ namespace SolBo.Shared.Contexts
         {
             var result = new TickerContextResponse();
 
-            if (availableStrategy.Ticker == 0)
+            if (availableStrategy.TickerType == TickerType.CURRENTPRICE)
             {
                 var response = _binanceClient.GetPrice(availableStrategy.Symbol);
 
@@ -29,7 +30,7 @@ namespace SolBo.Shared.Contexts
                     result.Message = response.Error.Message;
                 }
             }
-            else if (availableStrategy.Ticker == 1)
+            else if (availableStrategy.TickerType == TickerType.CURRENTAVERAGEPRICE)
             {
                 var response = _binanceClient.GetCurrentAvgPrice(availableStrategy.Symbol);
 

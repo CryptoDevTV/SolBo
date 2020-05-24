@@ -1,4 +1,7 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Extensions;
+using System;
 
 namespace SolBo.Shared.Rules.Validation
 {
@@ -9,9 +12,8 @@ namespace SolBo.Shared.Rules.Validation
             => ValidatedRuleResult.New(
                 RulePassed(solbot),
                 RuleAttribute,
-                $"{solbot.Strategy.AvailableStrategy.Ticker}");
+                solbot.Strategy.AvailableStrategy.TickerType.GetDescription());
         public bool RulePassed(Solbot solbot)
-            => solbot.Strategy.AvailableStrategy.Ticker == 0
-            || solbot.Strategy.AvailableStrategy.Ticker == 1;
+            => Enum.IsDefined(typeof(TickerType), solbot.Strategy.AvailableStrategy.TickerType);
     }
 }

@@ -1,4 +1,7 @@
 ﻿using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Extensions;
+using System;
 
 namespace SolBo.Shared.Rules.Validation
 {
@@ -9,9 +12,8 @@ namespace SolBo.Shared.Rules.Validation
             => ValidatedRuleResult.New(
                 RulePassed(solbot),
                 RuleAttribute,
-                $"{solbot.Strategy.AvailableStrategy.StopLossType}");
+                solbot.Strategy.AvailableStrategy.StopLossType.GetDescription());
         public bool RulePassed(Solbot solbot)
-            => solbot.Strategy.AvailableStrategy.StopLossType == 0
-            || solbot.Strategy.AvailableStrategy.StopLossType == 1;
+            => Enum.IsDefined(typeof(StopLossType), solbot.Strategy.AvailableStrategy.StopLossType);
     }
 }

@@ -10,7 +10,7 @@
       {
         "id": 1,
         "symbol": "ETHBTC",
-        "ticker": 0,
+        "tickertype": 0,
         "average": 3,
         "buypercentagedown": 2.1,
         "sellpercentageup": 0.5,

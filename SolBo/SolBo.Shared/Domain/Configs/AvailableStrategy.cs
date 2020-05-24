@@ -1,4 +1,6 @@
-﻿namespace SolBo.Shared.Domain.Configs
+﻿using SolBo.Shared.Domain.Enums;
+
+namespace SolBo.Shared.Domain.Configs
 {
     public class AvailableStrategy
     {
@@ -7,9 +9,9 @@
         public decimal BuyPercentageDown { get; set; }
         public decimal SellPercentageUp { get; set; }
         public int Average { get; set; }
-        public int Ticker { get; set; }
+        public TickerType TickerType { get; set; }
         public decimal StopLossPercentageDown { get; set; }
         public decimal FundPercentage { get; set; }
-        public int StopLossType { get; set; }
+        public StopLossType StopLossType { get; set; }
     }
 }
