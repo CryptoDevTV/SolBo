@@ -17,7 +17,8 @@
         "sellpercentageup": 0.5,
         "stoplosspercentagedown": 10.5,
         "stoplosstype": 0,
-        "fundpercentage": 80.4
+        "fundpercentage": 80.4,
+        "clearonstartup": true
       }
     ]
   },

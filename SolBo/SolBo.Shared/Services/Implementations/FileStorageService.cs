@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolBo.Shared.Domain.Statics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,6 +8,24 @@ namespace SolBo.Shared.Services.Implementations
     public class FileStorageService : IStorageService
     {
         private string _filePath;
+
+        public void ClearFile(string symbol)
+        {
+            FileStream fileStream = File.Open(_filePath, FileMode.Open);
+            fileStream.SetLength(0);
+            fileStream.Close(); // This flushes the content, too.
+        }
+
+        public string CreateBackup(string symbol)
+        {
+            var backupPath = GlobalConfig.BackupPriceFile(symbol);
+            File.Copy(GlobalConfig.PriceFile(symbol), backupPath, true);
+            return backupPath;
+        }
+
+        public bool Exist(string symbol)
+            => File.Exists(GlobalConfig.PriceFile(symbol));
+
         public ICollection<decimal> GetValues()
         {
             var list = new List<decimal>();

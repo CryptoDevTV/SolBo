@@ -62,6 +62,7 @@ namespace SolBo.Agent.Jobs
 
                     using (var client = new BinanceClient())
                     {
+                        _rules.Add(new ClearOnStartupSequenceRule(_storageService, context.PreviousFireTimeUtc));
                         _rules.Add(new SymbolSequenceRule(client));
                         _rules.Add(new GetPriceSequenceRule(client));
                         _rules.Add(new SavePriceSequenceRule(_storageService));

@@ -7,5 +7,8 @@ namespace SolBo.Shared.Services
         void SaveValue(decimal val);
         ICollection<decimal> GetValues();
         void SetPath(string path);
+        bool Exist(string symbol);
+        string CreateBackup(string symbol);
+        void ClearFile(string symbol);
     }
 }

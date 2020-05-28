@@ -13,5 +13,6 @@ namespace SolBo.Shared.Domain.Configs
         public decimal StopLossPercentageDown { get; set; }
         public decimal FundPercentage { get; set; }
         public StopLossType StopLossType { get; set; }
+        public bool ClearOnStartup { get; set; }
     }
 }
