@@ -14,6 +14,7 @@ namespace SolBo.Shared.Rules.Mode.Test
             if (result)
             {
                 solbot.Actions.Bought = 0;
+                solbot.Actions.StopLossReached = true;
                 result = true;
             }
 

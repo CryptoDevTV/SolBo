@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using SolBo.Shared.Domain.Configs;
+﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Services;
+using System;
 
 namespace SolBo.Shared.Rules.Sequence
 {

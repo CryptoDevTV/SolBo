@@ -55,8 +55,10 @@ namespace SolBo.Agent.Jobs
                     _rules.Add(new SellStepValidationRule());
                     _rules.Add(new StopLossStepValidationRule());
                     _rules.Add(new StopLossTypeValidationRule());
+                    _rules.Add(new StopLossPauseCyclesValidationRules());
                     _rules.Add(new FundStepValidationRule());
                     _rules.Add(new BoughtValidationRule());
+                    _rules.Add(new StopLossCurrentCycleValidationRule());
 
                     _rules.Add(new SetStorageSequenceRule(_storageService));
 

@@ -17,12 +17,15 @@
         "sellpercentageup": 0.5,
         "stoplosspercentagedown": 10.5,
         "stoplosstype": 0,
+        "stoplosspausecycles": 5,
         "fundpercentage": 80.4,
-        "clearonstartup": true
+        "clearonstartup": false
       }
     ]
   },
   "actions": {
-    "bought": 0
+    "bought": 1,
+    "stoplossreached": false,
+    "stoplosscurrentcycle": 0
   }
 }
