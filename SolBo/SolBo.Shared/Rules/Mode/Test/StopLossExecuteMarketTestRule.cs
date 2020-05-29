@@ -15,7 +15,6 @@ namespace SolBo.Shared.Rules.Mode.Test
             {
                 solbot.Actions.Bought = 0;
                 solbot.Actions.StopLossReached = true;
-                result = true;
             }
 
             return new MarketRuleResult()

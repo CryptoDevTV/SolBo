@@ -14,7 +14,7 @@
         "tickertype": 0,
         "average": 3,
         "buypercentagedown": 2.1,
-        "sellpercentageup": 0.5,
+        "sellpercentageup": 4.5,
         "stoplosspercentagedown": 10.5,
         "stoplosstype": 0,
         "stoplosspausecycles": 5,
@@ -24,7 +24,7 @@
     ]
   },
   "actions": {
-    "bought": 1,
+    "bought": 0,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }

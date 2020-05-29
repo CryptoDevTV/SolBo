@@ -11,22 +11,22 @@ namespace SolBo.Shared.Rules.Mode
 {
     public class ModeProductionRule : IModeRule
     {
-        public string ModeName => "PRODUCTION MODE";
+        public string ModeName => "PRODUCTION MODE (not working now)";
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         private readonly IMarketService _marketService;
         private readonly ICollection<IRule> _rules = new HashSet<IRule>();
         public ModeProductionRule(IMarketService marketService)
         {
             _marketService = marketService;
-
-            BinanceClient.SetDefaultOptions(new BinanceClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("apikey", "apisecret")
-            });
         }
 
         public IRuleResult RuleExecuted(Solbot solbot)
         {
+            BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+            {
+                ApiCredentials = new ApiCredentials(solbot.Exchange.ApiKey, solbot.Exchange.ApiSecret)
+            });
+
             Logger.Info(LogGenerator.ModeStart(ModeName));
 
             foreach (var item in _rules)

@@ -71,6 +71,7 @@ namespace SolBo.Agent.Jobs
                         _rules.Add(new CalculateAverageSequenceRule(_storageService));
 
                         _rules.Add(new ModeTypeSequenceRule());
+                        _rules.Add(new PumpStopLossCycleSequenceRule());
 
                         if (solbot.Exchange.IsInTestMode)
                             _rules.Add(new ModeTestRule(_marketService));
