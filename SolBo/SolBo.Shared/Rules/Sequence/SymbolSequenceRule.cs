@@ -29,7 +29,7 @@ namespace SolBo.Shared.Rules.Sequence
                         .Data
                         .Symbols
                         .FirstOrDefault(e => e.Name == solbot.Strategy.AvailableStrategy.Symbol);
-
+                    
                     if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
                     {
                         solbot.Communication = new Communication
@@ -37,7 +37,15 @@ namespace SolBo.Shared.Rules.Sequence
                             Symbol = new SymbolMessage
                             {
                                 BaseAsset = symbol.BaseAsset,
-                                QuoteAsset = symbol.QuoteAsset
+                                QuoteAsset = symbol.QuoteAsset,
+                                QuoteAssetPrecision = symbol.QuoteAssetPrecision,
+                                MinNotional = symbol.MinNotionalFilter.MinNotional,
+                                StepSize = symbol.LotSizeFilter.StepSize,
+                                MaxQuantity = symbol.LotSizeFilter.MaxQuantity,
+                                MinQuantity = symbol.LotSizeFilter.MinQuantity,
+                                TickSize = symbol.PriceFilter.TickSize,
+                                MaxPrice = symbol.PriceFilter.MaxPrice,
+                                MinPrice = symbol.PriceFilter.MinPrice
                             }
                         };
                         result.Success = true;

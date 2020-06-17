@@ -10,5 +10,6 @@ namespace SolBo.Shared.Domain.Configs
         public PercentageMessage StopLoss { get; set; }
         public PercentageMessage Buy { get; set; }
         public PercentageMessage Sell { get; set; }
+        public AvailableAssetMessage AvailableAsset { get; set; }
     }
 }

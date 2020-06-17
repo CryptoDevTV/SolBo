@@ -4,5 +4,6 @@
     {
         public decimal Change { get; set; }
         public bool PriceReached { get; set; }
+        public bool IsReady { get; set; }
     }
 }

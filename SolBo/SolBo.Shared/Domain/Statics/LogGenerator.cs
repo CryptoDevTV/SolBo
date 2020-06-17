@@ -47,5 +47,8 @@ namespace SolBo.Shared.Domain.Statics
             => $"{sequenceName} ON => {attribute}";
         public static string ModeTypeError(string sequenceName, string attribute)
             => $"{sequenceName} OFF => {attribute}";
+
+        public static string ExchangeLog(string baseAsset, string quoteAsset)
+            => $"Assets on exchange => base ({baseAsset}), quote ({quoteAsset})";
     }
 }
