@@ -34,10 +34,11 @@ namespace SolBo.Shared.Rules.Mode
 
                 _rules.Add(new StopLossStepMarketRule(_marketService));
                 _rules.Add(new StopLossPriceMarketRule());
-                _rules.Add(new StopLossExecuteMarketRule(_marketService, binanceClient));
+                _rules.Add(new StopLossExecuteMarketRule(binanceClient));
 
-                //_rules.Add(new SellStepMarketRule(_marketService));
-                //_rules.Add(new SellExecuteMarketTestRule());
+                _rules.Add(new SellStepMarketRule(_marketService));
+                _rules.Add(new SellPriceMarketRule());
+                _rules.Add(new SellExecuteMarketRule(binanceClient));
 
                 //_rules.Add(new BuyStepMarketRule(_marketService));
                 //_rules.Add(new BuyExecuteMarketTestRule());

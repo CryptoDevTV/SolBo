@@ -46,14 +46,14 @@ namespace SolBo.Shared.Domain.Statics
 
         public static string OrderMarketSuccess(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => Order succeed on exchange";
-        public static string OrderMarketError(MarketOrderType orderType)
-            => $"{orderType.GetDescription()} => Order not succeed on exchange";
+        public static string OrderMarketError(MarketOrderType orderType, string message = "")
+            => $"{orderType.GetDescription()} => Order not succeed on exchange => {message}";
 
-        public static string StopLossResultStart(long orderId)
+        public static string TradeResultStart(long orderId)
             => $"Order ({orderId}) => START";
-        public static string StopLossResultEnd(long orderId)
+        public static string TradeResultEnd(long orderId)
             => $"Order ({orderId}) => END";
-        public static string StopLossResult(BinanceOrderTrade order)
+        public static string TradeResult(BinanceOrderTrade order)
             => $"Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
 
         public static string ExecuteMarketSuccess(MarketOrderType orderType, bool priceReached, int bought)
