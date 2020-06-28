@@ -21,10 +21,13 @@ namespace SolBo.Shared.Rules.Mode
                 solbot.Communication.Average.Current,
                 solbot.Communication.Price.Current);
 
+            var fundResponse = _marketService.AvailableQuote(solbot.Strategy.AvailableStrategy.FundPercentage, solbot.Communication.AvailableAsset.Quote, solbot.Communication.Symbol.QuoteAssetPrecision);
+
             solbot.Communication.Buy = new PercentageMessage
             {
                 Change = result.PercentChanged,
-                PriceReached = result.IsReadyForMarket
+                PriceReached = result.IsReadyForMarket,
+                AvailableFund = fundResponse.QuoteAssetToTrade
             };
 
             return new MarketRuleResult()
