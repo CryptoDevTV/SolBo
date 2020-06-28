@@ -24,7 +24,7 @@ namespace SolBo.Shared.Rules.Sequence
 
                 var storedPriceAverage = AverageContext.Average(
                     _storageService.GetValues(),
-                    4,
+                    solbot.Communication.Symbol.QuoteAssetPrecision,
                     solbot.Strategy.AvailableStrategy.Average);
 
                 solbot.Communication.Average = new PriceMessage
