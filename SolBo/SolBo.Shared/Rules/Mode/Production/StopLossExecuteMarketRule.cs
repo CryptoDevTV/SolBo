@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Binance.Net;
+﻿using Binance.Net;
 using Binance.Net.Interfaces;
 using Binance.Net.Objects;
 using CryptoExchange.Net.Objects;
@@ -29,7 +26,9 @@ namespace SolBo.Shared.Rules.Mode.Production
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            if(solbot.Communication.StopLoss.IsReady)
+            var result = false;
+
+            if (solbot.Communication.StopLoss.IsReady)
             {
                 WebCallResult<BinancePlacedOrder> stopLossOrderResult = null;
 
@@ -69,28 +68,33 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                 if (!(stopLossOrderResult is null))
                 {
+                    result = stopLossOrderResult.Success;
+
                     if (stopLossOrderResult.Success)
                     {
-                        //Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
+                        Logger.Info(LogGenerator.StopLossResultStart(stopLossOrderResult.Data.OrderId));
 
                         if (stopLossOrderResult.Data.Fills.AnyAndNotNull())
                         {
                             foreach (var item in stopLossOrderResult.Data.Fills)
                             {
-                                //Logger.Info(LogGenerator.StopLossResult(item));
+                                Logger.Info(LogGenerator.StopLossResult(item));
                             }
                         }
 
-                        //Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
+                        Logger.Info(LogGenerator.StopLossResultEnd(stopLossOrderResult.Data.OrderId));
                     }
-                    //else
-                    //    Logger.Warn(stopLossOrderResult.Error.Message);
+                    else
+                        Logger.Warn(stopLossOrderResult.Error.Message);
                 }
             }
 
             return new MarketRuleResult()
             {
-
+                Success = result,
+                Message = result
+                    ? LogGenerator.OrderMarketSuccess(MarketOrder)
+                    : LogGenerator.OrderMarketError(MarketOrder)
             };
         }
     }

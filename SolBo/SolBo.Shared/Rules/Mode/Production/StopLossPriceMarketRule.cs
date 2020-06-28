@@ -1,5 +1,6 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 
 namespace SolBo.Shared.Rules.Mode.Production
 {
@@ -18,8 +19,8 @@ namespace SolBo.Shared.Rules.Mode.Production
             {
                 Success = result,
                 Message = result
-                    ? ""
-                    : ""
+                    ? LogGenerator.PriceMarketSuccess(MarketOrder)
+                    : LogGenerator.PriceMarketError(MarketOrder)
             };
         }
     }
