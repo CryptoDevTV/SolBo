@@ -10,7 +10,7 @@ namespace SolBo.Shared.Rules.Sequence
         {
             var result = new SequencedRuleResult();
             if (solbot.Actions.StopLossReached
-                && solbot.Actions.Bought == 1
+                && solbot.Actions.Bought == 0
                 && solbot.Actions.StopLossCurrentCycle < solbot.Strategy.AvailableStrategy.StopLossPauseCycles)
             {
                 solbot.Actions.StopLossCurrentCycle++;

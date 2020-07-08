@@ -96,7 +96,7 @@ namespace SolBo.Agent.Jobs
                     var saveConfig = await _schedulerService.SetConfigAsync(configFileName, solbot);
 
                     if (saveConfig.WriteSuccess)
-                        Logger.Trace(LogGenerator.SaveSuccess);
+                        Logger.Info(LogGenerator.SaveSuccess);
                     else
                         Logger.Error(LogGenerator.SaveError);
                 }

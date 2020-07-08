@@ -31,22 +31,29 @@ namespace SolBo.Shared.Rules.Mode.Production
                     OrderType.Market,
                     quoteOrderQuantity: solbot.Communication.Buy.AvailableFund);
 
-                if (buyOrderResult.Success)
+                if(!(buyOrderResult is null))
                 {
-                    Logger.Info(LogGenerator.TradeResultStart(buyOrderResult.Data.OrderId));
+                    result = buyOrderResult.Success;
 
-                    if (buyOrderResult.Data.Fills.AnyAndNotNull())
+                    if (buyOrderResult.Success)
                     {
-                        foreach (var item in buyOrderResult.Data.Fills)
-                        {
-                            Logger.Info(LogGenerator.TradeResult(item));
-                        }
-                    }
+                        solbot.Actions.Bought = 1;
 
-                    Logger.Info(LogGenerator.TradeResultEnd(buyOrderResult.Data.OrderId));
+                        Logger.Info(LogGenerator.TradeResultStart(buyOrderResult.Data.OrderId));
+
+                        if (buyOrderResult.Data.Fills.AnyAndNotNull())
+                        {
+                            foreach (var item in buyOrderResult.Data.Fills)
+                            {
+                                Logger.Info(LogGenerator.TradeResult(item));
+                            }
+                        }
+
+                        Logger.Info(LogGenerator.TradeResultEnd(buyOrderResult.Data.OrderId));
+                    }
+                    else
+                        Logger.Warn(buyOrderResult.Error.Message);
                 }
-                else
-                    Logger.Warn(buyOrderResult.Error.Message);
             }
 
             return new MarketRuleResult()

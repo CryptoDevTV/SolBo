@@ -44,6 +44,8 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                         if (sellOrderResult.Success)
                         {
+                            solbot.Actions.Bought = 0;
+
                             Logger.Info(LogGenerator.TradeResultStart(sellOrderResult.Data.OrderId));
 
                             if (sellOrderResult.Data.Fills.AnyAndNotNull())
