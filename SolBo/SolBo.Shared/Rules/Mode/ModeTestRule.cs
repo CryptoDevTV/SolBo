@@ -12,7 +12,7 @@ namespace SolBo.Shared.Rules.Mode
         public string ModeName => "TEST MODE";
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         private readonly IMarketService _marketService;
-        private readonly ICollection<IMarketRule> _rules = new HashSet<IMarketRule>();
+        private readonly ICollection<IRule> _rules = new HashSet<IRule>();
         public ModeTestRule(IMarketService marketService)
         {
             _marketService = marketService;
@@ -25,7 +25,7 @@ namespace SolBo.Shared.Rules.Mode
             _rules.Add(new SellStepMarketRule(_marketService));
             _rules.Add(new SellExecuteMarketTestRule());
 
-            _rules.Add(new BuyStepMarketRule(_marketService));
+            _rules.Add(new BuyStepMarketRule(_marketService, false));
             _rules.Add(new BuyExecuteMarketTestRule());
 
             Logger.Info(LogGenerator.ModeStart(ModeName));

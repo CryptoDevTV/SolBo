@@ -40,7 +40,7 @@ namespace SolBo.Shared.Rules.Mode
                 _rules.Add(new SellPriceMarketRule());
                 _rules.Add(new SellExecuteMarketRule(binanceClient));
 
-                _rules.Add(new BuyStepMarketRule(_marketService));
+                _rules.Add(new BuyStepMarketRule(_marketService, true));
                 _rules.Add(new BuyPriceMarketRule());
                 _rules.Add(new BuyExecuteMarketRule(binanceClient));
 

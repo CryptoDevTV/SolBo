@@ -103,7 +103,7 @@ namespace SolBo.Agent.Jobs
             }
             catch (Exception e)
             {
-                Logger.Fatal($"{e.Message}");
+                Logger.Fatal($"{Environment.NewLine}Message => {e.Message}{Environment.NewLine}StackTrace => {e.StackTrace}");
             }
         }
     }

@@ -10,9 +10,11 @@ namespace SolBo.Shared.Rules.Mode
     {
         public MarketOrderType MarketOrder => MarketOrderType.BUYING;
         private readonly IMarketService _marketService;
-        public BuyStepMarketRule(IMarketService marketService)
+        private readonly bool _isInProductionMode;
+        public BuyStepMarketRule(IMarketService marketService, bool isInProductionMode)
         {
             _marketService = marketService;
+            _isInProductionMode = isInProductionMode;
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
@@ -21,14 +23,18 @@ namespace SolBo.Shared.Rules.Mode
                 solbot.Communication.Average.Current,
                 solbot.Communication.Price.Current);
 
-            var fundResponse = _marketService.AvailableQuote(solbot.Strategy.AvailableStrategy.FundPercentage, solbot.Communication.AvailableAsset.Quote, solbot.Communication.Symbol.QuoteAssetPrecision);
-
             solbot.Communication.Buy = new PercentageMessage
             {
                 Change = result.PercentChanged,
-                PriceReached = result.IsReadyForMarket,
-                AvailableFund = fundResponse.QuoteAssetToTrade
+                PriceReached = result.IsReadyForMarket
             };
+
+            if (_isInProductionMode)
+            {
+                var fundResponse = _marketService.AvailableQuote(solbot.Strategy.AvailableStrategy.FundPercentage, solbot.Communication.AvailableAsset.Quote, solbot.Communication.Symbol.QuoteAssetPrecision);
+
+                solbot.Communication.Buy.AvailableFund = fundResponse.QuoteAssetToTrade;
+            }
 
             return new MarketRuleResult()
             {
