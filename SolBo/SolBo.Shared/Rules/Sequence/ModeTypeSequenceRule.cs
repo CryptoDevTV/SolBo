@@ -14,7 +14,7 @@ namespace SolBo.Shared.Rules.Sequence
                 Success = solbot.Strategy.ModeType == ModeType.WORKING,
                 Message = solbot.Strategy.ModeType == ModeType.WORKING
                     ? LogGenerator.ModeTypeSuccess(SequenceName, solbot.Strategy.ModeType.GetDescription())
-                    : LogGenerator.ModeTypeSuccess(SequenceName, solbot.Strategy.ModeType.GetDescription())
+                    : LogGenerator.ModeTypeError(SequenceName, solbot.Strategy.ModeType.GetDescription())
             };
     }
 }

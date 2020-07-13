@@ -37,6 +37,10 @@ Plik konfiguracyjny to miejsce gdzie należy zdefiniować:
 - `filename` - nazwę pliku użytkownika (domyślnie **solbo**)
 - `intervalinminutes` - okres w minutach co jaki bot ma łączyć się z giełdą (domyślnie **1**, bot łączy się z giełdą co 1 minutę)
 
+oraz opcjonalnie sekcje **notifications/pushover** (w celu otrzymywania powiadomień [Pushover](https://pushover.net/))
+- `token` - API Token/Key z utworzonej aplikacji w serwisie Pushover,
+- `recipients` - User Key otrzymany z serwisu Pushover.
+
 Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywany każdorazowo zgodnie z ustawionym okresem pobierania ceny z giełdy.
 
 #### Przykładowa (domyślna) zawartość:
@@ -44,7 +48,14 @@ Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywa
 ```
 {
   "filename": "solbo",
-  "intervalinminutes": 1
+  "intervalinminutes": 1,
+  "notifications": {
+    "pushover": {
+      "token": "",
+      "recipients": "",
+      "endpoint": "https://api.pushover.net/1/messages.json"
+    }
+  }
 }
 ```
 

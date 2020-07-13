@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SolBo.Agent.Jobs;
+using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Services;
 using SolBo.Shared.Services.Implementations;
 using System;
@@ -10,9 +11,8 @@ namespace SolBo.Agent.DI
 {
     public class DependencyProvider
     {
-        public static IServiceProvider Get()
+        public static IServiceProvider Get(App app)
         {
-
             var services = new ServiceCollection();
 
             #region Logging
@@ -37,6 +37,15 @@ namespace SolBo.Agent.DI
             services.AddTransient<IMarketService, MarketService>();
 
             services.AddTransient<IConfigurationService, ConfigurationService>();
+            #endregion
+
+            #region Notifications
+            services.AddTransient<IPushOverNotificationService>(
+                s => new PushOverNotificationService(
+                    app.Notifications.Pushover.Token,
+                    app.Notifications.Pushover.Recipients,
+                    app.Notifications.Pushover.Endpoint,
+                    app.Notifications.Pushover.IsActive));
             #endregion
 
             var serviceProvider = services.BuildServiceProvider();

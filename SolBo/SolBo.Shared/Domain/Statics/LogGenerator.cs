@@ -68,5 +68,9 @@ namespace SolBo.Shared.Domain.Statics
 
         public static string ExchangeLog(string baseAsset, string quoteAsset)
             => $"Assets on exchange => base ({baseAsset}), quote ({quoteAsset})";
+
+        public static string NotificationTitleStart => "Hello! my dear Trader :)";
+        public static string NotificationMessageStart
+            => "I've started working for <strong>You</strong>. Please visit <a href=\"https://cryptodev.tv\">https://cryptodev.tv</a>";
     }
 }

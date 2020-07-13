@@ -22,17 +22,20 @@ namespace SolBo.Agent.Jobs
         private readonly IStorageService _storageService;
         private readonly IMarketService _marketService;
         private readonly IConfigurationService _schedulerService;
+        private readonly IPushOverNotificationService _pushOverNotificationService;
 
         private readonly ICollection<IRule> _rules = new HashSet<IRule>();
 
         public BuyDeepSellHighJob(
             IStorageService storageService,
             IMarketService marketService,
-            IConfigurationService schedulerService)
+            IConfigurationService schedulerService,
+            IPushOverNotificationService pushOverNotificationService)
         {
             _storageService = storageService;
             _marketService = marketService;
             _schedulerService = schedulerService;
+            _pushOverNotificationService = pushOverNotificationService;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -46,6 +49,8 @@ namespace SolBo.Agent.Jobs
                 if (readConfig.ReadSucces)
                 {
                     var solbot = readConfig.SolBotConfig;
+
+                    _rules.Add(new SendNotificationRule(_pushOverNotificationService, context.PreviousFireTimeUtc));
 
                     _rules.Add(new StrategyValidationRule());
                     _rules.Add(new ModeTypeValidationRule());
@@ -74,9 +79,9 @@ namespace SolBo.Agent.Jobs
                         _rules.Add(new PumpStopLossCycleSequenceRule());
 
                         if (solbot.Exchange.IsInTestMode)
-                            _rules.Add(new ModeTestRule(_marketService));
+                            _rules.Add(new ModeTestRule(_marketService, _pushOverNotificationService));
                         else
-                            _rules.Add(new ModeProductionRule(_marketService));
+                            _rules.Add(new ModeProductionRule(_marketService, _pushOverNotificationService));
 
                         foreach (var item in _rules)
                         {

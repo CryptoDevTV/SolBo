@@ -16,10 +16,14 @@ namespace SolBo.Shared.Rules.Mode
         public string ModeName => "PRODUCTION MODE";
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         private readonly IMarketService _marketService;
+        private readonly IPushOverNotificationService _pushOverNotificationService;
         private readonly ICollection<IRule> _rules = new HashSet<IRule>();
-        public ModeProductionRule(IMarketService marketService)
+        public ModeProductionRule(
+            IMarketService marketService,
+            IPushOverNotificationService pushOverNotificationService)
         {
             _marketService = marketService;
+            _pushOverNotificationService = pushOverNotificationService;
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
