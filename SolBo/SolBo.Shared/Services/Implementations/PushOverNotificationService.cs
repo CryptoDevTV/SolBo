@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Net;
 
 namespace SolBo.Shared.Services.Implementations
@@ -9,7 +10,6 @@ namespace SolBo.Shared.Services.Implementations
         private readonly string _recipients;
         private readonly string _endpoint;
         private readonly bool _isActive;
-
         public PushOverNotificationService(
             string token,
             string recipients,
@@ -21,24 +21,29 @@ namespace SolBo.Shared.Services.Implementations
             _endpoint = endpoint;
             _isActive = isActive;
         }
-
         public void Send(string title, string message)
         {
-            if(_isActive)
+            if (_isActive)
             {
                 if (!string.IsNullOrWhiteSpace(title) && !string.IsNullOrWhiteSpace(message))
                 {
                     var parameters = new NameValueCollection
-                {
-                    { "token", _token },
-                    { "user", _recipients },
-                    { "message", message },
-                    { "title", title },
-                    { "html", "1" }
-                };
+                    {
+                        { "token", _token },
+                        { "user", _recipients },
+                        { "message", message },
+                        { "title", title },
+                        { "html", "1" }
+                    };
 
-                    using var client = new WebClient();
-                    client.UploadValues(_endpoint, parameters);
+                    try
+                    {
+                        using var client = new WebClient();
+                        client.UploadValues(_endpoint, parameters);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
             }
         }

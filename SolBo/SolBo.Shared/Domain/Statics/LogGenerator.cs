@@ -71,6 +71,13 @@ namespace SolBo.Shared.Domain.Statics
 
         public static string NotificationTitleStart => "Hello! my dear Trader :)";
         public static string NotificationMessageStart
-            => "I've started working for <strong>You</strong>. Please visit <a href=\"https://cryptodev.tv\">https://cryptodev.tv</a>";
+            => "I've started working for <strong>You</strong>.<br>" +
+            " Join our <a href=\"https://t.me/joinchat/JmoiyRyhQp5o7Ts1ZezFQA\">Telegram Group</a>.<br><br>" +
+            " Please visit <a href=\"https://cryptodev.tv\">https://cryptodev.tv</a>";
+
+        public static string NotificationTitle(WorkingType workingType, MarketOrderType marketOrderType)
+            => $"[{workingType.GetDescription()}] => {marketOrderType.GetDescription()}";
+        public static string NotificationMessage(decimal average, decimal price, decimal percentage)
+            => $"Average: {average}, Price: {price}, Percentage change: {percentage}";
     }
 }

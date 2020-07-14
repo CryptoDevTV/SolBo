@@ -5,6 +5,7 @@ using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
+using SolBo.Shared.Services;
 
 namespace SolBo.Shared.Rules.Mode.Production
 {
@@ -13,10 +14,13 @@ namespace SolBo.Shared.Rules.Mode.Production
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         public MarketOrderType MarketOrder => MarketOrderType.BUYING;
         private readonly IBinanceClient _binanceClient;
+        private readonly IPushOverNotificationService _pushOverNotificationService;
         public BuyExecuteMarketRule(
-            IBinanceClient binanceClient)
+            IBinanceClient binanceClient,
+            IPushOverNotificationService pushOverNotificationService)
         {
             _binanceClient = binanceClient;
+            _pushOverNotificationService = pushOverNotificationService;
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
@@ -50,6 +54,13 @@ namespace SolBo.Shared.Rules.Mode.Production
                         }
 
                         Logger.Info(LogGenerator.TradeResultEnd(buyOrderResult.Data.OrderId));
+
+                        _pushOverNotificationService.Send(
+                            LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder),
+                            LogGenerator.NotificationMessage(
+                                solbot.Communication.Average.Current,
+                                solbot.Communication.Price.Current,
+                                solbot.Communication.Buy.Change));
                     }
                     else
                         Logger.Warn(buyOrderResult.Error.Message);
