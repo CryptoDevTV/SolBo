@@ -75,9 +75,9 @@ namespace SolBo.Shared.Domain.Statics
             " Join our <a href=\"https://t.me/joinchat/JmoiyRyhQp5o7Ts1ZezFQA\">Telegram Group</a>.<br><br>" +
             " Please visit <a href=\"https://cryptodev.tv\">https://cryptodev.tv</a>";
 
-        public static string NotificationTitle(WorkingType workingType, MarketOrderType marketOrderType)
-            => $"[{workingType.GetDescription()}] => {marketOrderType.GetDescription()}";
+        public static string NotificationTitle(WorkingType workingType, MarketOrderType marketOrderType, string symbol)
+            => $"[{workingType.GetDescription()}] => {marketOrderType.GetDescription()} [{symbol}]";
         public static string NotificationMessage(decimal average, decimal price, decimal percentage)
-            => $"Average: {average}, Price: {price}, Percentage change: {percentage}";
+            => $"Average: {average}<br>Price: {price}<br>Percentage change: {percentage}";
     }
 }

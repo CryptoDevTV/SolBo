@@ -16,7 +16,9 @@ namespace SolBo.Shared.Rules.Mode.Test
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var result = solbot.Communication.Sell.PriceReached && solbot.Actions.BoughtPrice > 0;
+            var result = solbot.Communication.Sell.PriceReached && 
+                solbot.Actions.BoughtPrice > 0 &&
+                solbot.Communication.Price.Current > solbot.Actions.BoughtPrice;
 
             if (result)
             {
@@ -24,7 +26,7 @@ namespace SolBo.Shared.Rules.Mode.Test
                 result = true;
 
                 _pushOverNotificationService.Send(
-                    LogGenerator.NotificationTitle(WorkingType.TEST, MarketOrder),
+                    LogGenerator.NotificationTitle(WorkingType.TEST, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
                     LogGenerator.NotificationMessage(
                         solbot.Communication.Average.Current,
                         solbot.Communication.Price.Current,

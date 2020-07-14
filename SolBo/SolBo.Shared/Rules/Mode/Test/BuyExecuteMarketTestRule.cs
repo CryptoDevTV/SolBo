@@ -24,7 +24,7 @@ namespace SolBo.Shared.Rules.Mode.Test
                 result = true;
 
                 _pushOverNotificationService.Send(
-                    LogGenerator.NotificationTitle(WorkingType.TEST, MarketOrder),
+                    LogGenerator.NotificationTitle(WorkingType.TEST, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
                     LogGenerator.NotificationMessage(
                         solbot.Communication.Average.Current,
                         solbot.Communication.Price.Current,

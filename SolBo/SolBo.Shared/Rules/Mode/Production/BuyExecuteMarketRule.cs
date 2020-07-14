@@ -54,9 +54,9 @@ namespace SolBo.Shared.Rules.Mode.Production
                         }
 
                         Logger.Info(LogGenerator.TradeResultEnd(buyOrderResult.Data.OrderId));
-
+                        
                         _pushOverNotificationService.Send(
-                            LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder),
+                            LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
                             LogGenerator.NotificationMessage(
                                 solbot.Communication.Average.Current,
                                 solbot.Communication.Price.Current,
