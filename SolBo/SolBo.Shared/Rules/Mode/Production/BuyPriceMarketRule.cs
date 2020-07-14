@@ -11,7 +11,7 @@ namespace SolBo.Shared.Rules.Mode.Production
         {
             var result = solbot.Communication.Buy.AvailableFund > 0.0m &&
                 solbot.Communication.Buy.AvailableFund > solbot.Communication.Symbol.MinNotional &&
-                solbot.Communication.Buy.PriceReached && solbot.Actions.Bought == 0;
+                solbot.Communication.Buy.PriceReached && solbot.Actions.BoughtPrice == 0;
 
             solbot.Communication.Buy.IsReady = result;
 

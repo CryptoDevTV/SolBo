@@ -24,7 +24,7 @@
     ]
   },
   "actions": {
-    "bought": 0,
+    "boughtprice": 0,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }

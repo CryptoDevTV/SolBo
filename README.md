@@ -82,7 +82,10 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/fundpercentage**|część kapitału posiadanego na giełdze, którym bot będzie operował wyrażona w procentach|80|obowiązkowe
 **strategy/available/clearonstartup**|czyszczenie pliku przechowującego ceny dla danego symbolu, **true** - czyści plik i robi kopię zapasową poprzedniego przy uruchamianiu bota, **0** - nie czyści istniejącego pliku przy uruchomieniu, pobierane ceny są zapisywane do istniejącego pliku|true|obowiązkowe
 
-Użytkownik nie powinien samodzielnie modyfikować parametru **actions/bought**.
+Użytkownik nie powinien samodzielnie modyfikować parametrów:
+- **actions/boughtprice**,
+- **actions/stoplossreached**
+- **actions/stoplosscurrentcycle**.
 
 #### Przykładowa zawartość pliku
 
@@ -113,7 +116,7 @@ Użytkownik nie powinien samodzielnie modyfikować parametru **actions/bought**.
     ]
   },
   "actions": {
-    "bought": 0,
+    "boughtprice": 0,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }

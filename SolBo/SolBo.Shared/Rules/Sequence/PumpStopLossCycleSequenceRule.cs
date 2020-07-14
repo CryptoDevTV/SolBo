@@ -10,7 +10,7 @@ namespace SolBo.Shared.Rules.Sequence
         {
             var result = new SequencedRuleResult();
             if (solbot.Actions.StopLossReached
-                && solbot.Actions.Bought == 0
+                && solbot.Actions.BoughtPrice == 0
                 && solbot.Actions.StopLossCurrentCycle < solbot.Strategy.AvailableStrategy.StopLossPauseCycles)
             {
                 solbot.Actions.StopLossCurrentCycle++;
@@ -19,7 +19,7 @@ namespace SolBo.Shared.Rules.Sequence
                 result.Message = LogGenerator.SequenceError(SequenceName, $"{solbot.Actions.StopLossCurrentCycle}/{solbot.Strategy.AvailableStrategy.StopLossPauseCycles}");
             }
             else if(!solbot.Actions.StopLossReached
-                && solbot.Actions.Bought == 1)
+                && solbot.Actions.BoughtPrice > 0)
             {
                 result.Success = true;
                 result.Message = LogGenerator.SequenceSuccess(SequenceName, $"{solbot.Actions.StopLossCurrentCycle}");
@@ -27,7 +27,7 @@ namespace SolBo.Shared.Rules.Sequence
             else
             {
                 solbot.Actions.StopLossCurrentCycle = 0;
-                solbot.Actions.Bought = 0;
+                solbot.Actions.BoughtPrice = 0;
                 solbot.Actions.StopLossReached = false;
 
                 result.Success = true;

@@ -56,9 +56,9 @@ namespace SolBo.Shared.Domain.Statics
         public static string TradeResult(BinanceOrderTrade order)
             => $"Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
 
-        public static string ExecuteMarketSuccess(MarketOrderType orderType, bool priceReached, int bought)
+        public static string ExecuteMarketSuccess(MarketOrderType orderType, bool priceReached, decimal bought)
             => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought before ({bought})";
-        public static string ExecuteMarketError(MarketOrderType orderType, bool priceReached, int bought)
+        public static string ExecuteMarketError(MarketOrderType orderType, bool priceReached, decimal bought)
             => $"{orderType.GetDescription()} => Price not reached ({priceReached}), bought before ({bought})";
 
         public static string ModeTypeSuccess(string sequenceName, string attribute)

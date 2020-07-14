@@ -77,7 +77,7 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                     if (stopLossOrderResult.Success)
                     {
-                        solbot.Actions.Bought = 0;
+                        solbot.Actions.BoughtPrice = 0;
                         solbot.Actions.StopLossReached = true;
 
                         Logger.Info(LogGenerator.TradeResultStart(stopLossOrderResult.Data.OrderId));

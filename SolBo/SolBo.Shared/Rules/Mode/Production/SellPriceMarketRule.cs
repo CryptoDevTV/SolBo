@@ -12,7 +12,8 @@ namespace SolBo.Shared.Rules.Mode.Production
         {
             var result = solbot.Communication.AvailableAsset.Base > 0.0m &&
                 solbot.Communication.AvailableAsset.Base > solbot.Communication.Symbol.MinNotional &&
-                solbot.Communication.Sell.PriceReached && solbot.Actions.Bought == 1;
+                solbot.Communication.Sell.PriceReached && solbot.Actions.BoughtPrice > 0 &&
+                solbot.Communication.Price.Current > solbot.Actions.BoughtPrice;
 
             solbot.Communication.Sell.IsReady = result;
 

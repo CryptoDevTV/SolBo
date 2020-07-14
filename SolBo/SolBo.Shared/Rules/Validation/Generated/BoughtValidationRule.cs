@@ -9,9 +9,8 @@ namespace SolBo.Shared.Rules.Validation.Generated
             => ValidatedRuleResult.New(
                 RulePassed(solbot),
                 RuleAttribute,
-                $"{solbot.Actions.Bought}");
+                $"{solbot.Actions.BoughtPrice}");
         public bool RulePassed(Solbot solbot)
-            => solbot.Actions.Bought == 0
-            || solbot.Actions.Bought == 1;
+            => solbot.Actions.BoughtPrice >= 0;
     }
 }

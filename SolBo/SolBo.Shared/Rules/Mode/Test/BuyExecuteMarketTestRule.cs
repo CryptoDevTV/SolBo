@@ -16,11 +16,11 @@ namespace SolBo.Shared.Rules.Mode.Test
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var result = solbot.Communication.Buy.PriceReached && solbot.Actions.Bought == 0;
+            var result = solbot.Communication.Buy.PriceReached && solbot.Actions.BoughtPrice == 0;
 
             if (result)
             {
-                solbot.Actions.Bought = 1;
+                solbot.Actions.BoughtPrice = solbot.Communication.Price.Current;
                 result = true;
 
                 _pushOverNotificationService.Send(
@@ -35,8 +35,8 @@ namespace SolBo.Shared.Rules.Mode.Test
             {
                 Success = result,
                 Message = result
-                    ? LogGenerator.ExecuteMarketSuccess(MarketOrder, solbot.Communication.Buy.PriceReached, solbot.Actions.Bought)
-                    : LogGenerator.ExecuteMarketError(MarketOrder, solbot.Communication.Buy.PriceReached, solbot.Actions.Bought)
+                    ? LogGenerator.ExecuteMarketSuccess(MarketOrder, solbot.Communication.Buy.PriceReached, solbot.Actions.BoughtPrice)
+                    : LogGenerator.ExecuteMarketError(MarketOrder, solbot.Communication.Buy.PriceReached, solbot.Actions.BoughtPrice)
             };
         }
     }
