@@ -77,14 +77,14 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/buypercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
 **strategy/available/sellpercentageup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
 **strategy/available/stoplosspercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
-**strategy/available/stoplosstype**|wartość określające ile cykli bot czeka przed jakimkolwiek działaniem po zrealizowaniu zlecenia typu STOP LOSS|5|obowiązkowe
-**strategy/available/stoplosspausecycles**|typ określający rodzaj składanego zlecenie typu STOP LOSS|**1** - zlecenie typu STOPLOSSLIMIT, **0** - zlecenie typu SELL na MARKET. [Więcej info](https://binance-docs.github.io/apidocs/spot/en/#new-order-trade)|obowiązkowe
+**strategy/available/stoplosstype**|typ określający rodzaj składanego zlecenie typu STOP LOSS|**1** - zlecenie typu STOPLOSSLIMIT, **0** - zlecenie typu SELL na MARKET. [Więcej info](https://binance-docs.github.io/apidocs/spot/en/#new-order-trade)|obowiązkowe
+**strategy/available/stoplosspausecycles**|wartość określające ile cykli bot czeka przed jakimkolwiek działaniem po zrealizowaniu zlecenia typu STOP LOSS|5|obowiązkowe
 **strategy/available/fundpercentage**|część kapitału posiadanego na giełdze, którym bot będzie operował wyrażona w procentach|80|obowiązkowe
 **strategy/available/clearonstartup**|czyszczenie pliku przechowującego ceny dla danego symbolu, **true** - czyści plik i robi kopię zapasową poprzedniego przy uruchamianiu bota, **0** - nie czyści istniejącego pliku przy uruchomieniu, pobierane ceny są zapisywane do istniejącego pliku|true|obowiązkowe
 
 Użytkownik nie powinien samodzielnie modyfikować parametrów:
 - **actions/boughtprice**,
-- **actions/stoplossreached**
+- **actions/stoplossreached**,
 - **actions/stoplosscurrentcycle**.
 
 #### Przykładowa zawartość pliku
