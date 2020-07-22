@@ -41,12 +41,16 @@ oraz opcjonalnie sekcje **notifications/pushover** (w celu otrzymywania powiadom
 - `token` - API Token/Key z utworzonej aplikacji w serwisie Pushover,
 - `recipients` - User Key otrzymany z serwisu Pushover.
 
+Nie należy zmieniać wartości:
+- `version` - parametr ten przechowuje aktualną wersję bota (zgodnie z zakładką [Releases](https://github.com/CryptoDevTV/SolBo/releases))
+
 Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywany każdorazowo zgodnie z ustawionym okresem pobierania ceny z giełdy.
 
 #### Przykładowa (domyślna) zawartość:
 
 ```
 {
+  "version": "0.1.2",
   "filename": "solbo",
   "intervalinminutes": 1,
   "notifications": {

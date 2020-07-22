@@ -40,6 +40,7 @@ namespace SolBo.Agent.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
+            var botVersion = context.JobDetail.JobDataMap["Version"] as string;
             try
             {
                 var configFileName = context.JobDetail.JobDataMap["FileName"] as string;
@@ -101,14 +102,14 @@ namespace SolBo.Agent.Jobs
                     var saveConfig = await _schedulerService.SetConfigAsync(configFileName, solbot);
 
                     if (saveConfig.WriteSuccess)
-                        Logger.Info(LogGenerator.SaveSuccess);
+                        Logger.Info(LogGenerator.SaveSuccess(botVersion));
                     else
-                        Logger.Error(LogGenerator.SaveError);
+                        Logger.Error(LogGenerator.SaveError(botVersion));
                 }
             }
             catch (Exception e)
             {
-                Logger.Fatal($"{Environment.NewLine}Message => {e.Message}{Environment.NewLine}StackTrace => {e.StackTrace}");
+                Logger.Fatal($"{Environment.NewLine}[{botVersion}] Message => {e.Message}{Environment.NewLine}StackTrace => {e.StackTrace}");
             }
         }
     }

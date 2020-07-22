@@ -14,8 +14,8 @@ namespace SolBo.Shared.Domain.Statics
         public static string ValidationError(string ruleAttribute, string attributeValue)
             => $"Validation ERROR => {ruleAttribute} => Value => {attributeValue} => BAD";
 
-        public static string SaveSuccess => "Save SUCCESS";
-        public static string SaveError => "Save ERROR";
+        public static string SaveSuccess(string version) => $"[{version}] Save SUCCESS";
+        public static string SaveError(string version) => $"[{version}] Save ERROR";
 
         public static string SequenceSuccess(string sequenceName, string attribute)
             => $"{sequenceName} SUCCESS => {attribute}";

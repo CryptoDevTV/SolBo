@@ -59,6 +59,7 @@ namespace SolBo.Agent
                     .Build();
 
                 bdshJob.JobDataMap["FileName"] = app.FileName;
+                bdshJob.JobDataMap["Version"] = app.Version;
 
                 var bdshBuilder = TriggerBuilder.Create()
                     .WithIdentity("BuyDeepSellHighJobTrigger")
