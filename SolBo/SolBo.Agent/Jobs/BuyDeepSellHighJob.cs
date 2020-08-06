@@ -57,6 +57,7 @@ namespace SolBo.Agent.Jobs
                     _rules.Add(new ModeTypeValidationRule());
                     _rules.Add(new TickerValidationRule());
                     _rules.Add(new AverageValidationRule());
+                    _rules.Add(new AverageTypeValidationRule());
                     _rules.Add(new BuyStepValidationRule());
                     _rules.Add(new SellStepValidationRule());
                     _rules.Add(new StopLossStepValidationRule());
@@ -74,6 +75,7 @@ namespace SolBo.Agent.Jobs
                         _rules.Add(new SymbolSequenceRule(client));
                         _rules.Add(new GetPriceSequenceRule(client));
                         _rules.Add(new SavePriceSequenceRule(_storageService));
+                        _rules.Add(new AverageTypeSequenceRule());
                         _rules.Add(new CalculateAverageSequenceRule(_storageService));
 
                         _rules.Add(new ModeTypeSequenceRule());

@@ -23,6 +23,7 @@ namespace SolBo.Shared.Rules.Sequence
                 var count = _storageService.GetValues().Count;
 
                 var storedPriceAverage = AverageContext.Average(
+                    solbot.Strategy.AvailableStrategy.AverageType,
                     _storageService.GetValues(),
                     solbot.Communication.Symbol.QuoteAssetPrecision,
                     solbot.Strategy.AvailableStrategy.Average);

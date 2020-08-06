@@ -15,5 +15,6 @@ namespace SolBo.Shared.Domain.Configs
         public StopLossType StopLossType { get; set; }
         public bool ClearOnStartup { get; set; }
         public int StopLossPauseCycles { get; set; }
+        public AverageType AverageType { get; set; }
     }
 }

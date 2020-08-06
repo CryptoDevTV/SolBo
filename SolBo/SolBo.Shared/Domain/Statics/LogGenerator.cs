@@ -66,6 +66,11 @@ namespace SolBo.Shared.Domain.Statics
         public static string ModeTypeError(string sequenceName, string attribute)
             => $"{sequenceName} OFF => {attribute}";
 
+        public static string AverageTypeSuccess(string sequenceName, string attribute)
+            => $"{sequenceName} ON => {attribute}";
+        public static string AverageTypeError(string sequenceName, string attribute)
+            => $"{sequenceName} OFF => {attribute}";
+
         public static string ExchangeLog(string baseAsset, string quoteAsset)
             => $"Assets on exchange => base ({baseAsset}), quote ({quoteAsset})";
 
