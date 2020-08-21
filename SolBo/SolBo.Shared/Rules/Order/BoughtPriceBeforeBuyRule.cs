@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? "Solbo can set a transaction, to previous opened by Solb "
-                    : "Solbo will wait to close previous transaction"
+                    ? $"Solbo can set a new transaction, boughtprice: {solbot.Actions.BoughtPrice}"
+                    : $"Solbo will wait to close previous transaction, boughtprice: {solbot.Actions.BoughtPrice}"
             };
         }
     }

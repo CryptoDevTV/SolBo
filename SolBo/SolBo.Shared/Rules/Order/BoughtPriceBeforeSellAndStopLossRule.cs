@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? "You are able to sell, bought before"
-                    : "You are not able to sell, not bought before"
+                    ? $"You are able to sell, boughtprice: {solbot.Actions.BoughtPrice} from last transaction"
+                    : $"You are not able to sell, last boughtprice: {solbot.Actions.BoughtPrice} from last transaction"
             };
         }
     }
