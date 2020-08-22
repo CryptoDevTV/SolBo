@@ -3,6 +3,6 @@
     public class MarketResponse
     {
         public bool IsReadyForMarket { get; set; }
-        public decimal PercentChanged { get; set; }
+        public decimal Changed { get; set; }
     }
 }

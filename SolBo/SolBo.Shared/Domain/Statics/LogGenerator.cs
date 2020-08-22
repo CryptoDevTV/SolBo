@@ -34,10 +34,10 @@ namespace SolBo.Shared.Domain.Statics
         public static string Off(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => OFF";
 
-        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, decimal change)
-            => $"{orderType.GetDescription()} => Price ({priceCurrent}) increased from ({priceBase}) by {Math.Abs(change)}%";
-        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, decimal change)
-            => $"{orderType.GetDescription()} => Price ({priceCurrent}) has fallen from ({priceBase}) by {Math.Abs(change)}%";
+        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change)
+            => $"{orderType.GetDescription()} => Price ({priceCurrent}) increased from ({priceBase}) by {change}";
+        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change)
+            => $"{orderType.GetDescription()} => Price ({priceCurrent}) has fallen from ({priceBase}) by {change}";
 
         public static string PriceMarketSuccess(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => Order will be placed on exchange";
@@ -57,9 +57,9 @@ namespace SolBo.Shared.Domain.Statics
             => $"Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
 
         public static string ExecuteMarketSuccess(MarketOrderType orderType, bool priceReached, decimal bought)
-            => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought before ({bought})";
+            => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought price ({bought})";
         public static string ExecuteMarketError(MarketOrderType orderType, bool priceReached, decimal bought)
-            => $"{orderType.GetDescription()} => Price not reached ({priceReached}), bought before ({bought})";
+            => $"{orderType.GetDescription()} => Price not reached ({priceReached}), bought price ({bought})";
 
         public static string ModeTypeSuccess(string sequenceName, string attribute)
             => $"{sequenceName} ON => {attribute}";

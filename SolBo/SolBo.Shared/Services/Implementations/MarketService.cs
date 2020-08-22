@@ -1,4 +1,5 @@
-﻿using SolBo.Shared.Services.Responses;
+﻿using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Services.Responses;
 
 namespace SolBo.Shared.Services.Implementations
 {
@@ -17,35 +18,68 @@ namespace SolBo.Shared.Services.Implementations
 
             return result;
         }
-        public MarketResponse IsGoodToBuy(decimal percentPriceDrop, decimal storedPriceAverage, decimal currentPrice)
+        public MarketResponse IsGoodToBuy(CommissionType commissionType, decimal changePriceDrop, decimal storedPriceAverage, decimal currentPrice)
         {
-            return new MarketResponse
+            if (commissionType == CommissionType.PERCENTAGE)
             {
-                IsReadyForMarket = storedPriceAverage > currentPrice
-                    ? 100 - (currentPrice / storedPriceAverage * 100) >= percentPriceDrop
-                    : false,
-                PercentChanged = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
-            };
+                return new MarketResponse
+                {
+                    IsReadyForMarket = storedPriceAverage > currentPrice
+                        ? 100 - (currentPrice / storedPriceAverage * 100) >= changePriceDrop
+                        : false,
+                    Changed = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
+                };
+            }
+            else
+            {
+                return new MarketResponse
+                {
+                    IsReadyForMarket = storedPriceAverage - currentPrice >= changePriceDrop,
+                    Changed = storedPriceAverage - currentPrice
+                };
+            }
         }
-        public MarketResponse IsGoodToSell(decimal percentPriceRise, decimal storedPriceAverage, decimal currentPrice)
+        public MarketResponse IsGoodToSell(CommissionType commissionType, decimal changePriceRise, decimal storedPriceAverage, decimal currentPrice)
         {
-            return new MarketResponse
+            if (commissionType == CommissionType.PERCENTAGE)
             {
-                IsReadyForMarket = currentPrice > storedPriceAverage
-                    ? 100 - (storedPriceAverage * 100 / currentPrice) >= percentPriceRise
-                    : false,
-                PercentChanged = decimal.Round(100 - (storedPriceAverage * 100 / currentPrice), 2)
-            };
+                return new MarketResponse
+                {
+                    IsReadyForMarket = currentPrice > storedPriceAverage
+                        ? 100 - (storedPriceAverage * 100 / currentPrice) >= changePriceRise
+                        : false,
+                    Changed = decimal.Round(100 - (storedPriceAverage * 100 / currentPrice), 2)
+                };
+            }
+            else
+            {
+                return new MarketResponse
+                {
+                    IsReadyForMarket = storedPriceAverage + changePriceRise >= currentPrice,
+                    Changed = storedPriceAverage + changePriceRise - currentPrice
+                };
+            }
         }
-        public MarketResponse IsStopLossReached(decimal percentStopLoss, decimal storedPriceAverage, decimal currentPrice)
+        public MarketResponse IsStopLossReached(CommissionType commissionType, decimal changeStopLoss, decimal storedPriceAverage, decimal currentPrice)
         {
-            return new MarketResponse
+            if (commissionType == CommissionType.PERCENTAGE)
             {
-                IsReadyForMarket = storedPriceAverage > currentPrice
-                    ? 100 - (currentPrice / storedPriceAverage * 100) >= percentStopLoss
-                    : false,
-                PercentChanged = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
-            };
+                return new MarketResponse
+                {
+                    IsReadyForMarket = storedPriceAverage > currentPrice
+                        ? 100 - (currentPrice / storedPriceAverage * 100) >= changeStopLoss
+                        : false,
+                    Changed = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
+                };
+            }
+            else
+            {
+                return new MarketResponse
+                {
+                    IsReadyForMarket = storedPriceAverage - changeStopLoss >= currentPrice,
+                    Changed = storedPriceAverage - currentPrice
+                };
+            }
         }
     }
 }

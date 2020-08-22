@@ -3,6 +3,7 @@ using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
+using System;
 
 namespace SolBo.Shared.Rules.Mode
 {
@@ -19,13 +20,14 @@ namespace SolBo.Shared.Rules.Mode
         public IRuleResult RuleExecuted(Solbot solbot)
         {
             var result = _marketService.IsGoodToBuy(
-                solbot.Strategy.AvailableStrategy.BuyPercentageDown,
+                solbot.Strategy.AvailableStrategy.CommissionType,
+                solbot.Strategy.AvailableStrategy.BuyDown,
                 solbot.Communication.Average.Current,
                 solbot.Communication.Price.Current);
 
-            solbot.Communication.Buy = new PercentageMessage
+            solbot.Communication.Buy = new ChangeMessage
             {
-                Change = result.PercentChanged,
+                Change = result.Changed,
                 PriceReached = result.IsReadyForMarket
             };
 
@@ -36,12 +38,16 @@ namespace SolBo.Shared.Rules.Mode
                 solbot.Communication.Buy.AvailableFund = fundResponse.QuoteAssetToTrade;
             }
 
+            var change = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
+                ? $"{solbot.Communication.Buy.Change}"
+                : $"{Math.Abs(solbot.Communication.Buy.Change)}%";
+
             return new MarketRuleResult()
             {
                 Success = result.IsReadyForMarket,
-                Message = result.PercentChanged < 0
-                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.Buy.Change)
-                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.Buy.Change)
+                Message = result.Changed < 0
+                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, change)
+                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, change)
             };
         }
     }

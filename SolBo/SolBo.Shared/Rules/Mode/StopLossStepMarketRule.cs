@@ -3,6 +3,8 @@ using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
+using SolBo.Shared.Services.Responses;
+using System;
 
 namespace SolBo.Shared.Rules.Mode
 {
@@ -16,9 +18,9 @@ namespace SolBo.Shared.Rules.Mode
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            if (solbot.Strategy.AvailableStrategy.StopLossPercentageDown == 0)
+            if (solbot.Strategy.AvailableStrategy.StopLossDown == 0)
             {
-                solbot.Communication.StopLoss = new PercentageMessage
+                solbot.Communication.StopLoss = new ChangeMessage
                 {
                     Change = 0,
                     PriceReached = false
@@ -36,23 +38,38 @@ namespace SolBo.Shared.Rules.Mode
                     ? solbot.Communication.Average.Current
                     : solbot.Actions.BoughtPrice;
 
-                var result = _marketService.IsStopLossReached(
-                    solbot.Strategy.AvailableStrategy.StopLossPercentageDown,
-                    boughtPrice,
-                    solbot.Communication.Price.Current);
+                var result = new MarketResponse();
 
-                solbot.Communication.StopLoss = new PercentageMessage
+                if(boughtPrice > 0)
                 {
-                    Change = result.PercentChanged,
+                    result = _marketService.IsStopLossReached(
+                        solbot.Strategy.AvailableStrategy.CommissionType,
+                        solbot.Strategy.AvailableStrategy.StopLossDown,
+                        boughtPrice,
+                        solbot.Communication.Price.Current);
+                }
+                else
+                {
+                    result.IsReadyForMarket = false;
+                    result.Changed = 0;
+                }
+
+                solbot.Communication.StopLoss = new ChangeMessage
+                {
+                    Change = result.Changed,
                     PriceReached = result.IsReadyForMarket
                 };
+
+                var change = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
+                    ? $"{solbot.Communication.StopLoss.Change}"
+                    : $"{Math.Abs(solbot.Communication.Buy.Change)}%";
 
                 return new MarketRuleResult()
                 {
                     Success = result.IsReadyForMarket,
-                    Message = result.PercentChanged < 0
-                        ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, solbot.Communication.StopLoss.Change)
-                        : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, solbot.Communication.StopLoss.Change)
+                    Message = result.Changed < 0
+                        ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change)
+                        : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change)
                 };
             }
         }

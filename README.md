@@ -50,7 +50,7 @@ Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywa
 
 ```
 {
-  "version": "0.1.2",
+  "version": "0.2.0",
   "filename": "solbo",
   "intervalinminutes": 1,
   "notifications": {
@@ -80,6 +80,7 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/averagetype**|wartość określająca czy ostatnio pobrana cena ma być uwzględniana w wyliczaniu średniej|**0** - jest uwzględniana, **1** - nie jest uwzględniana|obowiązkowe
 **strategy/available/selltype**|wartość określająca czy *sellpercentageup* w przypadku **SELL** ma być wyliczana od ceny zakupu (**0**) czy od wartości wyliczonej średniej (**1**), analogicznie dla **STOPLOSS**|**0** - od ceny zakupu, **1** - od wyliczonej średniej|obowiązkowe
+**strategy/available/commissiontype**|wartość określająca czy bot ma śledzić zmianę ceny w ujęciu procentowym czy wartościowym|**0** - wartości bezwzględne ceny, **1** - wartości procentowe|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
 **strategy/available/sellpercentageup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
 **strategy/available/stoplosspercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
@@ -113,9 +114,10 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
         "average": 3,
         "averagetype": 0,
         "selltype": 0,
-        "buypercentagedown": 2.1,
-        "sellpercentageup": 4.5,
-        "stoplosspercentagedown": 6.5,
+        "commissiontype": 0,
+        "buydown": 0.0003,
+        "sellup": 0.0005,
+        "stoplossdown": 0.0004,
         "stoplosstype": 0,
         "stoplosspausecycles": 5,
         "fundpercentage": 100,
@@ -124,16 +126,12 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
     ]
   },
   "actions": {
-    "boughtprice": 0.04392800,
+    "boughtprice": 0,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }
 }
 ```
-
-#### Opis zachowania bota na podstawie przykładowego pliku
-
-Bot zostanie uruchomiony w trybie testowym (puste wartości parametrów **exchange/apikey** i **exchange/apisecret**) na giełdzie Binance (zgodnie z **exchange/name**). Bot aktywuje dostępną strategię numer jeden (zgodnie z **strategy/activeid**). Strategia ta polega na handlu na parze `ETHBTC` (zgodnie z **strategy/available/symbol**) w oparciu o średnią aktualnie pobieranej ceny z ostatnich 5 (zgodnie z **strategy/available/average**) okresów. Bot złoży zlecenie typu `BUY` jeśli cena w stosunku do średniej spadnie o 2% (zgodnie z **strategy/available/buypercentagedown**). Bot złoży zlecenie typu `SELL` jeśli cena w stosunku do średniej wzrośnie o 3% (zgodnie z **strategy/available/sellpercentageup**). Bot złoży zlecenie typu `STOP LOSS` w oparciu o `SELL` (zgodnie z **strategy/available/stoplosstype**) jeśli cena w stosunku do średniej spadnie o 10% (zgodnie z **strategy/available/stoplosspercentagedown**). Bot użyje 80% (zgodnie z **strategy/available/fundpercentage**) kapitału `BTC` zdeponowanego na giełdzie przez użytkownika.
 
 ## Tryb testowy
 

@@ -1,6 +1,6 @@
 ﻿namespace SolBo.Shared.Messages.Rules
 {
-    public class PercentageMessage
+    public class ChangeMessage
     {
         public decimal Change { get; set; }
         public bool PriceReached { get; set; }

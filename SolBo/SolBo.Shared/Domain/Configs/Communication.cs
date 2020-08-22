@@ -7,9 +7,9 @@ namespace SolBo.Shared.Domain.Configs
         public SymbolMessage Symbol { get; set; }
         public PriceMessage Price { get; set; }
         public PriceMessage Average { get; set; }
-        public PercentageMessage StopLoss { get; set; }
-        public PercentageMessage Buy { get; set; }
-        public PercentageMessage Sell { get; set; }
+        public ChangeMessage StopLoss { get; set; }
+        public ChangeMessage Buy { get; set; }
+        public ChangeMessage Sell { get; set; }
         public AvailableAssetMessage AvailableAsset { get; set; }
     }
 }

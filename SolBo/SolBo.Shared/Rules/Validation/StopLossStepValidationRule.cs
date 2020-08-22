@@ -9,8 +9,8 @@ namespace SolBo.Shared.Rules.Validation
             => ValidatedRuleResult.New(
                 RulePassed(solbot),
                 RuleAttribute,
-                $"{solbot.Strategy.AvailableStrategy.StopLossPercentageDown}");
+                $"{solbot.Strategy.AvailableStrategy.StopLossDown}");
         public bool RulePassed(Solbot solbot)
-            => solbot.Strategy.AvailableStrategy.StopLossPercentageDown >= 0;
+            => solbot.Strategy.AvailableStrategy.StopLossDown >= 0;
     }
 }
