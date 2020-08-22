@@ -16,9 +16,13 @@ namespace SolBo.Shared.Rules.Mode
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
+            var boughtPrice = solbot.Strategy.AvailableStrategy.SellType == SellType.FROM_AVERAGE_VALUE
+                ? solbot.Communication.Average.Current
+                : solbot.Actions.BoughtPrice;
+
             var result = _marketService.IsGoodToSell(
                 solbot.Strategy.AvailableStrategy.SellPercentageUp,
-                solbot.Communication.Average.Current,
+                boughtPrice,
                 solbot.Communication.Price.Current);
 
             solbot.Communication.Sell = new PercentageMessage
@@ -31,8 +35,8 @@ namespace SolBo.Shared.Rules.Mode
             {
                 Success = result.IsReadyForMarket,
                 Message = result.PercentChanged > 0
-                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.Sell.Change)
-                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.Sell.Change)
+                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, solbot.Communication.Sell.Change)
+                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, solbot.Communication.Sell.Change)
             };
         }
     }

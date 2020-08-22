@@ -34,10 +34,10 @@ namespace SolBo.Shared.Domain.Statics
         public static string Off(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => OFF";
 
-        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceAverage, decimal change)
-            => $"{orderType.GetDescription()} => Price ({priceCurrent}) increased from the average ({priceAverage}) by {Math.Abs(change)}%";
-        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceAverage, decimal change)
-            => $"{orderType.GetDescription()} => Price ({priceCurrent}) has fallen from the average ({priceAverage}) by {Math.Abs(change)}%";
+        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, decimal change)
+            => $"{orderType.GetDescription()} => Price ({priceCurrent}) increased from ({priceBase}) by {Math.Abs(change)}%";
+        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, decimal change)
+            => $"{orderType.GetDescription()} => Price ({priceCurrent}) has fallen from ({priceBase}) by {Math.Abs(change)}%";
 
         public static string PriceMarketSuccess(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => Order will be placed on exchange";

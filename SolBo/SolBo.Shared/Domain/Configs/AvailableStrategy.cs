@@ -16,5 +16,6 @@ namespace SolBo.Shared.Domain.Configs
         public bool ClearOnStartup { get; set; }
         public int StopLossPauseCycles { get; set; }
         public AverageType AverageType { get; set; }
+        public SellType SellType { get; set; }
     }
 }

@@ -32,9 +32,13 @@ namespace SolBo.Shared.Rules.Mode
             }
             else
             {
+                var boughtPrice = solbot.Strategy.AvailableStrategy.SellType == SellType.FROM_AVERAGE_VALUE
+                    ? solbot.Communication.Average.Current
+                    : solbot.Actions.BoughtPrice;
+
                 var result = _marketService.IsStopLossReached(
                     solbot.Strategy.AvailableStrategy.StopLossPercentageDown,
-                    solbot.Communication.Average.Current,
+                    boughtPrice,
                     solbot.Communication.Price.Current);
 
                 solbot.Communication.StopLoss = new PercentageMessage
@@ -47,8 +51,8 @@ namespace SolBo.Shared.Rules.Mode
                 {
                     Success = result.IsReadyForMarket,
                     Message = result.PercentChanged < 0
-                        ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.StopLoss.Change)
-                        : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, solbot.Communication.Average.Current, solbot.Communication.StopLoss.Change)
+                        ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, solbot.Communication.StopLoss.Change)
+                        : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, solbot.Communication.StopLoss.Change)
                 };
             }
         }

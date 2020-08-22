@@ -79,6 +79,7 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/tickertype**|parametr określający rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/averagetype**|wartość określająca czy ostatnio pobrana cena ma być uwzględniana w wyliczaniu średniej|**0** - jest uwzględniana, **1** - nie jest uwzględniana|obowiązkowe
+**strategy/available/selltype**|wartość określająca czy *sellpercentageup* w przypadku **SELL** ma być wyliczana od ceny zakupu (**0**) czy od wartości wyliczonej średniej (**1**), analogicznie dla **STOPLOSS**|**0** - od ceny zakupu, **1** - od wyliczonej średniej|obowiązkowe
 **strategy/available/buypercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
 **strategy/available/sellpercentageup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
 **strategy/available/stoplosspercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
@@ -110,19 +111,20 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
         "symbol": "ETHBTC",
         "tickertype": 0,
         "average": 3,
-		"averagetype": 0,
+        "averagetype": 0,
+        "selltype": 0,
         "buypercentagedown": 2.1,
-        "sellpercentageup": 0.5,
-        "stoplosspercentagedown": 10.5,
+        "sellpercentageup": 4.5,
+        "stoplosspercentagedown": 6.5,
         "stoplosstype": 0,
         "stoplosspausecycles": 5,
-        "fundpercentage": 80.4,
-        "clearonstartup": true
+        "fundpercentage": 100,
+        "clearonstartup": false
       }
     ]
   },
   "actions": {
-    "boughtprice": 0,
+    "boughtprice": 0.04392800,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }

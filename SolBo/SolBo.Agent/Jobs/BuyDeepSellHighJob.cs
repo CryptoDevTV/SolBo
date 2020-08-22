@@ -58,6 +58,7 @@ namespace SolBo.Agent.Jobs
                     _rules.Add(new TickerValidationRule());
                     _rules.Add(new AverageValidationRule());
                     _rules.Add(new AverageTypeValidationRule());
+                    _rules.Add(new SellTypeValidationRule());
                     _rules.Add(new BuyStepValidationRule());
                     _rules.Add(new SellStepValidationRule());
                     _rules.Add(new StopLossStepValidationRule());

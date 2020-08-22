@@ -14,6 +14,7 @@
         "tickertype": 0,
         "average": 3,
         "averagetype": 0,
+        "selltype": 0,
         "buypercentagedown": 2.1,
         "sellpercentageup": 4.5,
         "stoplosspercentagedown": 6.5,
