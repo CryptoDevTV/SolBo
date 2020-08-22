@@ -145,9 +145,14 @@ Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego
 
 Tryb ten jest automatycznie aktywowany poprzez wprowadzenie poprawnych wartości dla parametrów **exchange/apikey** i **exchange/apisecret**.
 
+### Oddzielne konto dla bota
+
+Istotnym ze względów bezpieczeństwa jest by Solbo, działał na innym koncie niż Twoje główne konto na Binance. Będę niezwykle wdzięczny jeśli na jego potrzeby założysz konto z tego [linku polecającego](https://www.binance.com/en/register?ref=T0ANYAVJ), za każdą transakcję złożoną przez bota ja dostanę małą gratyfikację, Ciebie nic to nie będzie kosztować.
+
 ## Instalacja i uruchomienie bota
 
-Do napisania :)
+1. [Windows](https://youtu.be/_mPunoV0FzI)
+2. [Raspberry PI](https://github.com/CryptoDevTV/SolBo/wiki/Raspberry-PI) - analogicznie na linuksach
 
 ## Kontakt
 
