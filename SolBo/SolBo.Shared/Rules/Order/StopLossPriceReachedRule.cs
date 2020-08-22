@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Stop loss price reached ({solbot.Communication.StopLoss.PriceReached})"
-                    : $"Stop loss price not reached ({solbot.Communication.StopLoss.PriceReached})"
+                    ? $"Stop loss price reached"
+                    : $"Stop loss price not reached"
             };
         }
     }

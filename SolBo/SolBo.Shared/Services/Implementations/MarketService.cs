@@ -34,7 +34,9 @@ namespace SolBo.Shared.Services.Implementations
             {
                 return new MarketResponse
                 {
-                    IsReadyForMarket = storedPriceAverage - currentPrice >= changePriceDrop,
+                    IsReadyForMarket = storedPriceAverage > currentPrice
+                        ? storedPriceAverage - currentPrice >= changePriceDrop
+                        : false,
                     Changed = storedPriceAverage - currentPrice
                 };
             }
@@ -55,7 +57,9 @@ namespace SolBo.Shared.Services.Implementations
             {
                 return new MarketResponse
                 {
-                    IsReadyForMarket = storedPriceAverage + changePriceRise >= currentPrice,
+                    IsReadyForMarket = currentPrice > storedPriceAverage
+                    ? currentPrice + changePriceRise >= storedPriceAverage
+                    : false,
                     Changed = storedPriceAverage + changePriceRise - currentPrice
                 };
             }
@@ -76,7 +80,9 @@ namespace SolBo.Shared.Services.Implementations
             {
                 return new MarketResponse
                 {
-                    IsReadyForMarket = storedPriceAverage - changeStopLoss >= currentPrice,
+                    IsReadyForMarket = storedPriceAverage > currentPrice
+                        ? storedPriceAverage + changeStopLoss >= currentPrice
+                        : false,
                     Changed = storedPriceAverage - currentPrice
                 };
             }
