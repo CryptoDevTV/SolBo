@@ -34,10 +34,6 @@ namespace SolBo.Shared.Rules.Mode.Production
                 }
             }
 
-            //var result = solbot.Communication.AvailableAsset.Base > 0.0m &&
-            //    solbot.Communication.AvailableAsset.Base > solbot.Communication.Symbol.MinNotional &&
-            //    solbot.Communication.StopLoss.PriceReached && solbot.Actions.BoughtPrice > 0;
-
             solbot.Communication.StopLoss.IsReady = result;
 
             return new MarketRuleResult()

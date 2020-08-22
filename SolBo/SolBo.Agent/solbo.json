@@ -16,7 +16,7 @@
         "averagetype": 0,
         "buypercentagedown": 2.1,
         "sellpercentageup": 4.5,
-        "stoplosspercentagedown": 10.5,
+        "stoplosspercentagedown": 6.5,
         "stoplosstype": 0,
         "stoplosspausecycles": 5,
         "fundpercentage": 100,

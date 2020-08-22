@@ -7,6 +7,8 @@ using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SolBo.Shared.Rules.Mode.Production
 {
@@ -52,15 +54,18 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                             Logger.Info(LogGenerator.TradeResultStart(sellOrderResult.Data.OrderId));
 
+                            var prices = new List<decimal>();
+
                             if (sellOrderResult.Data.Fills.AnyAndNotNull())
                             {
                                 foreach (var item in sellOrderResult.Data.Fills)
                                 {
                                     Logger.Info(LogGenerator.TradeResult(item));
+                                    prices.Add(item.Price);
                                 }
                             }
 
-                            Logger.Info(LogGenerator.TradeResultEnd(sellOrderResult.Data.OrderId));
+                            Logger.Info(LogGenerator.TradeResultEnd(sellOrderResult.Data.OrderId, prices.Average()));
 
                             _pushOverNotificationService.Send(
                                 LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),

@@ -6,6 +6,8 @@ using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SolBo.Shared.Rules.Mode.Production
 {
@@ -35,26 +37,29 @@ namespace SolBo.Shared.Rules.Mode.Production
                     OrderType.Market,
                     quoteOrderQuantity: solbot.Communication.Buy.AvailableFund);
 
-                if(!(buyOrderResult is null))
+                if (!(buyOrderResult is null))
                 {
                     result = buyOrderResult.Success;
 
                     if (buyOrderResult.Success)
                     {
-                        solbot.Actions.BoughtPrice = solbot.Communication.Price.Current;
-
                         Logger.Info(LogGenerator.TradeResultStart(buyOrderResult.Data.OrderId));
+
+                        var prices = new List<decimal>();
 
                         if (buyOrderResult.Data.Fills.AnyAndNotNull())
                         {
                             foreach (var item in buyOrderResult.Data.Fills)
                             {
                                 Logger.Info(LogGenerator.TradeResult(item));
+                                prices.Add(item.Price);
                             }
                         }
 
-                        Logger.Info(LogGenerator.TradeResultEnd(buyOrderResult.Data.OrderId));
-                        
+                        solbot.Actions.BoughtPrice = prices.Average();
+
+                        Logger.Info(LogGenerator.TradeResultEnd(buyOrderResult.Data.OrderId, prices.Average()));
+
                         _pushOverNotificationService.Send(
                             LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
                             LogGenerator.NotificationMessage(

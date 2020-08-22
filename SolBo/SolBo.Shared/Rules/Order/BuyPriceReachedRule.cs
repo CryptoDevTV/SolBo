@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Bought price reached {solbot.Communication.Buy.PriceReached}"
-                    : $"Bought price not reached {solbot.Communication.Buy.PriceReached}"
+                    ? $"Bought price reached"
+                    : $"Bought price not reached"
             };
         }
     }
