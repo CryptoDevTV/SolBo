@@ -10,16 +10,16 @@
     "available": [
       {
         "id": 1,
-        "symbol": "ETHBTC",
+        "symbol": "ALGOBTC",
         "tickertype": 0,
-        "average": 3,
-        "averagetype": 1,
+        "average": 1,
+        "averagetype": 0,
         "selltype": 0,
         "commissiontype": 0,
-        "buydown": 0.0003,
-        "sellup": 0.0005,
-        "stoplossdown": 0.0006,
-        "stoplosspausecycles": 5,
+        "buydown": 0,
+        "sellup": 0,
+        "stoplossdown": 0,
+        "stoplosspausecycles": 0,
         "fundpercentage": 100,
         "clearonstartup": false
       }

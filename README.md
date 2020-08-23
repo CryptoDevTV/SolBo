@@ -79,11 +79,11 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/available/tickertype**|parametr określający rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/averagetype**|wartość określająca czy ostatnio pobrana cena ma być uwzględniana w wyliczaniu średniej|**0** - jest uwzględniana, **1** - nie jest uwzględniana|obowiązkowe
-**strategy/available/selltype**|wartość określająca czy *sellpercentageup* w przypadku **SELL** ma być wyliczana od ceny zakupu (**0**) czy od wartości wyliczonej średniej (**1**), analogicznie dla **STOPLOSS**|**0** - od ceny zakupu, **1** - od wyliczonej średniej|obowiązkowe
+**strategy/available/selltype**|wartość określająca czy *sellup* w przypadku **SELL** ma być wyliczana od ceny zakupu (**0**) czy od wartości wyliczonej średniej (**1**), analogicznie dla **STOPLOSS**|**0** - od ceny zakupu, **1** - od wyliczonej średniej|obowiązkowe
 **strategy/available/commissiontype**|wartość określająca czy bot ma śledzić zmianę ceny w ujęciu procentowym czy wartościowym|**0** - wartości bezwzględne ceny, **1** - wartości procentowe|obowiązkowe
-**strategy/available/buypercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
-**strategy/available/sellpercentageup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
-**strategy/available/stoplosspercentagedown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
+**strategy/available/buydown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
+**strategy/available/sellup**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
+**strategy/available/stoplossdown**|wartość procentowa (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
 **strategy/available/stoplosspausecycles**|wartość określające ile cykli bot czeka przed jakimkolwiek działaniem po zrealizowaniu zlecenia typu STOP LOSS|5|obowiązkowe
 **strategy/available/fundpercentage**|część kapitału posiadanego na giełdze, którym bot będzie operował wyrażona w procentach|80|obowiązkowe
 **strategy/available/clearonstartup**|czyszczenie pliku przechowującego ceny dla danego symbolu, **true** - czyści plik i robi kopię zapasową poprzedniego przy uruchamianiu bota, **0** - nie czyści istniejącego pliku przy uruchomieniu, pobierane ceny są zapisywane do istniejącego pliku|true|obowiązkowe
@@ -108,16 +108,16 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
     "available": [
       {
         "id": 1,
-        "symbol": "ETHBTC",
+        "symbol": "ALGOBTC",
         "tickertype": 0,
-        "average": 3,
+        "average": 1,
         "averagetype": 0,
         "selltype": 0,
         "commissiontype": 0,
-        "buydown": 0.0003,
-        "sellup": 0.0005,
-        "stoplossdown": 0.0004,
-        "stoplosspausecycles": 5,
+        "buydown": 0,
+        "sellup": 0,
+        "stoplossdown": 0,
+        "stoplosspausecycles": 0,
         "fundpercentage": 100,
         "clearonstartup": false
       }

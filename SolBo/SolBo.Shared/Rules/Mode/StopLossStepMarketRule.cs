@@ -62,7 +62,7 @@ namespace SolBo.Shared.Rules.Mode
 
                 var change = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
                     ? $"{solbot.Communication.StopLoss.Change}"
-                    : $"{Math.Abs(solbot.Communication.Buy.Change)}%";
+                    : $"{Math.Abs(solbot.Communication.StopLoss.Change)}%";
 
                 return new MarketRuleResult()
                 {
