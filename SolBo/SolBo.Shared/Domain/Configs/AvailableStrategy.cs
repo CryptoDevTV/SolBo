@@ -12,11 +12,11 @@ namespace SolBo.Shared.Domain.Configs
         public TickerType TickerType { get; set; }
         public decimal StopLossDown { get; set; }
         public decimal FundPercentage { get; set; }
-        public StopLossType StopLossType { get; set; }
         public bool ClearOnStartup { get; set; }
         public int StopLossPauseCycles { get; set; }
         public AverageType AverageType { get; set; }
         public SellType SellType { get; set; }
         public CommissionType CommissionType { get; set; }
+        public StopLossType StopLossType => StopLossType.MARKETSELL;
     }
 }

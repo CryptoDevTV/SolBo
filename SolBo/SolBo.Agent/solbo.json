@@ -19,7 +19,6 @@
         "buydown": 0.0003,
         "sellup": 0.0005,
         "stoplossdown": 0.0006,
-        "stoplosstype": 0,
         "stoplosspausecycles": 5,
         "fundpercentage": 100,
         "clearonstartup": false
