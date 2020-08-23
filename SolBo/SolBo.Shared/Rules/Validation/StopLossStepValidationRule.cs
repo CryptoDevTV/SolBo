@@ -4,7 +4,7 @@ namespace SolBo.Shared.Rules.Validation
 {
     public class StopLossStepValidationRule : IValidatedRule
     {
-        public string RuleAttribute => "StopLossPercentageDown";
+        public string RuleAttribute => "StopLossDown";
         public IRuleResult RuleExecuted(Solbot solbot)
             => ValidatedRuleResult.New(
                 RulePassed(solbot),

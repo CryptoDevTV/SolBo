@@ -4,7 +4,7 @@ namespace SolBo.Shared.Rules.Validation
 {
     public class BuyStepValidationRule : IValidatedRule
     {
-        public string RuleAttribute => "BuyPercentageDown";
+        public string RuleAttribute => "BuyDown";
         public IRuleResult RuleExecuted(Solbot solbot)
             => ValidatedRuleResult.New(
                 RulePassed(solbot),
