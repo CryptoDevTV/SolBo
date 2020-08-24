@@ -13,12 +13,12 @@ namespace SolBo.Shared.Extensions
 
         public static string SellChange(this Solbot solbot)
             => solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
-                ? $"{solbot.Communication.Sell.Change}"
+                ? $"{Math.Abs(solbot.Communication.Sell.Change)}"
                 : $"{Math.Abs(solbot.Communication.Sell.Change)}%";
 
         public static string StopLossChange(this Solbot solbot)
             => solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
-                ? $"{solbot.Communication.StopLoss.Change}"
+                ? $"{Math.Abs(solbot.Communication.StopLoss.Change)}"
                 : $"{Math.Abs(solbot.Communication.StopLoss.Change)}%";
 
         public static string BuyChange(this Solbot solbot)

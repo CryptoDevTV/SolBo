@@ -35,31 +35,43 @@ namespace SolBo.Shared.Domain.Statics
             => $"{orderType.GetDescription()} => OFF";
 
         public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change)
-            => $"{orderType.GetDescription()} => Price ({priceCurrent}) increased from ({priceBase}) by {change}";
+            => $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) => INCREASED ({priceBase}) => by {change}";
         public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change)
-            => $"{orderType.GetDescription()} => Price ({priceCurrent}) has fallen from ({priceBase}) by {change}";
+        {
+            var result = priceBase > 0
+                ? $"=> DECREASED ({priceBase}) => by {change}"
+                : string.Empty;
+
+            return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) {result}";
+        }
 
         public static string PriceMarketSuccess(MarketOrderType orderType)
-            => $"{orderType.GetDescription()} => Order will be placed on exchange";
+            => $"{orderType.GetDescription()} => Order => exchange => PLACED";
         public static string PriceMarketError(MarketOrderType orderType)
-            => $"{orderType.GetDescription()} => Order will not be placed on exchange";
+            => $"{orderType.GetDescription()} => Order => exchange => NOT PLACED";
 
         public static string OrderMarketSuccess(MarketOrderType orderType)
-            => $"{orderType.GetDescription()} => Order succeed on exchange";
+            => $"{orderType.GetDescription()} => Order => exchange => SUCCEED";
         public static string OrderMarketError(MarketOrderType orderType, string message = "")
-            => $"{orderType.GetDescription()} => Order not succeed on exchange => {message}";
+        {
+            var result = string.IsNullOrWhiteSpace(message)
+                ? string.Empty
+                : $"=> {message}";
+
+            return $"{orderType.GetDescription()} => Order => exchange => NOT SUCCEED {result}";
+        }
 
         public static string TradeResultStart(long orderId)
             => $"Order ({orderId}) => START";
         public static string TradeResultEnd(long orderId, decimal average, decimal quantity, decimal commission)
             => $"Order ({orderId}) => END => Average => {average} => Quantity (all) => {quantity} => Commision (all) => {commission}";
         public static string TradeResult(MarketOrderType orderType, BinanceOrderTrade order)
-            => $"{orderType.GetDescription()} =>Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
+            => $"{orderType.GetDescription()} => Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
 
-        public static string ExecuteMarketSuccess(MarketOrderType orderType, bool priceReached, decimal bought)
-            => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought price ({bought})";
-        public static string ExecuteMarketError(MarketOrderType orderType, bool priceReached, decimal bought)
-            => $"{orderType.GetDescription()} => Price not reached ({priceReached}), bought price ({bought})";
+        public static string ExecuteMarketSuccess(MarketOrderType orderType, decimal bought)
+            => $"{orderType.GetDescription()} => Price => REACHED => bought price ({bought})";
+        public static string ExecuteMarketError(MarketOrderType orderType, decimal bought)
+            => $"{orderType.GetDescription()} => Price => NOT REACHED => bought price ({bought})";
 
         public static string ModeTypeSuccess(string sequenceName, string attribute)
             => $"{sequenceName} ON => {attribute}";
@@ -72,7 +84,7 @@ namespace SolBo.Shared.Domain.Statics
             => $"{sequenceName} OFF => {attribute}";
 
         public static string ExchangeLog(string baseAsset, string quoteAsset)
-            => $"Assets on exchange => base ({baseAsset}), quote ({quoteAsset})";
+            => $"Assets on exchange => BASE => ({baseAsset}) => QUOTE => ({quoteAsset})";
 
         public static string NotificationTitleStart => "Hello! my dear Trader :)";
         public static string NotificationMessageStart
@@ -83,6 +95,6 @@ namespace SolBo.Shared.Domain.Statics
         public static string NotificationTitle(WorkingType workingType, MarketOrderType marketOrderType, string symbol)
             => $"[{workingType.GetDescription()}] => {marketOrderType.GetDescription()} [{symbol}]";
         public static string NotificationMessage(decimal average, decimal price, decimal percentage)
-            => $"Average: {average}<br>Price: {price}<br>Percentage change: {percentage}";
+            => $"Average: {average}<br>Price: {price}<br>Change: {percentage}";
     }
 }

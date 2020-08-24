@@ -12,9 +12,10 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Available quote assets ({solbot.Communication.Buy.AvailableFund}) are enough to proceed"
-                    : $"Available quote assets ({solbot.Communication.Buy.AvailableFund}) are NOT enough to proceed" +
-                    $", you need at least ({solbot.Communication.Symbol.MinNotional})"
+                    ? $"QUOTE => ({solbot.Communication.Symbol.QuoteAsset}:{solbot.Communication.Buy.AvailableFund})" +
+                    $" => ENOUGH"
+                    : $"QUOTE => ({solbot.Communication.Symbol.QuoteAsset}:{solbot.Communication.Buy.AvailableFund})" +
+                    $" => NOT ENOUGH => MIN NEEDED => ({solbot.Communication.Symbol.QuoteAsset}:{solbot.Communication.Symbol.MinNotional})"
             };
         }
     }

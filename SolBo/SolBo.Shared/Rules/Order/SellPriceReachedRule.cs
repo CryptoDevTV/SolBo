@@ -11,22 +11,22 @@ namespace SolBo.Shared.Rules.Order
         {
             var response = solbot.Communication.Sell.PriceReached;
 
-            var sellPriceChange = solbot.Communication.Average.Current - solbot.Communication.Price.Current > 0
+            var sellPriceChange = solbot.BoughtPrice() - solbot.Communication.Price.Current > 0
                 ? "falling"
                 : "rising";
 
             var sellPrice = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
-                ? $"{solbot.BoughtPrice()} - {solbot.Communication.Price.Current}(current) = " +
-                $"{solbot.BoughtPrice() - solbot.Communication.Price.Current}. (price {sellPriceChange})" +
-                $" Defined changed {solbot.Strategy.AvailableStrategy.SellUp}"
+                ? $"{solbot.Communication.Price.Current}(current) - {solbot.BoughtPrice()} = " +
+                $"{solbot.Communication.Price.Current - solbot.BoughtPrice()}. (price {sellPriceChange})." +
+                $" sellup => {solbot.Strategy.AvailableStrategy.SellUp}"
                 : "";
 
             return new OrderRuleResult
             {
                 Success = response,
                 Message = response
-                    ? $"Sell price reached => {sellPrice}"
-                    : $"Sell price not reached => {sellPrice}"
+                    ? $"REACHED => {sellPrice}"
+                    : $"NOT REACHED => {sellPrice}"
             };
         }
     }

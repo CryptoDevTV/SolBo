@@ -16,16 +16,16 @@ namespace SolBo.Shared.Rules.Order
 
             var buyPrice = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
                 ? $"{solbot.Communication.Average.Current} - {solbot.Communication.Price.Current}(current) = " +
-                $"{solbot.Communication.Average.Current - solbot.Communication.Price.Current}. (price {buyPriceChange})" +
-                $" Defined changed {solbot.Strategy.AvailableStrategy.BuyDown}"
+                $"{solbot.Communication.Average.Current - solbot.Communication.Price.Current}. (price {buyPriceChange})." +
+                $" buydown => {solbot.Strategy.AvailableStrategy.BuyDown}"
                 : "";
 
             return new OrderRuleResult
             {
                 Success = response,
                 Message = response
-                    ? $"Bought price reached => {buyPrice}"
-                    : $"Bought price not reached => {buyPrice}"
+                    ? $"REACHED => {buyPrice}"
+                    : $"NOT REACHED => {buyPrice}"
             };
         }
     }

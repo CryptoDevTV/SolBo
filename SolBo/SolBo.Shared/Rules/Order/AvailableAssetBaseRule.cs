@@ -6,15 +6,10 @@ namespace SolBo.Shared.Rules.Order
     {
         public string OrderStep => "AvailableAssetBase";
         public IRuleResult RuleExecuted(Solbot solbot)
-        {
-            var response = solbot.Communication.AvailableAsset.Base > 0.0m;
-            return new OrderRuleResult
+            => new OrderRuleResult
             {
-                Success = response,
-                Message = response
-                    ? $"Base asset ({solbot.Communication.AvailableAsset.Base})"
-                    : $"Base asset ({solbot.Communication.AvailableAsset.Base})"
+                Success = solbot.Communication.AvailableAsset.Base > 0.0m,
+                Message = $"BASE => ({solbot.Communication.Symbol.BaseAsset}:{solbot.Communication.AvailableAsset.Base})"
             };
-        }
     }
 }

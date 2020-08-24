@@ -6,15 +6,10 @@ namespace SolBo.Shared.Rules.Order
     {
         public string OrderStep => "AvailableQuoteAsset";
         public IRuleResult RuleExecuted(Solbot solbot)
-        {
-            var response = solbot.Communication.Buy.AvailableFund > 0.0m;
-            return new OrderRuleResult
+            => new OrderRuleResult
             {
-                Success = response,
-                Message = response
-                    ? $"Quote asset ({solbot.Communication.Buy.AvailableFund})"
-                    : $"Quote asset ({solbot.Communication.Buy.AvailableFund})"
+                Success = solbot.Communication.Buy.AvailableFund > 0.0m,
+                Message = $"QUOTE => ({solbot.Communication.Buy.AvailableFund})"
             };
-        }
     }
 }

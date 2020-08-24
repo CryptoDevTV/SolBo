@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Solbo is not waiting for sell, boughtprice: {solbot.Actions.BoughtPrice}"
-                    : $"Solbo will wait to close previous transaction, boughtprice: {solbot.Actions.BoughtPrice}, before buying"
+                    ? $"WAITING FOR SALE => NO => LAST BUY => ({solbot.Communication.Symbol.QuoteAsset}:{solbot.Actions.BoughtPrice})"
+                    : $"WAITING FOR SALE => YES => LAST BUY => ({solbot.Communication.Symbol.QuoteAsset}:{solbot.Actions.BoughtPrice})"
             };
         }
     }

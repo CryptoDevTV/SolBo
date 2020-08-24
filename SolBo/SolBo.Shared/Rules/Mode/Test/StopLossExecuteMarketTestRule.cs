@@ -35,8 +35,8 @@ namespace SolBo.Shared.Rules.Mode.Test
             {
                 Success = result,
                 Message = result
-                    ? LogGenerator.ExecuteMarketSuccess(MarketOrder, solbot.Communication.StopLoss.PriceReached, solbot.Actions.BoughtPrice)
-                    : LogGenerator.ExecuteMarketError(MarketOrder, solbot.Communication.StopLoss.PriceReached, solbot.Actions.BoughtPrice)
+                    ? LogGenerator.ExecuteMarketSuccess(MarketOrder, solbot.Actions.BoughtPrice)
+                    : LogGenerator.ExecuteMarketError(MarketOrder, solbot.Actions.BoughtPrice)
             };
         }
     }

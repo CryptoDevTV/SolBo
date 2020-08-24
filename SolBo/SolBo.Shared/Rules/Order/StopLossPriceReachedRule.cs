@@ -11,22 +11,28 @@ namespace SolBo.Shared.Rules.Order
         {
             var response = solbot.Communication.StopLoss.PriceReached;
 
-            var slPriceChange = solbot.Communication.Average.Current - solbot.Communication.Price.Current > 0
+            var slPriceChange = solbot.BoughtPrice() - solbot.Communication.Price.Current > 0
                 ? "falling"
                 : "rising";
 
+            var result = solbot.BoughtPrice() > 0
+                ? $"100 - {solbot.Communication.Price.Current}(current) / {solbot.BoughtPrice()} * 100 = " +
+                $"{100 - (solbot.Communication.Price.Current / solbot.BoughtPrice() * 100)}. (price {slPriceChange})." +
+                $" stoplossdown => {solbot.Strategy.AvailableStrategy.StopLossDown}%"
+                : "LAST BUY => NO";
+
             var slPrice = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
-                ? $"{solbot.BoughtPrice()} - {solbot.Communication.Price.Current}(current) = " +
-                $"{solbot.BoughtPrice() - solbot.Communication.Price.Current}. (price {slPriceChange})" +
-                $" Defined changed {solbot.Strategy.AvailableStrategy.StopLossDown}"
-                : "";
+                ? $"{solbot.Communication.Price.Current}(current) - {solbot.BoughtPrice()} = " +
+                $"{solbot.Communication.Price.Current - solbot.BoughtPrice()}. (price {slPriceChange})." +
+                $" stoplossdown => {solbot.Strategy.AvailableStrategy.StopLossDown}"
+                : result;
 
             return new OrderRuleResult
             {
                 Success = response,
                 Message = response
-                    ? $"Stop loss price reached => {slPrice}"
-                    : $"Stop loss price not reached => {slPrice}"
+                    ? $"REACHED => {slPrice}"
+                    : $"NOT REACHED => {slPrice}"
             };
         }
     }

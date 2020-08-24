@@ -12,9 +12,10 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Available base asset ({solbot.Communication.AvailableAsset.Base}) are enough to proceed"
-                    : $"Available base asset ({solbot.Communication.AvailableAsset.Base}) are NOT enough to proceed" +
-                    $", you need at least ({solbot.Communication.Symbol.MinNotional})"
+                    ? $"BASE => ({solbot.Communication.Symbol.BaseAsset}:{solbot.Communication.AvailableAsset.Base})" +
+                    $" => ENOUGH"
+                    : $"BASE => ({solbot.Communication.Symbol.BaseAsset}:{solbot.Communication.AvailableAsset.Base})" +
+                    $" => NOT ENOUGH => MIN NEEDED => ({solbot.Communication.Symbol.BaseAsset}:{solbot.Communication.Symbol.MinQuantity})"
             };
         }
     }
