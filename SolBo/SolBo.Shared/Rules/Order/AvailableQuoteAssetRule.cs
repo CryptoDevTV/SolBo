@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Quote asset ({solbot.Communication.Buy.AvailableFund}) - OK"
-                    : $"Quote asset ({solbot.Communication.Buy.AvailableFund}) - ERROR"
+                    ? $"Quote asset ({solbot.Communication.Buy.AvailableFund})"
+                    : $"Quote asset ({solbot.Communication.Buy.AvailableFund})"
             };
         }
     }

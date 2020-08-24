@@ -9,7 +9,7 @@ Program ten udostępniony jest w celach edukacyjnych. Użytkownik pobiera i korz
 
 ### 1. Buy deep sell high
 
-W strategii tej bot śledzi zdefiniowany symbol (np. `BTCUSDT`), poprzez okresowe pobieranie ceny z giełdy za pomocą API. W momencie kiedy cena spadnie o zadeklarowany procent, bot składa na giełdzie zlecenie **BUY** typu **MARKET**. Bot dalej śledzi cenę tego symbolu i czeka na jej wzrost o zadeklarowany procent, kiedy cena ta osiągnie określony pułap bot składa na giełdzie zlecenie **SELL** typu **MARKET**. Bot realizuje również zlecenie **STOP LOSS**, jeśli po zakupie, cena spadnie o zadeklarowany procent.
+W strategii tej bot śledzi zdefiniowany symbol (np. `BTCUSDT`), poprzez okresowe pobieranie ceny z giełdy za pomocą API. W momencie kiedy cena spadnie o zadeklarowaną wartość (bezwzględną lub procentową), bot składa na giełdzie zlecenie **BUY** typu **MARKET**. Bot dalej śledzi cenę tego symbolu i czeka na jej wzrost o zadeklarowaną wartość (bezwzględną lub procentową), kiedy cena ta osiągnie określony pułap bot składa na giełdzie zlecenie **SELL** typu **MARKET**. Bot realizuje również zlecenie **STOP LOSS**, jeśli po zakupie, cena spadnie o zadeklarowaną wartość (bezwzględną lub procentową).
 
 Funkcje bota:
 

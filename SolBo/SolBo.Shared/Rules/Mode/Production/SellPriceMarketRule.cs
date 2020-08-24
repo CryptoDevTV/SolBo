@@ -2,6 +2,7 @@
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Rules.Order;
 using System.Collections.Generic;
 
@@ -27,11 +28,11 @@ namespace SolBo.Shared.Rules.Mode.Production
                 var resultOrderStep = item.RuleExecuted(solbot);
 
                 if (resultOrderStep.Success)
-                    Logger.Info($"{resultOrderStep.Message}");
+                    Logger.Info($"{MarketOrder.GetDescription()} => {resultOrderStep.Message}");
                 else
                 {
                     result = false;
-                    Logger.Warn($"{resultOrderStep.Message}");
+                    Logger.Warn($"{MarketOrder.GetDescription()} => {resultOrderStep.Message}");
                 }
             }
 

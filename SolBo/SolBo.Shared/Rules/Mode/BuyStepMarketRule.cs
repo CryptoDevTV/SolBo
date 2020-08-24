@@ -1,9 +1,9 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
-using System;
 
 namespace SolBo.Shared.Rules.Mode
 {
@@ -38,9 +38,7 @@ namespace SolBo.Shared.Rules.Mode
                 solbot.Communication.Buy.AvailableFund = fundResponse.QuoteAssetToTrade;
             }
 
-            var change = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
-                ? $"{solbot.Communication.Buy.Change}"
-                : $"{Math.Abs(solbot.Communication.Buy.Change)}%";
+            var change = solbot.BuyChange();
 
             return new MarketRuleResult()
             {

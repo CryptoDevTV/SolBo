@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Base asset ({solbot.Communication.AvailableAsset.Base}) - OK"
-                    : $"Base asset ({solbot.Communication.AvailableAsset.Base}) - ERROR"
+                    ? $"Base asset ({solbot.Communication.AvailableAsset.Base})"
+                    : $"Base asset ({solbot.Communication.AvailableAsset.Base})"
             };
         }
     }

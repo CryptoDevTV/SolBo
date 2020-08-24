@@ -51,10 +51,10 @@ namespace SolBo.Shared.Domain.Statics
 
         public static string TradeResultStart(long orderId)
             => $"Order ({orderId}) => START";
-        public static string TradeResultEnd(long orderId, decimal average)
-            => $"Order ({orderId}) => END => Average => {average}";
-        public static string TradeResult(BinanceOrderTrade order)
-            => $"Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
+        public static string TradeResultEnd(long orderId, decimal average, decimal quantity, decimal commission)
+            => $"Order ({orderId}) => END => Average => {average} => Quantity (all) => {quantity} => Commision (all) => {commission}";
+        public static string TradeResult(MarketOrderType orderType, BinanceOrderTrade order)
+            => $"{orderType.GetDescription()} =>Trade ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
 
         public static string ExecuteMarketSuccess(MarketOrderType orderType, bool priceReached, decimal bought)
             => $"{orderType.GetDescription()} => Price reached ({priceReached}), bought price ({bought})";

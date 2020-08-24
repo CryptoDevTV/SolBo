@@ -55,17 +55,21 @@ namespace SolBo.Shared.Rules.Mode.Production
                             Logger.Info(LogGenerator.TradeResultStart(sellOrderResult.Data.OrderId));
 
                             var prices = new List<decimal>();
+                            var quantityAll = new List<decimal>();
+                            var commission = new List<decimal>();
 
                             if (sellOrderResult.Data.Fills.AnyAndNotNull())
                             {
                                 foreach (var item in sellOrderResult.Data.Fills)
                                 {
-                                    Logger.Info(LogGenerator.TradeResult(item));
+                                    Logger.Info(LogGenerator.TradeResult(MarketOrder, item));
                                     prices.Add(item.Price);
+                                    quantityAll.Add(item.Quantity);
+                                    commission.Add(item.Commission);
                                 }
                             }
 
-                            Logger.Info(LogGenerator.TradeResultEnd(sellOrderResult.Data.OrderId, prices.Average()));
+                            Logger.Info(LogGenerator.TradeResultEnd(sellOrderResult.Data.OrderId, prices.Average(), quantityAll.Sum(), commission.Sum()));
 
                             _pushOverNotificationService.Send(
                                 LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),

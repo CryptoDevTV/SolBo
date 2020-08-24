@@ -1,6 +1,7 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
 using SolBo.Shared.Services.Responses;
@@ -34,9 +35,7 @@ namespace SolBo.Shared.Rules.Mode
             }
             else
             {
-                var boughtPrice = solbot.Strategy.AvailableStrategy.SellType == SellType.FROM_AVERAGE_VALUE
-                    ? solbot.Communication.Average.Current
-                    : solbot.Actions.BoughtPrice;
+                var boughtPrice = solbot.BoughtPrice();
 
                 var result = new MarketResponse();
 
@@ -60,9 +59,7 @@ namespace SolBo.Shared.Rules.Mode
                     PriceReached = result.IsReadyForMarket
                 };
 
-                var change = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
-                    ? $"{solbot.Communication.StopLoss.Change}"
-                    : $"{Math.Abs(solbot.Communication.StopLoss.Change)}%";
+                var change = solbot.StopLossChange();
 
                 return new MarketRuleResult()
                 {
