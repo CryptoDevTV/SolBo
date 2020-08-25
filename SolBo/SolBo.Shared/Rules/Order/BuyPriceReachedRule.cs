@@ -1,5 +1,6 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
+using System;
 
 namespace SolBo.Shared.Rules.Order
 {
@@ -17,8 +18,10 @@ namespace SolBo.Shared.Rules.Order
             var buyPrice = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
                 ? $"{solbot.Communication.Average.Current} - {solbot.Communication.Price.Current}(current) = " +
                 $"{solbot.Communication.Average.Current - solbot.Communication.Price.Current}. (price {buyPriceChange})." +
-                $" buydown => {solbot.Strategy.AvailableStrategy.BuyDown}"
-                : "";
+                $" => buydown => {solbot.Strategy.AvailableStrategy.BuyDown}"
+                : $"100 - ({solbot.Communication.Price.Current} / {solbot.Communication.Average.Current} * 100) = " + 
+                $"{Math.Round(100 - (solbot.Communication.Price.Current / solbot.Communication.Average.Current * 100), 2)}. (price {buyPriceChange})." +
+                $" => buydown => {solbot.Strategy.AvailableStrategy.BuyDown}%";
 
             return new OrderRuleResult
             {

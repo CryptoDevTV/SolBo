@@ -12,8 +12,8 @@ namespace SolBo.Shared.Rules.Order
             {
                 Success = response,
                 Message = response
-                    ? $"Current price for sell ({solbot.Communication.Price.Current}) is higher than bought price {solbot.Actions.BoughtPrice}"
-                    : $"Current price for sell ({solbot.Communication.Price.Current}) is lower than bought price {solbot.Actions.BoughtPrice}"
+                    ? $"CURRENT PRICE => ({solbot.Communication.Price.Current}) > ({solbot.Actions.BoughtPrice})"
+                    : $"CURRENT PRICE => ({solbot.Communication.Price.Current}) < ({solbot.Actions.BoughtPrice})"
             };
         }
     }
