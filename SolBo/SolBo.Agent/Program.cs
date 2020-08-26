@@ -76,7 +76,7 @@ namespace SolBo.Agent
 
                 await Task.Delay(TimeSpan.FromSeconds(30));
 
-                Console.ReadKey();
+                Console.Read();
             }
             catch (SchedulerException ex)
             {
