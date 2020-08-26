@@ -18,19 +18,31 @@ namespace SolBo.Shared.Rules.Mode.Production.Exchange
         {
             var accountInfo = _binanceClient.GetAccountInfo();
 
-            var availableBase = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == solbot.Communication.Symbol.BaseAsset).Free;
-            var availableQuote = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == solbot.Communication.Symbol.QuoteAsset).Free;
+            var result = false;
+            var baseMsg = string.Empty;
+            var quoteMsg = string.Empty;
 
-            solbot.Communication.AvailableAsset = new AvailableAssetMessage
+            if(accountInfo.Success)
             {
-                Base = availableBase,
-                Quote = availableQuote
-            };
+                var availableBase = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == solbot.Communication.Symbol.BaseAsset).Free;
+                var availableQuote = accountInfo.Data.Balances.FirstOrDefault(e => e.Asset == solbot.Communication.Symbol.QuoteAsset).Free;
+
+                solbot.Communication.AvailableAsset = new AvailableAssetMessage
+                {
+                    Base = availableBase,
+                    Quote = availableQuote
+                };
+
+                baseMsg = $"{solbot.Communication.Symbol.BaseAsset}:{availableBase}";
+                quoteMsg = $"{solbot.Communication.Symbol.QuoteAsset}:{availableQuote}";
+
+                result = true;
+            }
 
             return new ExchangeRuleResult
             {
-                Success = true,
-                Message = LogGenerator.ExchangeLog($"{solbot.Communication.Symbol.BaseAsset}:{availableBase}", $"{solbot.Communication.Symbol.QuoteAsset}:{availableQuote}")
+                Success = result,
+                Message = LogGenerator.ExchangeLog(baseMsg, quoteMsg, accountInfo.Error?.Message)
             };
         }
     }

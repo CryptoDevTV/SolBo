@@ -10,16 +10,16 @@
     "available": [
       {
         "id": 1,
-        "symbol": "ALGOBTC",
+        "symbol": "STORJBTC",
         "tickertype": 0,
-        "average": 3,
+        "average": 5,
         "averagetype": 1,
         "selltype": 0,
-        "commissiontype": 1,
-        "buydown": 0.02,
-        "sellup": 0.04,
-        "stoplossdown": 0.06,
-        "stoplosspausecycles": 5,
+        "commissiontype": 0,
+        "buydown": 2,
+        "sellup": 2.5,
+        "stoplossdown": 5,
+        "stoplosspausecycles": 10,
         "fundpercentage": 100,
         "clearonstartup": false
       }

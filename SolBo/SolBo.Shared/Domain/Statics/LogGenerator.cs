@@ -83,8 +83,10 @@ namespace SolBo.Shared.Domain.Statics
         public static string AverageTypeError(string sequenceName, string attribute)
             => $"{sequenceName} OFF => {attribute}";
 
-        public static string ExchangeLog(string baseAsset, string quoteAsset)
-            => $"EXCHANGE ASSETS => BASE => ({baseAsset}) => QUOTE => ({quoteAsset})";
+        public static string ExchangeLog(string baseAsset, string quoteAsset, string error = "")
+            => string.IsNullOrWhiteSpace(error)
+                ? $"EXCHANGE ASSETS => BASE => ({baseAsset}) => QUOTE => ({quoteAsset})"
+                : $"EXCHANGE ASSETS => ERROR => {error}";
 
         public static string NotificationTitleStart => "Hello! my dear Trader :)";
         public static string NotificationMessageStart

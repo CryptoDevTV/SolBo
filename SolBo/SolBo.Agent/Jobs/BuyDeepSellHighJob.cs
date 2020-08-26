@@ -86,7 +86,10 @@ namespace SolBo.Agent.Jobs
                         if (solbot.Exchange.IsInTestMode)
                             _rules.Add(new ModeTestRule(_marketService, _pushOverNotificationService));
                         else
+                        {
+                            _rules.Add(new ApiCredentialsValidationRule());
                             _rules.Add(new ModeProductionRule(_marketService, _pushOverNotificationService));
+                        }
 
                         foreach (var item in _rules)
                         {
