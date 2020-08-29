@@ -1,4 +1,7 @@
 ![SolBo Logo](Docs/images/solbo_logo_small.png)
+
+> Dużo małych pieniędzy tworzy dużo pieniędzy
+
 # SolBo - Edukacyjny krypto bot tradingowy
 
 Celem tego projektu jest pokazanie procesu tworzenia i działania bota, którego zadaniem będzie handel na wybranej giełdzie kryptowalutowej określoną parą.
