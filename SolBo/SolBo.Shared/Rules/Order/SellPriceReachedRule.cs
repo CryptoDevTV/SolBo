@@ -19,7 +19,7 @@ namespace SolBo.Shared.Rules.Order
             var result = solbot.BoughtPrice() > 0
                 ? $"100 - {solbot.Communication.Price.Current}(current) / {solbot.BoughtPrice()} * 100 = " +
                 $"{Math.Round(100 - (solbot.Communication.Price.Current / solbot.BoughtPrice() * 100), 2)}. (price {sellPriceChange})." +
-                $" => stoplossdown => {solbot.Strategy.AvailableStrategy.SellUp}%"
+                $" => sellup => {solbot.Strategy.AvailableStrategy.SellUp}%"
                 : "LAST BUY => NO";
 
             var sellPrice = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
