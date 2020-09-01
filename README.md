@@ -53,7 +53,7 @@ Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywa
 
 ```
 {
-  "version": "0.2.0",
+  "version": "0.2.3",
   "filename": "solbo",
   "intervalinminutes": 1,
   "notifications": {
@@ -79,7 +79,6 @@ Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 **strategy/modetype**|parametr określający czy bot pracuje (`0`) czy jest w stanie przerwy (`1`)|**0** - bot pracuje i realizuje strategie, **1** - bot śledzi cenę i ją zapisuje, nie analizuje warunków do zleceń, nie składa zleceń|obowiązkowe
 **strategy/available/id**|identyfikator strategii|stała wartość: **1**|obowiązkowe
 **strategy/available/symbol**|symbol opisujący parę walutową (dostępną na giełdzie) np.`ETHBTC` gdzie `ETH` to base asset, a `BTC` to quote asset|`ETHBTC`|obowiązkowe
-**strategy/available/tickertype**|parametr określający rodzaj pobieranej ceny symbolu|**1** - średnia z ostatnich 5min, **0** - aktualna cena / kurs|obowiązkowe
 **strategy/available/average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
 **strategy/available/averagetype**|wartość określająca czy ostatnio pobrana cena ma być uwzględniana w wyliczaniu średniej|**0** - jest uwzględniana, **1** - nie jest uwzględniana|obowiązkowe
 **strategy/available/selltype**|wartość określająca czy *sellup* w przypadku **SELL** ma być wyliczana od ceny zakupu (**0**) czy od wartości wyliczonej średniej (**1**), analogicznie dla **STOPLOSS**|**0** - od ceny zakupu, **1** - od wyliczonej średniej|obowiązkowe
@@ -112,7 +111,6 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
       {
         "id": 1,
         "symbol": "ALGOBTC",
-        "tickertype": 0,
         "average": 1,
         "averagetype": 0,
         "selltype": 0,

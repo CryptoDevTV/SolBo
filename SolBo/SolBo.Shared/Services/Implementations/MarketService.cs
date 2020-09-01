@@ -1,5 +1,7 @@
 ﻿using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Services.Responses;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SolBo.Shared.Services.Implementations
 {
@@ -18,6 +20,21 @@ namespace SolBo.Shared.Services.Implementations
 
             return result;
         }
+
+        public decimal Average(AverageType averageType, IEnumerable<decimal> values, int round, int lastToTake = 0)
+        {
+            var priceValues = values;
+
+            if (averageType == AverageType.WITHOUT_CURRENT && values.Count() > 1)
+                priceValues = values.SkipLast(1);
+
+            decimal result = lastToTake == 0
+                ? priceValues.Average()
+                : priceValues.Count() > lastToTake ? priceValues.TakeLast(lastToTake).Average() : priceValues.Average();
+
+            return decimal.Round(result, round);
+        }
+
         public MarketResponse IsGoodToBuy(CommissionType commissionType, decimal changePriceDrop, decimal storedPriceAverage, decimal currentPrice)
         {
             if (commissionType == CommissionType.PERCENTAGE)

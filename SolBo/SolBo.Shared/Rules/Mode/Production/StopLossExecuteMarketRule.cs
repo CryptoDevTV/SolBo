@@ -37,41 +37,18 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                 var quantity = BinanceHelpers.ClampQuantity(solbot.Communication.Symbol.MinQuantity, solbot.Communication.Symbol.MaxQuantity, solbot.Communication.Symbol.StepSize, solbot.Communication.AvailableAsset.Base);
 
-                if (solbot.Strategy.AvailableStrategy.StopLossType == StopLossType.MARKETSELL)
-                {
-                    var minNotional = quantity * solbot.Communication.Price.Current;
+                var minNotional = quantity * solbot.Communication.Price.Current;
 
-                    if (minNotional > solbot.Communication.Symbol.MinNotional)
-                    {
-                        stopLossOrderResult = _binanceClient.PlaceOrder(
-                            solbot.Strategy.AvailableStrategy.Symbol,
-                            OrderSide.Sell,
-                            OrderType.Market,
-                            quantity: quantity);
-                    }
-                    else
-                        message = "not enough";
+                if (minNotional > solbot.Communication.Symbol.MinNotional)
+                {
+                    stopLossOrderResult = _binanceClient.PlaceOrder(
+                        solbot.Strategy.AvailableStrategy.Symbol,
+                        OrderSide.Sell,
+                        OrderType.Market,
+                        quantity: quantity);
                 }
                 else
-                {
-                    var stopLossPrice = BinanceHelpers.ClampPrice(solbot.Communication.Symbol.MinPrice, solbot.Communication.Symbol.MaxPrice, solbot.Communication.Price.Current);
-
-                    var minNotional = quantity * stopLossPrice;
-
-                    if (minNotional > solbot.Communication.Symbol.MinNotional)
-                    {
-                        stopLossOrderResult = _binanceClient.PlaceOrder(
-                            solbot.Strategy.AvailableStrategy.Symbol,
-                            OrderSide.Sell,
-                            OrderType.StopLossLimit,
-                            quantity: quantity,
-                            stopPrice: BinanceHelpers.FloorPrice(solbot.Communication.Symbol.TickSize, stopLossPrice),
-                            price: BinanceHelpers.FloorPrice(solbot.Communication.Symbol.TickSize, stopLossPrice),
-                            timeInForce: TimeInForce.GoodTillCancel);
-                    }
-                    else
-                        message = "not enough";
-                }
+                    message = "not enough";
 
                 if (!(stopLossOrderResult is null))
                 {

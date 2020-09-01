@@ -1,5 +1,4 @@
-﻿using SolBo.Shared.Contexts;
-using SolBo.Shared.Domain.Configs;
+﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
 using SolBo.Shared.Services;
@@ -11,9 +10,13 @@ namespace SolBo.Shared.Rules.Sequence
     {
         public string SequenceName => "AVERAGE";
         private readonly IStorageService _storageService;
-        public CalculateAverageSequenceRule(IStorageService storageService)
+        private readonly IMarketService _marketService;
+        public CalculateAverageSequenceRule(
+            IStorageService storageService,
+            IMarketService marketService)
         {
             _storageService = storageService;
+            _marketService = marketService;
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
@@ -22,7 +25,7 @@ namespace SolBo.Shared.Rules.Sequence
             {
                 var count = _storageService.GetValues().Count;
 
-                var storedPriceAverage = AverageContext.Average(
+                var storedPriceAverage = _marketService.Average(
                     solbot.Strategy.AvailableStrategy.AverageType,
                     _storageService.GetValues(),
                     solbot.Communication.Symbol.QuoteAssetPrecision,

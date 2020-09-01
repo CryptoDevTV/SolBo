@@ -1,8 +1,7 @@
-﻿using Binance.Net.Interfaces;
-using SolBo.Shared.Contexts;
-using SolBo.Shared.Domain.Configs;
+﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
+using SolBo.Shared.Services;
 using System;
 
 namespace SolBo.Shared.Rules.Sequence
@@ -10,19 +9,17 @@ namespace SolBo.Shared.Rules.Sequence
     public class GetPriceSequenceRule : ISequencedRule
     {
         public string SequenceName => "PRICE";
-        private readonly IBinanceClient _binanceClient;
-        public GetPriceSequenceRule(IBinanceClient binanceClient)
+        private readonly ITickerPriceService _tickerPriceService;
+        public GetPriceSequenceRule(ITickerPriceService tickerPriceService)
         {
-            _binanceClient = binanceClient;
+            _tickerPriceService = tickerPriceService;
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
             var result = new SequencedRuleResult();
             try
             {
-                var tickerContext = new TickerContext(_binanceClient);
-
-                var currentPrice = tickerContext.GetPriceValue(solbot.Strategy.AvailableStrategy);
+                var currentPrice = _tickerPriceService.GetPriceValue(solbot.Strategy.AvailableStrategy);
 
                 if (currentPrice.Success)
                 {

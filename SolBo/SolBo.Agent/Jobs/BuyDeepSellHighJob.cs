@@ -1,4 +1,4 @@
-﻿using Binance.Net;
+﻿using Binance.Net.Interfaces;
 using NLog;
 using Quartz;
 using SolBo.Shared.Domain.Statics;
@@ -19,23 +19,30 @@ namespace SolBo.Agent.Jobs
     {
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
+        private readonly IBinanceClient _binanceClient;
+
         private readonly IStorageService _storageService;
         private readonly IMarketService _marketService;
         private readonly IConfigurationService _schedulerService;
         private readonly IPushOverNotificationService _pushOverNotificationService;
+        private readonly ITickerPriceService _tickerPriceService;
 
         private readonly ICollection<IRule> _rules = new HashSet<IRule>();
 
         public BuyDeepSellHighJob(
+            IBinanceClient binanceClient,
             IStorageService storageService,
             IMarketService marketService,
             IConfigurationService schedulerService,
-            IPushOverNotificationService pushOverNotificationService)
+            IPushOverNotificationService pushOverNotificationService,
+            ITickerPriceService tickerPriceService)
         {
+            _binanceClient = binanceClient;
             _storageService = storageService;
             _marketService = marketService;
             _schedulerService = schedulerService;
             _pushOverNotificationService = pushOverNotificationService;
+            _tickerPriceService = tickerPriceService;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -55,7 +62,6 @@ namespace SolBo.Agent.Jobs
 
                     _rules.Add(new StrategyValidationRule());
                     _rules.Add(new ModeTypeValidationRule());
-                    _rules.Add(new TickerValidationRule());
                     _rules.Add(new AverageValidationRule());
                     _rules.Add(new AverageTypeValidationRule());
                     _rules.Add(new SellTypeValidationRule());
@@ -63,7 +69,6 @@ namespace SolBo.Agent.Jobs
                     _rules.Add(new SellStepValidationRule());
                     _rules.Add(new CommissionTypeValidationRule());
                     _rules.Add(new StopLossStepValidationRule());
-                    _rules.Add(new StopLossTypeValidationRule());
                     _rules.Add(new StopLossPauseCyclesValidationRules());
                     _rules.Add(new FundStepValidationRule());
                     _rules.Add(new BoughtValidationRule());
@@ -71,38 +76,35 @@ namespace SolBo.Agent.Jobs
 
                     _rules.Add(new SetStorageSequenceRule(_storageService));
 
-                    using (var client = new BinanceClient())
+                    _rules.Add(new ClearOnStartupSequenceRule(_storageService, context.PreviousFireTimeUtc));
+                    _rules.Add(new SymbolSequenceRule(_binanceClient));
+                    _rules.Add(new GetPriceSequenceRule(_tickerPriceService));
+                    _rules.Add(new SavePriceSequenceRule(_storageService));
+                    _rules.Add(new AverageTypeSequenceRule());
+                    _rules.Add(new CalculateAverageSequenceRule(_storageService, _marketService));
+
+                    _rules.Add(new ModeTypeSequenceRule());
+                    _rules.Add(new PumpStopLossCycleSequenceRule());
+
+                    if (solbot.Exchange.IsInTestMode)
+                        _rules.Add(new ModeTestRule(_marketService, _pushOverNotificationService));
+                    else
                     {
-                        _rules.Add(new ClearOnStartupSequenceRule(_storageService, context.PreviousFireTimeUtc));
-                        _rules.Add(new SymbolSequenceRule(client));
-                        _rules.Add(new GetPriceSequenceRule(client));
-                        _rules.Add(new SavePriceSequenceRule(_storageService));
-                        _rules.Add(new AverageTypeSequenceRule());
-                        _rules.Add(new CalculateAverageSequenceRule(_storageService));
+                        _rules.Add(new ApiCredentialsValidationRule());
+                        _rules.Add(new ModeProductionRule(_marketService, _pushOverNotificationService));
+                    }
 
-                        _rules.Add(new ModeTypeSequenceRule());
-                        _rules.Add(new PumpStopLossCycleSequenceRule());
+                    foreach (var item in _rules)
+                    {
+                        var result = item.RuleExecuted(solbot);
 
-                        if (solbot.Exchange.IsInTestMode)
-                            _rules.Add(new ModeTestRule(_marketService, _pushOverNotificationService));
+                        if (result.Success)
+                            Logger.Trace($"{result.Message}");
                         else
                         {
-                            _rules.Add(new ApiCredentialsValidationRule());
-                            _rules.Add(new ModeProductionRule(_marketService, _pushOverNotificationService));
-                        }
+                            Logger.Error($"{result.Message}");
 
-                        foreach (var item in _rules)
-                        {
-                            var result = item.RuleExecuted(solbot);
-
-                            if (result.Success)
-                                Logger.Trace($"{result.Message}");
-                            else
-                            {
-                                Logger.Error($"{result.Message}");
-
-                                break;
-                            }
+                            break;
                         }
                     }
 

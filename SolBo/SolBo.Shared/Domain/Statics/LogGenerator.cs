@@ -7,8 +7,6 @@ namespace SolBo.Shared.Domain.Statics
 {
     public static class LogGenerator
     {
-        public static string ErrorTicker => "Bad ticker definition";
-
         public static string ValidationSuccess(string ruleAttribute)
             => $"Validation SUCCESS => {ruleAttribute}";
         public static string ValidationError(string ruleAttribute, string attributeValue)

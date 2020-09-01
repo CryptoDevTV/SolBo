@@ -9,7 +9,6 @@ namespace SolBo.Shared.Domain.Configs
         public decimal BuyDown { get; set; }
         public decimal SellUp { get; set; }
         public int Average { get; set; }
-        public TickerType TickerType { get; set; }
         public decimal StopLossDown { get; set; }
         public decimal FundPercentage { get; set; }
         public bool ClearOnStartup { get; set; }
@@ -17,6 +16,5 @@ namespace SolBo.Shared.Domain.Configs
         public AverageType AverageType { get; set; }
         public SellType SellType { get; set; }
         public CommissionType CommissionType { get; set; }
-        public StopLossType StopLossType => StopLossType.MARKETSELL;
     }
 }

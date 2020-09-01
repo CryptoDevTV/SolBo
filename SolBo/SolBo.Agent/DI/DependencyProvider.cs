@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Binance.Net;
+using Binance.Net.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SolBo.Agent.Jobs;
@@ -31,11 +33,14 @@ namespace SolBo.Agent.DI
             services.AddTransient<BuyDeepSellHighJob>();
             #endregion
 
+            #region Exchanges
+            services.AddTransient<IBinanceClient, BinanceClient>();
+            #endregion
+
             #region Services
+            services.AddTransient<ITickerPriceService, TickerPriceService>();
             services.AddTransient<IStorageService, FileStorageService>();
-
             services.AddTransient<IMarketService, MarketService>();
-
             services.AddTransient<IConfigurationService, ConfigurationService>();
             #endregion
 
