@@ -36,7 +36,7 @@ namespace SolBo.Shared.Rules.Mode
             {
                 _rules.Add(new AccountExchangeRule(binanceClient));
 
-                if (solbot.Strategy.AvailableStrategy.IsStopLossOn)
+                if (solbot.Strategy.AvailableStrategy.IsStopLossOn && solbot.Actions.BoughtBefore)
                 {
                     _rules.Add(new StopLossStepMarketRule(_marketService));
                     _rules.Add(new StopLossPriceMarketRule());

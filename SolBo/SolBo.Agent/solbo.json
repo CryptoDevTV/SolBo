@@ -1,8 +1,8 @@
 {
   "exchange": {
     "name": "Binance",
-    "apikey": "",
-    "apisecret": ""
+    "apikey": "kSVkSTk5vGjyPfetIFu4TyeMTGB5t6xXWAZ7Tbb9CrdgiIfEzBNPPhA7uLUqsT1J",
+    "apisecret": "Trr5ErUENlE2A6pCzdni8ObyEmjYoBfo4KyVwA5tyFTPKlQsv1xKsGnSohfRJxbw"
   },
   "strategy": {
     "activeid": 1,
@@ -14,12 +14,12 @@
         "average": 5,
         "averagetype": 0,
         "selltype": 0,
-        "commissiontype": 1,
-        "buydown": 1,
-        "sellup": 1,
-        "stoplossdown": 1.5,
+        "commissiontype": 0,
+        "buydown": 0.00000200,
+        "sellup": 0.00000300,
+        "stoplossdown": 0.00000400,
         "stoplosspausecycles": 0,
-        "fundpercentage": 50,
+        "fundpercentage": 100,
         "clearonstartup": false
       }
     ]
