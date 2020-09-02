@@ -1,5 +1,6 @@
 ﻿using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Services.Responses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -98,9 +99,9 @@ namespace SolBo.Shared.Services.Implementations
                 return new MarketResponse
                 {
                     IsReadyForMarket = storedPriceAverage > currentPrice
-                        ? storedPriceAverage + changeStopLoss >= currentPrice
+                        ? Math.Abs(currentPrice - storedPriceAverage) >= changeStopLoss
                         : false,
-                    Changed = storedPriceAverage - currentPrice
+                    Changed = currentPrice - storedPriceAverage
                 };
             }
         }

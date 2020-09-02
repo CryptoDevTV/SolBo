@@ -58,25 +58,18 @@ namespace SolBo.Shared.Domain.Statics
             $"=> ({average}) => BY ({change}) " +
             $"=> NEEDED INCREASED CHANGE => ({needed})";
 
-        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change, string needed)
-        {
-            if(orderType == MarketOrderType.SELLING || orderType == MarketOrderType.STOPLOSS)
-            {
-                return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) => INCREASED => CALCULATED AVERAGE => ({priceBase}) => BY ({change}) => NEEDED CHANGE => ({needed})";
-            }
-            else
-            {
-                return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) => INCREASED => CALCULATED AVERAGE => ({priceBase}) => BY ({change}) => NEEDED CHANGE => ({needed})";
-            }
-        }
-        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change, string needed)
-        {
-            var result = priceBase > 0
-                ? $"=> DECREASED => CALCULATED AVERAGE => ({priceBase}) => BY {change}"
-                : string.Empty;
+        public static string StopLossStepSuccess(SellType sellType, decimal priceCurrent, decimal average, string change)
+            => $"{MarketOrderType.STOPLOSS.GetDescription()} " +
+            $"=> CURRENT PRICE => ({priceCurrent}) " +
+            $"=> DECREASED => {sellType.GetDescription()} " +
+            $"=> ({average}) => BY ({change})";
 
-            return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) {result} => NEEDED CHANGE => ({needed})";
-        }
+        public static string StopLossStepError(SellType sellType, decimal priceCurrent, decimal average, string change, string needed)
+            => $"{MarketOrderType.STOPLOSS.GetDescription()} " +
+            $"=> CURRENT PRICE => ({priceCurrent}) " +
+            $"=> DECREASED => {sellType.GetDescription()} " +
+            $"=> ({average}) => BY ({change}) " +
+            $"=> NEEDED DECREASED CHANGE => ({needed})";
 
         public static string PriceMarketSuccess(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => ORDER => EXCHANGE => PLACED";

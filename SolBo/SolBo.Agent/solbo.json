@@ -17,7 +17,7 @@
         "commissiontype": 1,
         "buydown": 1,
         "sellup": 1,
-        "stoplossdown": 0,
+        "stoplossdown": 1.5,
         "stoplosspausecycles": 0,
         "fundpercentage": 50,
         "clearonstartup": false
