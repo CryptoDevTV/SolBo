@@ -1,8 +1,8 @@
 {
   "exchange": {
     "name": "Binance",
-    "apikey": "kSVkSTk5vGjyPfetIFu4TyeMTGB5t6xXWAZ7Tbb9CrdgiIfEzBNPPhA7uLUqsT1J",
-    "apisecret": "Trr5ErUENlE2A6pCzdni8ObyEmjYoBfo4KyVwA5tyFTPKlQsv1xKsGnSohfRJxbw"
+    "apikey": "",
+    "apisecret": ""
   },
   "strategy": {
     "activeid": 1,
