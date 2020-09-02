@@ -77,7 +77,7 @@ namespace SolBo.Shared.Services.Implementations
                     IsReadyForMarket = currentPrice > storedPriceAverage
                     ? currentPrice + changePriceRise >= storedPriceAverage
                     : false,
-                    Changed = storedPriceAverage + changePriceRise - currentPrice
+                    Changed = storedPriceAverage - currentPrice
                 };
             }
         }

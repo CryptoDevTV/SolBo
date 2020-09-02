@@ -45,12 +45,24 @@ namespace SolBo.Shared.Rules.Mode
             var change = solbot.SellChange();
             var needed = solbot.NeededSellChange();
 
+            var priceUp = (solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.PERCENTAGE && result.Changed > 0)
+                || solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE && result.Changed < 0;
+
             return new MarketRuleResult()
             {
                 Success = result.IsReadyForMarket,
-                Message = result.Changed > 0
-                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change, needed)
-                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change, needed)
+                Message = priceUp
+                    ? LogGenerator.SellStepSuccess(
+                        solbot.Strategy.AvailableStrategy.SellType, 
+                        solbot.Communication.Price.Current, 
+                        boughtPrice, 
+                        change)
+                    : LogGenerator.SellStepError(
+                        solbot.Strategy.AvailableStrategy.SellType,
+                        solbot.Communication.Price.Current, 
+                        boughtPrice, 
+                        change, 
+                        needed)
             };
         }
     }

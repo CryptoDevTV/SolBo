@@ -36,14 +36,27 @@ namespace SolBo.Shared.Domain.Statics
             => $"{MarketOrderType.BUYING.GetDescription()} " +
             $"=> CURRENT PRICE => ({priceCurrent}) " +
             $"=> DECREASED => CALCULATED AVERAGE " +
-            $"=> ({average}) => BY {change}";
+            $"=> ({average}) => BY ({change})";
 
         public static string BuyStepError(decimal priceCurrent, decimal average, string change, string needed)
             => $"{MarketOrderType.BUYING.GetDescription()} " +
             $"=> CURRENT PRICE => ({priceCurrent}) " +
             $"=> INCREASED => CALCULATED AVERAGE " +
-            $"=> ({average}) => BY {change} " +
+            $"=> ({average}) => BY ({change}) " +
             $"=> NEEDED DECREASED CHANGE => ({needed})";
+
+        public static string SellStepSuccess(SellType sellType, decimal priceCurrent, decimal average, string change)
+            => $"{MarketOrderType.SELLING.GetDescription()} " +
+            $"=> CURRENT PRICE => ({priceCurrent}) " +
+            $"=> INCREASED => {sellType.GetDescription()} " +
+            $"=> ({average}) => BY ({change})";
+
+        public static string SellStepError(SellType sellType, decimal priceCurrent, decimal average, string change, string needed)
+            => $"{MarketOrderType.SELLING.GetDescription()} " +
+            $"=> CURRENT PRICE => ({priceCurrent}) " +
+            $"=> DECREASED => {sellType.GetDescription()} " +
+            $"=> ({average}) => BY ({change}) " +
+            $"=> NEEDED INCREASED CHANGE => ({needed})";
 
         public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change, string needed)
         {

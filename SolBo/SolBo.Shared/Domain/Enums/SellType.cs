@@ -4,10 +4,10 @@ namespace SolBo.Shared.Domain.Enums
 {
     public enum SellType
     {
-        [Description("FromValue")]
+        [Description("FROM BOUGHT VALUE")]
         FROM_VALUE = 0,
 
-        [Description("FromAverageValue")]
+        [Description("FROM AVERAGE VALUE")]
         FROM_AVERAGE_VALUE = 1
     }
 }
