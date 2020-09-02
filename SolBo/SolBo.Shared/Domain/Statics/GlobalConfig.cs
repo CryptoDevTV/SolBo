@@ -16,5 +16,7 @@ namespace SolBo.Shared.Domain.Statics
             var backupFileName = $"{symbol}_backup_{string.Format("{0:yyyyMMddHHmmss}", DateTime.Now)}";
             return Path.Combine(Directory.GetCurrentDirectory(), $"{backupFileName}.txt");
         }
+
+        public static int RoundValue => 8;
     }
 }

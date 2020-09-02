@@ -23,8 +23,6 @@ namespace SolBo.Shared.Rules.Sequence
             var result = new SequencedRuleResult();
             try
             {
-                var count = _storageService.GetValues().Count;
-
                 var storedPriceAverage = _marketService.Average(
                     solbot.Strategy.AvailableStrategy.AverageType,
                     _storageService.GetValues(),
@@ -33,10 +31,7 @@ namespace SolBo.Shared.Rules.Sequence
 
                 solbot.Communication.Average = new PriceMessage
                 {
-                    Current = storedPriceAverage,
-                    Count = count < solbot.Strategy.AvailableStrategy.Average
-                    ? count
-                    : solbot.Strategy.AvailableStrategy.Average
+                    Current = storedPriceAverage
                 };
 
                 result.Success = true;

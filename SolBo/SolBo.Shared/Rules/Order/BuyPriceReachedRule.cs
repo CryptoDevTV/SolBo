@@ -1,5 +1,6 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 using System;
 
 namespace SolBo.Shared.Rules.Order
@@ -20,7 +21,7 @@ namespace SolBo.Shared.Rules.Order
                 $"{solbot.Communication.Average.Current - solbot.Communication.Price.Current}. (price {buyPriceChange})." +
                 $" => buydown => {solbot.Strategy.AvailableStrategy.BuyDown}"
                 : $"100 - ({solbot.Communication.Price.Current} / {solbot.Communication.Average.Current} * 100) = " + 
-                $"{Math.Round(100 - (solbot.Communication.Price.Current / solbot.Communication.Average.Current * 100), 2)}. (price {buyPriceChange})." +
+                $"{Math.Round(100 - (solbot.Communication.Price.Current / solbot.Communication.Average.Current * 100), GlobalConfig.RoundValue)}. (price {buyPriceChange})." +
                 $" => buydown => {solbot.Strategy.AvailableStrategy.BuyDown}%";
 
             return new OrderRuleResult

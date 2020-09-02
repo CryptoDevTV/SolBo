@@ -43,13 +43,14 @@ namespace SolBo.Shared.Rules.Mode
             };
 
             var change = solbot.SellChange();
+            var needed = solbot.NeededSellChange();
 
             return new MarketRuleResult()
             {
                 Success = result.IsReadyForMarket,
                 Message = result.Changed > 0
-                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change)
-                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change)
+                    ? LogGenerator.StepMarketSuccess(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change, needed)
+                    : LogGenerator.StepMarketError(MarketOrder, solbot.Communication.Price.Current, boughtPrice, change, needed)
             };
         }
     }

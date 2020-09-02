@@ -36,17 +36,26 @@ namespace SolBo.Shared.Rules.Mode
             {
                 _rules.Add(new AccountExchangeRule(binanceClient));
 
-                _rules.Add(new StopLossStepMarketRule(_marketService));
-                _rules.Add(new StopLossPriceMarketRule());
-                _rules.Add(new StopLossExecuteMarketRule(binanceClient, _pushOverNotificationService));
+                if (solbot.Strategy.AvailableStrategy.IsStopLossOn)
+                {
+                    _rules.Add(new StopLossStepMarketRule(_marketService));
+                    _rules.Add(new StopLossPriceMarketRule());
+                    _rules.Add(new StopLossExecuteMarketRule(binanceClient, _pushOverNotificationService));
+                }
 
-                _rules.Add(new SellStepMarketRule(_marketService));
-                _rules.Add(new SellPriceMarketRule());
-                _rules.Add(new SellExecuteMarketRule(binanceClient, _pushOverNotificationService));
+                if (solbot.Actions.BoughtBefore)
+                {
+                    _rules.Add(new SellStepMarketRule(_marketService));
+                    _rules.Add(new SellPriceMarketRule());
+                    _rules.Add(new SellExecuteMarketRule(binanceClient, _pushOverNotificationService));
+                }
 
-                _rules.Add(new BuyStepMarketRule(_marketService, true));
-                _rules.Add(new BuyPriceMarketRule());
-                _rules.Add(new BuyExecuteMarketRule(binanceClient, _pushOverNotificationService));
+                if (solbot.Actions.SellBefore)
+                {
+                    _rules.Add(new BuyStepMarketRule(_marketService, true));
+                    _rules.Add(new BuyPriceMarketRule());
+                    _rules.Add(new BuyExecuteMarketRule(binanceClient, _pushOverNotificationService));
+                }
 
                 Logger.Info(LogGenerator.ModeStart(ModeName));
 

@@ -1,5 +1,6 @@
 ﻿using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
 using System;
 
@@ -18,13 +19,13 @@ namespace SolBo.Shared.Rules.Order
 
             var result = solbot.BoughtPrice() > 0
                 ? $"100 - {solbot.Communication.Price.Current}(current) / {solbot.BoughtPrice()} * 100 = " +
-                $"{Math.Round(100 - (solbot.Communication.Price.Current / solbot.BoughtPrice() * 100), 2)}. (price {slPriceChange})." +
+                $"{Math.Round(100 - (solbot.Communication.Price.Current / solbot.BoughtPrice() * 100), GlobalConfig.RoundValue)}. (price {slPriceChange})." +
                 $" => stoplossdown => {solbot.Strategy.AvailableStrategy.StopLossDown}%"
                 : "LAST BUY => NO";
 
             var slPrice = solbot.Strategy.AvailableStrategy.CommissionType == CommissionType.VALUE
                 ? $"{solbot.Communication.Price.Current}(current) - {solbot.BoughtPrice()} = " +
-                $"{Math.Round(solbot.Communication.Price.Current - solbot.BoughtPrice(), 2)}. (price {slPriceChange})." +
+                $"{Math.Round(solbot.Communication.Price.Current - solbot.BoughtPrice(), GlobalConfig.RoundValue)}. (price {slPriceChange})." +
                 $" => stoplossdown => {solbot.Strategy.AvailableStrategy.StopLossDown}"
                 : result;
 

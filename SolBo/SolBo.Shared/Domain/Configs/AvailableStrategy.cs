@@ -1,4 +1,5 @@
 ﻿using SolBo.Shared.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace SolBo.Shared.Domain.Configs
 {
@@ -16,5 +17,9 @@ namespace SolBo.Shared.Domain.Configs
         public AverageType AverageType { get; set; }
         public SellType SellType { get; set; }
         public CommissionType CommissionType { get; set; }
+
+        [JsonIgnore]
+        public bool IsStopLossOn
+            => StopLossDown > 0;
     }
 }

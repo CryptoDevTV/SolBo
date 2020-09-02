@@ -23,14 +23,23 @@ namespace SolBo.Shared.Rules.Mode
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            _rules.Add(new StopLossStepMarketRule(_marketService));
-            _rules.Add(new StopLossExecuteMarketTestRule(_pushOverNotificationService));
+            if(solbot.Strategy.AvailableStrategy.IsStopLossOn)
+            {
+                _rules.Add(new StopLossStepMarketRule(_marketService));
+                _rules.Add(new StopLossExecuteMarketTestRule(_pushOverNotificationService));
+            }
 
-            _rules.Add(new SellStepMarketRule(_marketService));
-            _rules.Add(new SellExecuteMarketTestRule(_pushOverNotificationService));
+            if(solbot.Actions.BoughtBefore)
+            {
+                _rules.Add(new SellStepMarketRule(_marketService));
+                _rules.Add(new SellExecuteMarketTestRule(_pushOverNotificationService));
+            }
 
-            _rules.Add(new BuyStepMarketRule(_marketService, false));
-            _rules.Add(new BuyExecuteMarketTestRule(_pushOverNotificationService));
+            if(solbot.Actions.SellBefore)
+            {
+                _rules.Add(new BuyStepMarketRule(_marketService, false));
+                _rules.Add(new BuyExecuteMarketTestRule(_pushOverNotificationService));
+            }
 
             Logger.Info(LogGenerator.ModeStart(ModeName));
 

@@ -32,15 +32,37 @@ namespace SolBo.Shared.Domain.Statics
         public static string Off(MarketOrderType orderType)
             => $"{orderType.GetDescription()} => OFF";
 
-        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change)
-            => $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) => INCREASED ({priceBase}) => by {change}";
-        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change)
+        public static string BuyStepSuccess(decimal priceCurrent, decimal average, string change)
+            => $"{MarketOrderType.BUYING.GetDescription()} " +
+            $"=> CURRENT PRICE => ({priceCurrent}) " +
+            $"=> DECREASED => CALCULATED AVERAGE " +
+            $"=> ({average}) => BY {change}";
+
+        public static string BuyStepError(decimal priceCurrent, decimal average, string change, string needed)
+            => $"{MarketOrderType.BUYING.GetDescription()} " +
+            $"=> CURRENT PRICE => ({priceCurrent}) " +
+            $"=> INCREASED => CALCULATED AVERAGE " +
+            $"=> ({average}) => BY {change} " +
+            $"=> NEEDED DECREASED CHANGE => ({needed})";
+
+        public static string StepMarketSuccess(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change, string needed)
+        {
+            if(orderType == MarketOrderType.SELLING || orderType == MarketOrderType.STOPLOSS)
+            {
+                return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) => INCREASED => CALCULATED AVERAGE => ({priceBase}) => BY ({change}) => NEEDED CHANGE => ({needed})";
+            }
+            else
+            {
+                return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) => INCREASED => CALCULATED AVERAGE => ({priceBase}) => BY ({change}) => NEEDED CHANGE => ({needed})";
+            }
+        }
+        public static string StepMarketError(MarketOrderType orderType, decimal priceCurrent, decimal priceBase, string change, string needed)
         {
             var result = priceBase > 0
-                ? $"=> DECREASED ({priceBase}) => by {change}"
+                ? $"=> DECREASED => CALCULATED AVERAGE => ({priceBase}) => BY {change}"
                 : string.Empty;
 
-            return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) {result}";
+            return $"{orderType.GetDescription()} => CURRENT PRICE => ({priceCurrent}) {result} => NEEDED CHANGE => ({needed})";
         }
 
         public static string PriceMarketSuccess(MarketOrderType orderType)
@@ -67,9 +89,17 @@ namespace SolBo.Shared.Domain.Statics
             => $"{orderType.GetDescription()} => TRADE ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
 
         public static string ExecuteMarketSuccess(MarketOrderType orderType, decimal bought)
-            => $"{orderType.GetDescription()} => PRICE => REACHED => bought price ({bought})";
+        {
+            return bought == 0
+                ? $"{orderType.GetDescription()} => PRICE => REACHED"
+                : $"{orderType.GetDescription()} => PRICE => REACHED => BOUGHT => ({bought})";
+        }
         public static string ExecuteMarketError(MarketOrderType orderType, decimal bought)
-            => $"{orderType.GetDescription()} => PRICE => NOT REACHED => bought price ({bought})";
+        {
+            return bought == 0
+                ? $"{orderType.GetDescription()} => PRICE => NOT REACHED"
+                : $"{orderType.GetDescription()} => PRICE => NOT REACHED => BOUGHT => ({bought})";
+        }
 
         public static string ModeTypeSuccess(string sequenceName, string attribute)
             => $"{sequenceName} ON => {attribute}";

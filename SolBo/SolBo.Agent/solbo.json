@@ -10,16 +10,16 @@
     "available": [
       {
         "id": 1,
-        "symbol": "STORJBTC",
+        "symbol": "SNXBTC",
         "average": 5,
-        "averagetype": 1,
+        "averagetype": 0,
         "selltype": 0,
         "commissiontype": 0,
-        "buydown": 2,
-        "sellup": 2.5,
-        "stoplossdown": 5,
-        "stoplosspausecycles": 10,
-        "fundpercentage": 100,
+        "buydown": 0.00000200,
+        "sellup": 0.00000200,
+        "stoplossdown": 0,
+        "stoplosspausecycles": 0,
+        "fundpercentage": 50,
         "clearonstartup": false
       }
     ]

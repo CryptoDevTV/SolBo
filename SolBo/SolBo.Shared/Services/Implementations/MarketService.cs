@@ -44,7 +44,7 @@ namespace SolBo.Shared.Services.Implementations
                     IsReadyForMarket = storedPriceAverage > currentPrice
                         ? 100 - (currentPrice / storedPriceAverage * 100) >= changePriceDrop
                         : false,
-                    Changed = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2)
+                    Changed = decimal.Round(100 - (currentPrice / storedPriceAverage * 100), 2),
                 };
             }
             else
