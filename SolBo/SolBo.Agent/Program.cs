@@ -60,6 +60,10 @@ namespace SolBo.Agent
 
                 bdshJob.JobDataMap["FileName"] = app.FileName;
                 bdshJob.JobDataMap["Version"] = app.Version;
+                bdshJob.JobDataMap["ApiKey"] = app.Exchange.ApiKey;
+                bdshJob.JobDataMap["ApiSecret"] = app.Exchange.ApiSecret;
+                bdshJob.JobDataMap["PassPhrase"] = app.Exchange.PassPhrase;
+                bdshJob.JobDataMap["ExchangeType"] = app.Exchange.Type;
 
                 var bdshBuilder = TriggerBuilder.Create()
                     .WithIdentity("BuyDeepSellHighJobTrigger")

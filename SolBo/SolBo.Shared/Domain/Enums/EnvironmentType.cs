@@ -2,7 +2,7 @@
 
 namespace SolBo.Shared.Domain.Enums
 {
-    public enum WorkingType
+    public enum EnvironmentType
     {
         [Description("TEST")]
         TEST = 0,

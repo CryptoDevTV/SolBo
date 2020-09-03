@@ -1,4 +1,4 @@
-﻿using Binance.Net.Objects;
+﻿using Binance.Net.Objects.Spot.SpotData;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Extensions;
 using System;
@@ -128,7 +128,7 @@ namespace SolBo.Shared.Domain.Statics
             " Join our <a href=\"https://t.me/joinchat/JmoiyRyhQp5o7Ts1ZezFQA\">Telegram Group</a>.<br><br>" +
             " Please visit <a href=\"https://cryptodev.tv\">https://cryptodev.tv</a>";
 
-        public static string NotificationTitle(WorkingType workingType, MarketOrderType marketOrderType, string symbol)
+        public static string NotificationTitle(EnvironmentType workingType, MarketOrderType marketOrderType, string symbol)
             => $"[{workingType.GetDescription()}] => {marketOrderType.GetDescription()} [{symbol}]";
         public static string NotificationMessage(decimal average, decimal price, decimal percentage)
             => $"Average: {average}<br>Price: {price}<br>Change: {percentage}";

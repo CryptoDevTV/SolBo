@@ -1,16 +1,11 @@
 {
-  "exchange": {
-    "name": "Binance",
-    "apikey": "",
-    "apisecret": ""
-  },
   "strategy": {
     "activeid": 1,
     "modetype": 0,
     "available": [
       {
         "id": 1,
-        "symbol": "SNXBTC",
+        "symbol": "REQ-ETH",
         "average": 5,
         "averagetype": 0,
         "selltype": 0,

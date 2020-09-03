@@ -1,5 +1,6 @@
-﻿using Binance.Net.Interfaces;
-using Binance.Net.Objects;
+﻿using Binance.Net.Enums;
+using Binance.Net.Interfaces;
+using Kucoin.Net.Interfaces;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
@@ -8,11 +9,12 @@ using System.Linq;
 
 namespace SolBo.Shared.Rules.Sequence
 {
-    public class SymbolSequenceRule : ISequencedRule
+    public class BinanceSymbolSequenceRule : ISequencedRule
     {
-        public string SequenceName => "SYMBOL";
+        public string SequenceName => "SYMBOL-BINANCE";
         private readonly IBinanceClient _binanceClient;
-        public SymbolSequenceRule(IBinanceClient binanceClient)
+        public BinanceSymbolSequenceRule(
+            IBinanceClient binanceClient)
         {
             _binanceClient = binanceClient;
         }
@@ -29,7 +31,7 @@ namespace SolBo.Shared.Rules.Sequence
                         .Data
                         .Symbols
                         .FirstOrDefault(e => e.Name == solbot.Strategy.AvailableStrategy.Symbol);
-                    
+
                     if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
                     {
                         solbot.Communication = new Communication

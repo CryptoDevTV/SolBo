@@ -6,11 +6,11 @@ using System;
 
 namespace SolBo.Shared.Rules.Sequence
 {
-    public class GetPriceSequenceRule : ISequencedRule
+    public class BinanceGetPriceSequenceRule : ISequencedRule
     {
-        public string SequenceName => "PRICE";
-        private readonly ITickerPriceService _tickerPriceService;
-        public GetPriceSequenceRule(ITickerPriceService tickerPriceService)
+        public string SequenceName => "BINANCE-PRICE";
+        private readonly IBinanceTickerService _tickerPriceService;
+        public BinanceGetPriceSequenceRule(IBinanceTickerService tickerPriceService)
         {
             _tickerPriceService = tickerPriceService;
         }

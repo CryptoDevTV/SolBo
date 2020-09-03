@@ -4,7 +4,6 @@ namespace SolBo.Shared.Domain.Configs
 {
     public class Solbot
     {
-        public Exchange Exchange { get; set; }
         public Strategy Strategy { get; set; }
         public Actions Actions { get; set; }
         [JsonIgnore]

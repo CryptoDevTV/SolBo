@@ -1,6 +1,7 @@
 ﻿using Binance.Net;
+using Binance.Net.Enums;
 using Binance.Net.Interfaces;
-using Binance.Net.Objects;
+using Binance.Net.Objects.Spot.SpotData;
 using CryptoExchange.Net.Objects;
 using NLog;
 using SolBo.Shared.Domain.Configs;
@@ -79,7 +80,7 @@ namespace SolBo.Shared.Rules.Mode.Production
                         Logger.Info(LogGenerator.TradeResultEnd(stopLossOrderResult.Data.OrderId, prices.Average(), quantityAll.Sum(), commission.Sum()));
 
                         _pushOverNotificationService.Send(
-                            LogGenerator.NotificationTitle(WorkingType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
+                            LogGenerator.NotificationTitle(EnvironmentType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
                             LogGenerator.NotificationMessage(
                                 solbot.Communication.Average.Current,
                                 solbot.Communication.Price.Current,

@@ -1,10 +1,16 @@
 ﻿using Binance.Net;
 using Binance.Net.Interfaces;
+using Binance.Net.Objects.Spot;
+using CryptoExchange.Net.Authentication;
+using Kucoin.Net;
+using Kucoin.Net.Interfaces;
+using Kucoin.Net.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SolBo.Agent.Jobs;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Services;
 using SolBo.Shared.Services.Implementations;
 using System;
@@ -35,10 +41,26 @@ namespace SolBo.Agent.DI
 
             #region Exchanges
             services.AddTransient<IBinanceClient, BinanceClient>();
+            if (app.Exchange.Type == ExchangeType.Binance && !app.Exchange.IsInTestMode)
+            {
+                services.AddTransient<IBinanceClient>(s => new BinanceClient(new BinanceClientOptions
+                {
+                    ApiCredentials = new ApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret)
+                }));
+            }
+            services.AddTransient<IKucoinClient, KucoinClient>();
+            if (app.Exchange.Type == ExchangeType.KuCoin && !app.Exchange.IsInTestMode)
+            {
+                services.AddTransient<IKucoinClient>(s => new KucoinClient(new KucoinClientOptions
+                {
+                    ApiCredentials = new KucoinApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret, app.Exchange.PassPhrase)
+                }));
+            }
             #endregion
 
             #region Services
-            services.AddTransient<ITickerPriceService, TickerPriceService>();
+            services.AddTransient<IBinanceTickerService, BinanceTickerService>();
+            services.AddTransient<IKucoinTickerService, KucoinTickerService>();
             services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<IMarketService, MarketService>();
             services.AddTransient<IConfigurationService, ConfigurationService>();

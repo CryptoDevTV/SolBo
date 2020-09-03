@@ -4,10 +4,10 @@ using SolBo.Shared.Services.Responses;
 
 namespace SolBo.Shared.Services.Implementations
 {
-    public class TickerPriceService : ITickerPriceService
+    public class BinanceTickerService : IBinanceTickerService
     {
         private readonly IBinanceClient _binanceClient;
-        public TickerPriceService(
+        public BinanceTickerService(
             IBinanceClient binanceClient)
         {
             _binanceClient = binanceClient;

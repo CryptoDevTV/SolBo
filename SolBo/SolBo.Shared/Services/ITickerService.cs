@@ -3,7 +3,7 @@ using SolBo.Shared.Services.Responses;
 
 namespace SolBo.Shared.Services
 {
-    public interface ITickerPriceService
+    public interface ITickerService
     {
         TickerPriceResponse GetPriceValue(AvailableStrategy availableStrategy);
     }
