@@ -14,13 +14,13 @@ using System.Linq;
 
 namespace SolBo.Shared.Rules.Mode.Production
 {
-    public class StopLossExecuteMarketRule : IMarketRule
+    public class BinanceStopLossExecuteMarketRule : IMarketRule
     {
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         public MarketOrderType MarketOrder => MarketOrderType.STOPLOSS;
         private readonly IBinanceClient _binanceClient;
         private readonly IPushOverNotificationService _pushOverNotificationService;
-        public StopLossExecuteMarketRule(
+        public BinanceStopLossExecuteMarketRule(
             IBinanceClient binanceClient,
             IPushOverNotificationService pushOverNotificationService)
         {

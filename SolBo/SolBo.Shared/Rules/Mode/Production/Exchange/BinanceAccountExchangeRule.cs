@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace SolBo.Shared.Rules.Mode.Production.Exchange
 {
-    public class AccountExchangeRule : IExchangeRule
+    public class BinanceAccountExchangeRule : IExchangeRule
     {
         private readonly IBinanceClient _binanceClient;
-        public AccountExchangeRule(
+        public BinanceAccountExchangeRule(
             IBinanceClient binanceClient)
         {
             _binanceClient = binanceClient;
