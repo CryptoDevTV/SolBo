@@ -33,7 +33,10 @@ namespace SolBo.Shared.Rules.Mode
 
             if (_isInProductionMode)
             {
-                var fundResponse = _marketService.AvailableQuote(solbot.Strategy.AvailableStrategy.FundPercentage, solbot.Communication.AvailableAsset.Quote, solbot.Communication.Symbol.QuoteAssetPrecision);
+                var fundResponse = _marketService.AvailableQuote(
+                    solbot.Strategy.AvailableStrategy.FundPercentage, 
+                    solbot.Communication.AvailableAsset.Quote, 
+                    solbot.Communication.Symbol.QuoteAssetPrecision);
 
                 solbot.Communication.Buy.AvailableFund = fundResponse.QuoteAssetToTrade;
             }

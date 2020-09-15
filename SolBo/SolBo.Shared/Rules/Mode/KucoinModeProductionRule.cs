@@ -34,23 +34,23 @@ namespace SolBo.Shared.Rules.Mode
 
             if (solbot.Strategy.AvailableStrategy.IsStopLossOn && solbot.Actions.BoughtBefore)
             {
-                //_rules.Add(new StopLossStepMarketRule(_marketService));
-                //_rules.Add(new StopLossPriceMarketRule());
-                //_rules.Add(new StopLossExecuteMarketRule(_binanceClient, _pushOverNotificationService));
+                _rules.Add(new StopLossStepMarketRule(_marketService));
+                _rules.Add(new StopLossPriceMarketRule());
+                _rules.Add(new KucoinStopLossExecuteMarketRule(_kucoinClient, _pushOverNotificationService));
             }
 
             if (solbot.Actions.BoughtBefore)
             {
-                //_rules.Add(new SellStepMarketRule(_marketService));
-                //_rules.Add(new SellPriceMarketRule());
-                //_rules.Add(new SellExecuteMarketRule(_binanceClient, _pushOverNotificationService));
+                _rules.Add(new SellStepMarketRule(_marketService));
+                _rules.Add(new SellPriceMarketRule());
+                //_rules.Add(new KucoinSellExecuteMarketRule(_kucoinClient, _pushOverNotificationService));
             }
 
             if (solbot.Actions.SellBefore)
             {
-                //_rules.Add(new BuyStepMarketRule(_marketService, true));
-                //_rules.Add(new BuyPriceMarketRule());
-                //_rules.Add(new BuyExecuteMarketRule(_binanceClient, _pushOverNotificationService));
+                _rules.Add(new BuyStepMarketRule(_marketService, true));
+                _rules.Add(new BuyPriceMarketRule());
+                _rules.Add(new KucoinBuyExecuteMarketRule(_kucoinClient, _pushOverNotificationService));
             }
 
             Logger.Info(LogGenerator.ModeStart(ModeName));

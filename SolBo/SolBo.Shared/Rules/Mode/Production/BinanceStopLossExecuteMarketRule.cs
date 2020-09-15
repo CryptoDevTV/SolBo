@@ -60,7 +60,7 @@ namespace SolBo.Shared.Rules.Mode.Production
                         solbot.Actions.BoughtPrice = 0;
                         solbot.Actions.StopLossReached = true;
 
-                        Logger.Info(LogGenerator.TradeResultStart(stopLossOrderResult.Data.OrderId));
+                        Logger.Info(LogGenerator.TradeResultStart($"{stopLossOrderResult.Data.OrderId}"));
 
                         var prices = new List<decimal>();
                         var quantityAll = new List<decimal>();
@@ -77,7 +77,7 @@ namespace SolBo.Shared.Rules.Mode.Production
                             }
                         }
 
-                        Logger.Info(LogGenerator.TradeResultEnd(stopLossOrderResult.Data.OrderId, prices.Average(), quantityAll.Sum(), commission.Sum()));
+                        Logger.Info(LogGenerator.TradeResultEnd($"{stopLossOrderResult.Data.OrderId}", prices.Average(), quantityAll.Sum(), commission.Sum()));
 
                         _pushOverNotificationService.Send(
                             LogGenerator.NotificationTitle(EnvironmentType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),

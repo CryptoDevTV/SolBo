@@ -1,4 +1,5 @@
 ﻿using Binance.Net.Objects.Spot.SpotData;
+using Kucoin.Net.Objects;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Extensions;
 using System;
@@ -87,13 +88,16 @@ namespace SolBo.Shared.Domain.Statics
             return $"{orderType.GetDescription()} => ORDER => EXCHANGE => NOT SUCCEED {result}";
         }
 
-        public static string TradeResultStart(long orderId)
+        public static string TradeResultStart(string orderId)
             => $"ORDER ({orderId}) => START";
-        public static string TradeResultEnd(long orderId, decimal average, decimal quantity, decimal commission)
+        public static string TradeResultEnd(string orderId, decimal average, decimal quantity, decimal commission)
             => $"ORDER ({orderId}) => END => AVERAGE => {average} => Quantity (all) => {quantity} => Commision (all) => {commission}";
+        public static string TradeResultEndKucoin(string orderId)
+            => $"ORDER ({orderId}) => END";
         public static string TradeResult(MarketOrderType orderType, BinanceOrderTrade order)
             => $"{orderType.GetDescription()} => TRADE ({order.TradeId}) => Price => {order.Price} => Quantity {order.Quantity} => Commission {order.Commission} ({order.CommissionAsset})";
-
+        public static string TradeResultKucoin(MarketOrderType orderType, KucoinOrder order, decimal price)
+            => $"{orderType.GetDescription()} => TRADE ({order.Id}) => Price => {price} => Quantity {order.DealQuantity.ToKucoinRound()} => Commission {order.Fee.ToKucoinRound()} ({order.FeeCurrency})";
         public static string ExecuteMarketSuccess(MarketOrderType orderType, decimal bought)
         {
             return bought == 0

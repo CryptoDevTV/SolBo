@@ -1,27 +1,24 @@
-﻿using Binance.Net.Enums;
-using Binance.Net.Interfaces;
+﻿using Kucoin.Net.Interfaces;
 using NLog;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SolBo.Shared.Rules.Mode.Production
 {
-    public class BinanceBuyExecuteMarketRule : IMarketRule
+    public class KucoinBuyExecuteMarketRule : IMarketRule
     {
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
         public MarketOrderType MarketOrder => MarketOrderType.BUYING;
-        private readonly IBinanceClient _binanceClient;
+        private readonly IKucoinClient _kucoinClient;
         private readonly IPushOverNotificationService _pushOverNotificationService;
-        public BinanceBuyExecuteMarketRule(
-            IBinanceClient binanceClient,
+        public KucoinBuyExecuteMarketRule(
+            IKucoinClient kucoinClient,
             IPushOverNotificationService pushOverNotificationService)
         {
-            _binanceClient = binanceClient;
+            _kucoinClient = kucoinClient;
             _pushOverNotificationService = pushOverNotificationService;
         }
         public IRuleResult RuleExecuted(Solbot solbot)
@@ -31,11 +28,11 @@ namespace SolBo.Shared.Rules.Mode.Production
 
             if (solbot.Communication.Buy.IsReady)
             {
-                var buyOrderResult = _binanceClient.PlaceOrder(
+                var buyOrderResult = _kucoinClient.PlaceOrder(
                     solbot.Strategy.AvailableStrategy.Symbol,
-                    OrderSide.Buy,
-                    OrderType.Market,
-                    quoteOrderQuantity: solbot.Communication.Buy.AvailableFund);
+                    Kucoin.Net.Objects.KucoinOrderSide.Buy,
+                    Kucoin.Net.Objects.KucoinNewOrderType.Market,
+                    funds: solbot.Communication.Buy.AvailableFund);
 
                 if (!(buyOrderResult is null))
                 {
@@ -43,26 +40,30 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                     if (buyOrderResult.Success)
                     {
-                        Logger.Info(LogGenerator.TradeResultStart($"{buyOrderResult.Data.OrderId}"));
+                        var order = _kucoinClient.GetOrder(buyOrderResult.Data.OrderId);
 
-                        var prices = new List<decimal>();
-                        var quantity = new List<decimal>();
-                        var commission = new List<decimal>();
-
-                        if (buyOrderResult.Data.Fills.AnyAndNotNull())
+                        if (!(order is null))
                         {
-                            foreach (var item in buyOrderResult.Data.Fills)
+                            if (order.Success)
                             {
-                                Logger.Info(LogGenerator.TradeResult(MarketOrder, item));
-                                prices.Add(item.Price);
-                                quantity.Add(item.Quantity);
-                                commission.Add(item.Commission);
+                                Logger.Info(LogGenerator.TradeResultStart(order.Data.ClientOrderId));
+
+                                if (order.Success)
+                                {
+                                    if (order.Data.DealQuantity != 0)
+                                    {
+                                        var price = (order.Data.Funds / order.Data.DealQuantity).ToKucoinRound();
+                                        Logger.Info(LogGenerator.TradeResultKucoin(MarketOrder, order.Data, price));
+
+                                        solbot.Actions.BoughtPrice = price;
+                                    }
+
+                                    Logger.Info(LogGenerator.TradeResultEndKucoin(order.Data.ClientOrderId));
+                                }
+                                else
+                                    Logger.Warn(order.Error.Message);
                             }
                         }
-
-                        solbot.Actions.BoughtPrice = prices.Average();
-
-                        Logger.Info(LogGenerator.TradeResultEnd($"{buyOrderResult.Data.OrderId}", prices.Average(), quantity.Sum(), commission.Sum()));
 
                         _pushOverNotificationService.Send(
                             LogGenerator.NotificationTitle(EnvironmentType.PRODUCTION, MarketOrder, solbot.Strategy.AvailableStrategy.Symbol),
@@ -74,14 +75,16 @@ namespace SolBo.Shared.Rules.Mode.Production
                     else
                         Logger.Warn(buyOrderResult.Error.Message);
                 }
+                else
+                    Logger.Warn(buyOrderResult.Error.Message);
             }
 
             return new MarketRuleResult()
             {
                 Success = result,
                 Message = result
-                    ? LogGenerator.OrderMarketSuccess(MarketOrder)
-                    : LogGenerator.OrderMarketError(MarketOrder, message)
+                ? LogGenerator.OrderMarketSuccess(MarketOrder)
+                : LogGenerator.OrderMarketError(MarketOrder, message)
             };
         }
     }

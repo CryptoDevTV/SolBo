@@ -5,7 +5,7 @@
     "available": [
       {
         "id": 1,
-        "symbol": "REQ-ETH",
+        "symbol": "BCHSV-ETH",
         "average": 5,
         "averagetype": 0,
         "selltype": 0,
@@ -14,7 +14,7 @@
         "sellup": 0.00000300,
         "stoplossdown": 0.00000400,
         "stoplosspausecycles": 0,
-        "fundpercentage": 100,
+        "fundpercentage": 50,
         "clearonstartup": false
       }
     ]

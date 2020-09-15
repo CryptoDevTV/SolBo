@@ -17,7 +17,7 @@ namespace SolBo.Shared.Services.Implementations
                 result.QuoteAssetToTrade = decimal.Round(availableQuote * fundPercentage / 100, precision);
             }
             else
-                result.QuoteAssetToTrade = availableQuote;
+                result.QuoteAssetToTrade = decimal.Round(availableQuote, precision);
 
             return result;
         }
