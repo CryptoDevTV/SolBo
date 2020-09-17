@@ -1,8 +1,10 @@
-﻿using Kucoin.Net.Interfaces;
+﻿using Binance.Net;
+using Kucoin.Net.Interfaces;
 using NLog;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Domain.Statics;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
 
 namespace SolBo.Shared.Rules.Mode.Production
@@ -27,11 +29,13 @@ namespace SolBo.Shared.Rules.Mode.Production
 
             if (solbot.Communication.StopLoss.IsReady)
             {
+                var quantity = BinanceHelpers.ClampQuantity(solbot.Communication.Symbol.MinQuantity, solbot.Communication.Symbol.MaxQuantity, solbot.Communication.Symbol.StepSize, solbot.Communication.AvailableAsset.Base);
+
                 var stopLossOrderResult = _kucoinClient.PlaceOrder(
                         solbot.Strategy.AvailableStrategy.Symbol,
                         Kucoin.Net.Objects.KucoinOrderSide.Sell,
                         Kucoin.Net.Objects.KucoinNewOrderType.Market,
-                        quantity: solbot.Communication.StopLoss.AvailableFund);
+                        quantity: quantity);
 
                 if (!(stopLossOrderResult is null))
                 {
@@ -43,12 +47,25 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                         var order = _kucoinClient.GetOrder(stopLossOrderResult.Data.OrderId);
 
-                        if (order.Success)
+                        if (!(order is null))
                         {
-                            Logger.Info(LogGenerator.TradeResultKucoin(MarketOrder, order.Data, 0.1m));
+                            if (order.Success)
+                            {
+                                Logger.Info(LogGenerator.TradeResultStart(order.Data.ClientOrderId));
+
+                                if (order.Data.DealQuantity != 0)
+                                {
+                                    var price = (order.Data.Funds / order.Data.DealQuantity).ToKucoinRound();
+                                    Logger.Info(LogGenerator.TradeResultKucoin(MarketOrder, order.Data, price));
+
+                                    solbot.Actions.BoughtPrice = price;
+                                }
+
+                                Logger.Info(LogGenerator.TradeResultEndKucoin(order.Data.ClientOrderId));
+                            }
+                            else
+                                Logger.Warn(order.Error.Message);
                         }
-                        else
-                            Logger.Warn(order.Error.Message);
 
                         solbot.Actions.BoughtPrice = 0;
                         solbot.Actions.StopLossReached = true;
@@ -60,8 +77,10 @@ namespace SolBo.Shared.Rules.Mode.Production
                             LogGenerator.NotificationMessage(
                                 solbot.Communication.Average.Current,
                                 solbot.Communication.Price.Current,
-                                solbot.Communication.Buy.Change));
+                                solbot.Communication.StopLoss.Change));
                     }
+                    else
+                        Logger.Warn(stopLossOrderResult.Error.Message);
                 }
                 else
                     Logger.Warn(stopLossOrderResult.Error.Message);

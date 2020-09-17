@@ -76,7 +76,7 @@ namespace SolBo.Shared.Rules.Mode.Production
                             LogGenerator.NotificationMessage(
                                 solbot.Communication.Average.Current,
                                 solbot.Communication.Price.Current,
-                                solbot.Communication.Buy.Change));
+                                solbot.Communication.Sell.Change));
                     }
                     else
                         Logger.Warn(sellOrderResult.Error.Message);

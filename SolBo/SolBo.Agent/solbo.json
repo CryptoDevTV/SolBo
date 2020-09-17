@@ -14,13 +14,13 @@
         "sellup": 0.00000300,
         "stoplossdown": 0.00000400,
         "stoplosspausecycles": 0,
-        "fundpercentage": 50,
+        "fundpercentage": 100,
         "clearonstartup": false
       }
     ]
   },
   "actions": {
-    "boughtprice": 0.41738,
+    "boughtprice": 0,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }

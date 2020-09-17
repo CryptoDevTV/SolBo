@@ -27,6 +27,7 @@ Funkcje bota:
 ## Obsługiwane giełdy
 
 - [Binance](https://www.binance.com/en/register?ref=T0ANYAVJ)
+- [KuCoin](https://www.kucoin.com/ucenter/signup?rcode=2NNePfu)
 
 ## Opis konfiguracji bota
 
@@ -39,6 +40,12 @@ W celu poprawnego skonfigurowania bota należy odpowiednio i zgodnie z własnym 
 Plik konfiguracyjny to miejsce gdzie należy zdefiniować:
 - `filename` - nazwę pliku użytkownika (domyślnie **solbo**)
 - `intervalinminutes` - okres w minutach co jaki bot ma łączyć się z giełdą (domyślnie **1**, bot łączy się z giełdą co 1 minutę)
+
+oraz giełdę na jakiej ma grać bot:
+- `exchange/type` - **0** - Binance, **1** - Kucoin
+- `apikey` - klucz API dla danej giełdy
+- `apisecret` - klucz SECRET danej giełdy
+- `passphrase` - fraza wymagana jedynie dla giełdy Kucoin, dla Binance pole to należy zostawić puste
 
 oraz opcjonalnie sekcje **notifications/pushover** (w celu otrzymywania powiadomień [Pushover](https://pushover.net/))
 - `token` - API Token/Key z utworzonej aplikacji w serwisie Pushover,
@@ -53,7 +60,7 @@ Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywa
 
 ```
 {
-  "version": "0.2.3",
+  "version": "0.3.0",
   "filename": "solbo",
   "intervalinminutes": 1,
   "notifications": {
@@ -62,6 +69,12 @@ Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywa
       "recipients": "",
       "endpoint": "https://api.pushover.net/1/messages.json"
     }
+  },
+  "exchange": {
+    "type": "1",
+    "apikey": "",
+    "apisecret": "",
+    "passphrase": ""
   }
 }
 ```
@@ -72,9 +85,6 @@ Plik użytkownika to miejsce gdzie należy zdefiniować parametry zgodnie z poni
 
 Parametr 	| Opis 	| Przykładowa wartość 	| Typ
 ------------|-------|-----------------------|-----
-**exchange/name**|nazwa giełdy|binance|opcjonalne
-**exchange/apikey**|parametr do pobrania z giełdy|aSqaS0a5qkjy9fe05F....|opcjonalny
-**exchange/apisecret**|parametr do pobrania z giełdy|0bb9eM0kB506Crdk5....|opcjonalny
 **strategy/activeid**|wartość pola **id** aktywnej strategii bota|stała wartość: **1**|obowiązkowe
 **strategy/modetype**|parametr określający czy bot pracuje (`0`) czy jest w stanie przerwy (`1`)|**0** - bot pracuje i realizuje strategie, **1** - bot śledzi cenę i ją zapisuje, nie analizuje warunków do zleceń, nie składa zleceń|obowiązkowe
 **strategy/available/id**|identyfikator strategii|stała wartość: **1**|obowiązkowe
@@ -99,11 +109,6 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
 
 ```
 {
-  "exchange": {
-    "name": "Binance",
-    "apikey": "",
-    "apisecret": ""
-  },
   "strategy": {
     "activeid": 1,
     "modetype": 0,
@@ -136,17 +141,17 @@ Użytkownik nie powinien samodzielnie modyfikować parametrów:
 
 Bot posiada tryb testowy, który "emuluje" składanie zleceń na giełdzie, techniczne zapisy kroków wykonanych przez bota można śledzić w pliku zapisywanym w katalogu instalacyjnym / uruchomieniowym i nazwą zgodną z wartością parametru **strategy/available/symbol**. Tryb ten jest mocno sugerowany do użycia w pierwszym etapie korzystania z bota. Zapisy dokonywane przez bota w pliku mogą posłużyć analizie i weryfikacji poprawności działania bota w połączeniu z wykresem giełdy.
 
-Tryb ten jest automatycznie aktywowany poprzez pozostawienie pustych parametrów **exchange/apikey** i **exchange/apisecret**.
+Tryb ten jest automatycznie aktywowany poprzez pozostawienie pustych parametrów **apikey**, **apisecret**, **passphrase** w pliku konfiguracyjnym - `appsettings.solbo-runtime.json`.
 
 ## Tryb produkcyjny
 
-Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego strategii. Wymaga podania wartości dla **exchanges/apikey** i **exchanges/apisecret** zgodnie z danymi pochodzącymi ze strony giełdy. Dane te dla własnego konta na Binance należy pobrać z sekcji [API Management](https://www.binance.com/en/usercenter/settings/api-management).
+Do użycia jedynie dla świadomych użytkowników sposobu działania bota i jego strategii. Wymaga podania wartości dla **apikey**, **apisecret**, **passphrase** w pliku konfiguracyjnym - `appsettings.solbo-runtime.json` zgodnie z danymi pochodzącymi ze strony giełdy. Dane te dla własnego konta na Binance należy pobrać z sekcji [API Management](https://www.binance.com/en/usercenter/settings/api-management).
 
-Tryb ten jest automatycznie aktywowany poprzez wprowadzenie poprawnych wartości dla parametrów **exchange/apikey** i **exchange/apisecret**.
+Tryb ten jest automatycznie aktywowany poprzez wprowadzenie poprawnych wartości dla parametrów **apikey**, **apisecret**, **passphrase** w pliku konfiguracyjnym - `appsettings.solbo-runtime.json`.
 
 ### Oddzielne konto dla bota
 
-Istotnym ze względów bezpieczeństwa jest by Solbo, działał na innym koncie niż Twoje główne konto na Binance. Będę niezwykle wdzięczny jeśli na jego potrzeby założysz konto z tego [linku polecającego](https://www.binance.com/en/register?ref=T0ANYAVJ), za każdą transakcję złożoną przez bota ja dostanę małą gratyfikację, Ciebie nic to nie będzie kosztować.
+Istotnym ze względów bezpieczeństwa jest by Solbo, działał na innym koncie niż Twoje główne konto na danej giełdzie. Będę niezwykle wdzięczny jeśli na jego potrzeby założysz konto z tego linku polecającego [Binance](https://www.binance.com/en/register?ref=T0ANYAVJ) lub [KuCoin](https://www.kucoin.com/ucenter/signup?rcode=2NNePfu), za każdą transakcję złożoną przez bota ja dostanę małą gratyfikację, Ciebie nic to nie będzie kosztować.
 
 ## Instalacja i uruchomienie bota
 

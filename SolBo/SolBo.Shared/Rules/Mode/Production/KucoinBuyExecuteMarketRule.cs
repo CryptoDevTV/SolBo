@@ -28,11 +28,13 @@ namespace SolBo.Shared.Rules.Mode.Production
 
             if (solbot.Communication.Buy.IsReady)
             {
+                var funds = (solbot.Communication.Buy.AvailableFund * 0.95m).ToKucoinRound();
+
                 var buyOrderResult = _kucoinClient.PlaceOrder(
                     solbot.Strategy.AvailableStrategy.Symbol,
                     Kucoin.Net.Objects.KucoinOrderSide.Buy,
                     Kucoin.Net.Objects.KucoinNewOrderType.Market,
-                    funds: solbot.Communication.Buy.AvailableFund);
+                    funds: funds);
 
                 if (!(buyOrderResult is null))
                 {
