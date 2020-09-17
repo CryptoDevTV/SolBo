@@ -48,21 +48,18 @@ namespace SolBo.Shared.Rules.Mode.Production
                             {
                                 Logger.Info(LogGenerator.TradeResultStart(order.Data.ClientOrderId));
 
-                                if (order.Success)
+                                if (order.Data.DealQuantity != 0)
                                 {
-                                    if (order.Data.DealQuantity != 0)
-                                    {
-                                        var price = (order.Data.Funds / order.Data.DealQuantity).ToKucoinRound();
-                                        Logger.Info(LogGenerator.TradeResultKucoin(MarketOrder, order.Data, price));
+                                    var price = (order.Data.Funds / order.Data.DealQuantity).ToKucoinRound();
+                                    Logger.Info(LogGenerator.TradeResultKucoin(MarketOrder, order.Data, price));
 
-                                        solbot.Actions.BoughtPrice = price;
-                                    }
-
-                                    Logger.Info(LogGenerator.TradeResultEndKucoin(order.Data.ClientOrderId));
+                                    solbot.Actions.BoughtPrice = price;
                                 }
-                                else
-                                    Logger.Warn(order.Error.Message);
+
+                                Logger.Info(LogGenerator.TradeResultEndKucoin(order.Data.ClientOrderId));
                             }
+                            else
+                                Logger.Warn(order.Error.Message);
                         }
 
                         _pushOverNotificationService.Send(

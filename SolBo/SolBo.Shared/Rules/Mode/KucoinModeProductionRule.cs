@@ -5,7 +5,6 @@ using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Rules.Mode.Production;
 using SolBo.Shared.Rules.Mode.Production.Exchange;
 using SolBo.Shared.Services;
-using System;
 using System.Collections.Generic;
 
 namespace SolBo.Shared.Rules.Mode
@@ -43,7 +42,7 @@ namespace SolBo.Shared.Rules.Mode
             {
                 _rules.Add(new SellStepMarketRule(_marketService));
                 _rules.Add(new SellPriceMarketRule());
-                //_rules.Add(new KucoinSellExecuteMarketRule(_kucoinClient, _pushOverNotificationService));
+                _rules.Add(new KucoinSellExecuteMarketRule(_kucoinClient, _pushOverNotificationService));
             }
 
             if (solbot.Actions.SellBefore)

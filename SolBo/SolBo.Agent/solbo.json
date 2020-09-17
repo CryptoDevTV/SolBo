@@ -20,7 +20,7 @@
     ]
   },
   "actions": {
-    "boughtprice": 0,
+    "boughtprice": 0.41738,
     "stoplossreached": false,
     "stoplosscurrentcycle": 0
   }
