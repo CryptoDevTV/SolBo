@@ -42,7 +42,7 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                 if (minNotional > solbot.Communication.Symbol.MinNotional)
                 {
-                    stopLossOrderResult = _binanceClient.PlaceOrder(
+                    stopLossOrderResult = _binanceClient.Spot.Order.PlaceOrder(
                         solbot.Strategy.AvailableStrategy.Symbol,
                         OrderSide.Sell,
                         OrderType.Market,

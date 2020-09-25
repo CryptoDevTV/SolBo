@@ -38,7 +38,7 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                 if (minNotional > solbot.Communication.Symbol.MinNotional)
                 {
-                    var sellOrderResult = _binanceClient.PlaceOrder(
+                    var sellOrderResult = _binanceClient.Spot.Order.PlaceOrder(
                         solbot.Strategy.AvailableStrategy.Symbol,
                         OrderSide.Sell,
                         OrderType.Market,

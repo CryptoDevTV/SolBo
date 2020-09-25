@@ -16,7 +16,7 @@ namespace SolBo.Shared.Services.Implementations
         {
             var result = new TickerPriceResponse();
 
-            var response = _binanceClient.GetPrice(availableStrategy.Symbol);
+            var response = _binanceClient.Spot.Market.GetPrice(availableStrategy.Symbol);
 
             if (response.Success)
             {

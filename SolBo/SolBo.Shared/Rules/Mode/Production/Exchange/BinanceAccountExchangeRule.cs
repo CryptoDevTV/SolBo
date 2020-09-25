@@ -16,7 +16,7 @@ namespace SolBo.Shared.Rules.Mode.Production.Exchange
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var accountInfo = _binanceClient.GetAccountInfo();
+            var accountInfo = _binanceClient.General.GetAccountInfo();
 
             var result = false;
             var baseMsg = string.Empty;

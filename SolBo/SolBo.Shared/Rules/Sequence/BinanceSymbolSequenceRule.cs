@@ -1,6 +1,5 @@
 ﻿using Binance.Net.Enums;
 using Binance.Net.Interfaces;
-using Kucoin.Net.Interfaces;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Statics;
 using SolBo.Shared.Messages.Rules;
@@ -23,7 +22,7 @@ namespace SolBo.Shared.Rules.Sequence
             var result = new SequencedRuleResult();
             try
             {
-                var exchangeInfo = _binanceClient.GetExchangeInfo();
+                var exchangeInfo = _binanceClient.Spot.System.GetExchangeInfo();
 
                 if (exchangeInfo.Success)
                 {

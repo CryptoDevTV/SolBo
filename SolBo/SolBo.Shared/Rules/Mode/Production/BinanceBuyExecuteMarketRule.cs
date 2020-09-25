@@ -31,7 +31,7 @@ namespace SolBo.Shared.Rules.Mode.Production
 
             if (solbot.Communication.Buy.IsReady)
             {
-                var buyOrderResult = _binanceClient.PlaceOrder(
+                var buyOrderResult = _binanceClient.Spot.Order.PlaceOrder(
                     solbot.Strategy.AvailableStrategy.Symbol,
                     OrderSide.Buy,
                     OrderType.Market,
