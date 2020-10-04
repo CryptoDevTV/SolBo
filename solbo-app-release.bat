@@ -1,3 +1,3 @@
 cd C:\Users\tomek\Documents\GitHub\CryptoDevTV\SolBo\SolBo\SolBo.Agent
 
-dotnet publish -c Release -r win10-x64 /p:PublishSingleFile=true
+dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true

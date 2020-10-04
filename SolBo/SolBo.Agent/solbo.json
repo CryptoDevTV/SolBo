@@ -1,27 +1,27 @@
 {
-  "strategy": {
-    "activeid": 1,
-    "modetype": 0,
-    "available": [
+  "Strategy": {
+    "ActiveId": 1,
+    "ModeType": 0,
+    "Available": [
       {
-        "id": 1,
-        "symbol": "BCHSV-ETH",
-        "average": 5,
-        "averagetype": 0,
-        "selltype": 0,
-        "commissiontype": 0,
-        "buydown": 0.00000200,
-        "sellup": 0.00000300,
-        "stoplossdown": 0.00040000,
-        "stoplosspausecycles": 2,
-        "fundpercentage": 100,
-        "clearonstartup": false
+        "Id": 1,
+        "Symbol": "BCHSV-ETH",
+        "BuyDown": 0.00000200,
+        "SellUp": 0.00000300,
+        "Average": 5,
+        "StopLossDown": 0.00040000,
+        "FundPercentage": 100,
+        "ClearOnStartup": false,
+        "StopLossPauseCycles": 2,
+        "AverageType": 0,
+        "SellType": 0,
+        "CommissionType": 0
       }
     ]
   },
-  "actions": {
-    "boughtprice": 0,
-    "stoplossreached": false,
-    "stoplosscurrentcycle": 0
+  "Actions": {
+    "BoughtPrice": 0,
+    "StopLossCurrentCycle": 0,
+    "StopLossReached": false
   }
 }
