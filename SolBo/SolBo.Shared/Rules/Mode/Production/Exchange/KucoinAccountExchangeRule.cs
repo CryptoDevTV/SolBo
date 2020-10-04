@@ -28,20 +28,28 @@ namespace SolBo.Shared.Rules.Mode.Production.Exchange
             {
                 var accountType = accountInfo.Data.Where(a => a.Type == KucoinAccountType.Trade).ToList();
 
-                var q = accountType.FirstOrDefault(q => q.Currency == solbot.Communication.Symbol.QuoteAsset);
-                accountType.Remove(q); // because of BCHSV <> BSV
-                var b = accountType.FirstOrDefault()?.Available;
+                var quote = accountType.FirstOrDefault(q => q.Currency == solbot.Communication.Symbol.QuoteAsset);
+                KucoinAccount basee = null;
+
+                if(solbot.Communication.Symbol.BaseAsset.ToUpper() == "BSV")
+                {
+                    basee = accountType.FirstOrDefault(q => q.Currency == "BCHSV");
+                }
+                else
+                {
+                    basee = accountType.FirstOrDefault(q => q.Currency == solbot.Communication.Symbol.BaseAsset);
+                }
 
                 if (accountType.AnyAndNotNull())
                 {
                     solbot.Communication.AvailableAsset = new AvailableAssetMessage
                     {
-                        Quote = q.Available,
-                        Base = b ?? 0m
+                        Quote = quote.Available,
+                        Base = basee.Available
                     };
 
-                    baseMsg = $"{solbot.Communication.Symbol.BaseAsset}:{b ?? 0m}";
-                    quoteMsg = $"{solbot.Communication.Symbol.QuoteAsset}:{q.Available}";
+                    baseMsg = $"{solbot.Communication.Symbol.BaseAsset}:{basee.Available}";
+                    quoteMsg = $"{solbot.Communication.Symbol.QuoteAsset}:{quote.Available}";
 
                     result = true;
                 }
