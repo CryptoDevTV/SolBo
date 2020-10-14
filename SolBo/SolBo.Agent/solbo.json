@@ -5,17 +5,17 @@
     "Available": [
       {
         "Id": 1,
-        "Symbol": "ALGO-ETH",
-        "BuyDown": 0.00000200,
-        "SellUp": 0.00000300,
-        "Average": 5,
-        "StopLossDown": 0.00040000,
-        "FundPercentage": 100,
+        "Symbol": "UNI-USDT",
+        "BuyDown": 4.2,
+        "SellUp": 6.1,
+        "Average": 3,
+        "StopLossDown": 12,
+        "FundPercentage": 90,
         "ClearOnStartup": false,
-        "StopLossPauseCycles": 2,
-        "AverageType": 0,
-        "SellType": 0,
-        "CommissionType": 0
+        "StopLossPauseCycles": 3,
+        "AverageType": 1,
+        "SellType": 1,
+        "CommissionType": 1
       }
     ]
   },

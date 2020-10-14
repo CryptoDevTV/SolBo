@@ -31,22 +31,19 @@ namespace SolBo.Shared.Rules.Sequence
 
                     if (!(symbol is null) && symbol.EnableTrading)
                     {
-                        int count = BitConverter.GetBytes(decimal.GetBits(symbol.PriceIncrement)[3])[2];
-
                         solbot.Communication = new Communication
                         {
                             Symbol = new SymbolMessage
                             {
                                 BaseAsset = symbol.BaseCurrency,
                                 QuoteAsset = symbol.QuoteCurrency,
-                                QuoteAssetPrecision = count,
-                                //MinNotional = symbol.MinNotionalFilter.MinNotional,
+                                BasePrecision = symbol.BaseIncrement,
+                                QuotePrecision = symbol.QuoteIncrement,
+                                BaseAssetPrecision = BitConverter.GetBytes(decimal.GetBits(symbol.BaseIncrement)[3])[2],
+                                QuoteAssetPrecision = BitConverter.GetBytes(decimal.GetBits(symbol.QuoteIncrement)[3])[2],
                                 StepSize = symbol.PriceIncrement,
                                 MaxQuantity = symbol.QuoteMaxSize,
-                                MinQuantity = symbol.QuoteMinSize,
-                                TickSize = symbol.QuoteIncrement
-                                //MaxPrice = symbol.QuoteMaxSize,
-                                //MinPrice = symbol.QuoteMinSize
+                                MinQuantity = symbol.QuoteMinSize
                             }
                         };
                         result.Success = true;

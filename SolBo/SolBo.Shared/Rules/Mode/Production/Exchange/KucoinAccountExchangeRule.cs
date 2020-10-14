@@ -40,15 +40,17 @@ namespace SolBo.Shared.Rules.Mode.Production.Exchange
                     basee = accountType.FirstOrDefault(q => q.Currency == solbot.Communication.Symbol.BaseAsset);
                 }
 
+                var baseAvailable = basee != null ? basee.Available : 0m;
+
                 if (accountType.AnyAndNotNull())
                 {
                     solbot.Communication.AvailableAsset = new AvailableAssetMessage
                     {
                         Quote = quote.Available,
-                        Base = basee.Available
+                        Base = baseAvailable
                     };
 
-                    baseMsg = $"{solbot.Communication.Symbol.BaseAsset}:{basee.Available}";
+                    baseMsg = $"{solbot.Communication.Symbol.BaseAsset}:{baseAvailable}";
                     quoteMsg = $"{solbot.Communication.Symbol.QuoteAsset}:{quote.Available}";
 
                     result = true;
