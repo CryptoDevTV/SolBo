@@ -60,7 +60,7 @@ Plik ten odczytywany jest tylko podczas uruchamiania bota, nie jest on odczytywa
 
 ```
 {
-  "version": "0.3.3",
+  "version": "0.3.4",
   "filename": "solbo",
   "intervalinminutes": 1,
   "notifications": {

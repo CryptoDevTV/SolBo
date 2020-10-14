@@ -29,7 +29,7 @@ namespace SolBo.Shared.Rules.Mode.Production
 
             if (solbot.Communication.StopLoss.IsReady)
             {
-                var quantity = BinanceHelpers.ClampQuantity(solbot.Communication.Symbol.MinQuantity, solbot.Communication.Symbol.MaxQuantity, solbot.Communication.Symbol.StepSize, solbot.Communication.AvailableAsset.Base);
+                var quantity = BinanceHelpers.ClampQuantity(solbot.Communication.Symbol.MinQuantity, solbot.Communication.Symbol.MaxQuantity, solbot.Communication.Symbol.BasePrecision, solbot.Communication.AvailableAsset.Base);
 
                 var stopLossOrderResult = _kucoinClient.PlaceOrder(
                         solbot.Strategy.AvailableStrategy.Symbol,

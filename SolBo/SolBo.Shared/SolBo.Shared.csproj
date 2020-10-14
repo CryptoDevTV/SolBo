@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.3.3</Version>
+    <Version>0.3.4</Version>
     <RepositoryUrl>https://github.com/CryptoDevTV/SolBo</RepositoryUrl>
     <PackageProjectUrl>https://cryptodev.tv</PackageProjectUrl>
     <Copyright>Tomasz Kowalczyk</Copyright>
     <Company>CryptoDev.TV</Company>
     <Product>SolBo</Product>
     <Authors>Tomasz Kowalczyk</Authors>
+    <Description>Yet another trading bot</Description>
   </PropertyGroup>
 
   <ItemGroup>
