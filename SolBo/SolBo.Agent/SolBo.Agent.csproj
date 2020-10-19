@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
-    <PackageReference Include="Quartz" Version="3.2.0" />
+    <PackageReference Include="Quartz" Version="3.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +34,12 @@
     </None>
     <None Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="_BuyDeepSellHigh.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="_RollingPrice.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="solbo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

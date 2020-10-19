@@ -4,11 +4,14 @@ using Quartz;
 using Quartz.Impl;
 using SolBo.Agent.DI;
 using SolBo.Agent.Factories;
-using SolBo.Agent.Jobs;
+using SolBo.Agent.Strategies;
 using SolBo.Shared.Domain.Configs;
+using SolBo.Shared.Extensions;
+using SolBo.Shared.Services;
 using System;
 using System.IO;
 using System.Security.Permissions;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SolBo.Agent
@@ -22,14 +25,18 @@ namespace SolBo.Agent
 
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
+        private static IFileService _fileService;
+
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static async Task<int> Main()
         {
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
 
-            LogManager.Configuration.Variables["fileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
-            LogManager.Configuration.Variables["archiveFileName"] = $"{appId}-{DateTime.UtcNow.ToString("ddMMyyyy")}.log";
+            LogManager.Configuration.Variables["fileName"] = $"{appId}-{DateTime.UtcNow:ddMMyyyy}.log";
+            LogManager.Configuration.Variables["archiveFileName"] = $"{appId}-{DateTime.UtcNow:ddMMyyyy}.log";
+
+            _fileService = new FileService();
 
             var cfgBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
@@ -53,30 +60,79 @@ namespace SolBo.Agent
 
                 await _scheduler.Start();
 
-                #region Buy Deep Sell High
-                IJobDetail bdshJob = JobBuilder.Create<BuyDeepSellHighJob>()
-                    .WithIdentity("BuyDeepSellHighJob")
-                    .Build();
+                #region Strategies
+                if(app.Strategies.AnyAndNotNull())
+                {
+                    foreach (var strategy in app.Strategies)
+                    {
+                        if (string.Equals(strategy.Name, "BuyDeepSellHigh"))
+                        {
+                            var filePath = $"_{strategy.Name}.json";
+                            var strategyDefinition = await _fileService.GetAsync<BuyDeepSellHighStrategy>(filePath);
 
-                bdshJob.JobDataMap["FileName"] = app.FileName;
-                bdshJob.JobDataMap["Version"] = app.Version;
-                bdshJob.JobDataMap["ApiKey"] = app.Exchange.ApiKey;
-                bdshJob.JobDataMap["ApiSecret"] = app.Exchange.ApiSecret;
-                bdshJob.JobDataMap["PassPhrase"] = app.Exchange.PassPhrase;
-                bdshJob.JobDataMap["ExchangeType"] = app.Exchange.Type;
+                            if (strategyDefinition.Jobs.AnyAndNotNull())
+                            {
+                                foreach (var job in strategyDefinition.Jobs)
+                                {
+                                    if(job.IsActive)
+                                    {
+                                        var jobId = $"{strategy.Name}_{job.Id}";
 
-                var bdshBuilder = TriggerBuilder.Create()
-                    .WithIdentity("BuyDeepSellHighJobTrigger")
-                    .StartNow();
+                                        var jobDetail = JobBuilder.Create<BuyDeepSellHighJob>()
+                                            .WithIdentity(jobId, strategy.Name)
+                                            .Build();
 
-                bdshBuilder.WithSimpleSchedule(x => x
-                        .WithIntervalInMinutes(app.IntervalInMinutes)
-                        .RepeatForever());
+                                        jobDetail.JobDataMap["args"] = JsonSerializer.Serialize(job);
 
-                var bdshTrigger = bdshBuilder.Build();
+                                        var jobBuilder = TriggerBuilder.Create()
+                                             .WithIdentity($"{jobId}_t", strategy.Name)
+                                             .WithSimpleSchedule(x => x
+                                                .WithIntervalInMinutes(job.IntervalInMinutes)
+                                                .RepeatForever())
+                                             .StartNow();
+
+
+                                        await _scheduler.ScheduleJob(jobDetail, jobBuilder.Build());
+                                    }
+                                }
+                            }
+                        }
+                        if (string.Equals(strategy.Name, "RollingPrice"))
+                        {
+                            var filePath = $"_{strategy.Name}.json";
+                            var strategyDefinition = await _fileService.GetAsync<RollingPriceStrategy>(filePath);
+
+                            if (strategyDefinition.Jobs.AnyAndNotNull())
+                            {
+                                foreach (var job in strategyDefinition.Jobs)
+                                {
+                                    if(job.IsActive)
+                                    {
+                                        var jobId = $"{strategy.Name}_{job.Id}";
+
+                                        var jobDetail = JobBuilder.Create<RollingPriceJob>()
+                                            .WithIdentity(jobId, strategy.Name)
+                                            .Build();
+
+                                        jobDetail.JobDataMap["args"] = JsonSerializer.Serialize(job);
+
+                                        var jobBuilder = TriggerBuilder.Create()
+                                            .WithIdentity($"{jobId}_t", strategy.Name)
+                                            .WithSimpleSchedule(x => x
+                                                .WithIntervalInMinutes(job.IntervalInMinutes)
+                                                .RepeatForever())
+                                            .StartNow();
+
+                                        await _scheduler.ScheduleJob(jobDetail, jobBuilder.Build());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 #endregion
 
-                await _scheduler.ScheduleJob(bdshJob, bdshTrigger);
+                Logger.Info($"Version: {app.Version}");
 
                 await Task.Delay(TimeSpan.FromSeconds(30));
 

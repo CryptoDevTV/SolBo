@@ -1,0 +1,46 @@
+﻿{
+  "jobs": [
+    {
+      "Id": 1,
+      "IntervalInMinutes": 1,
+      "ModeType": 0,
+      "Symbol": "AMPL-USDT",
+      "BuyDown": 4.2,
+      "SellUp": 6.1,
+      "Average": 3,
+      "StopLossDown": 12,
+      "FundPercentage": 90,
+      "ClearOnStartup": false,
+      "StopLossPauseCycles": 3,
+      "AverageType": 1,
+      "SellType": 1,
+      "CommissionType": 1,
+      "Actions": {
+        "BoughtPrice": 0,
+        "StopLossCurrentCycle": 0,
+        "StopLossReached": false
+      }
+    },
+    {
+      "Id": 2,
+      "IntervalInMinutes": 2,
+      "ModeType": 0,
+      "Symbol": "BTC-USDT",
+      "BuyDown": 4.2,
+      "SellUp": 6.1,
+      "Average": 3,
+      "StopLossDown": 12,
+      "FundPercentage": 90,
+      "ClearOnStartup": false,
+      "StopLossPauseCycles": 3,
+      "AverageType": 1,
+      "SellType": 1,
+      "CommissionType": 1,
+      "Actions": {
+        "BoughtPrice": 0,
+        "StopLossCurrentCycle": 0,
+        "StopLossReached": false
+      }
+    }
+  ]
+}

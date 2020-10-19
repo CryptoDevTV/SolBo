@@ -1,0 +1,16 @@
+﻿{
+  "jobs": [
+    {
+      "Id": 1,
+      "IntervalInMinutes": 1,
+      "ModeType": 0,
+      "Symbol": "AMPL-USDT"
+    },
+    {
+      "Id": 2,
+      "IntervalInMinutes": 2,
+      "ModeType": 0,
+      "Symbol": "BTC-USDT"
+    }
+  ]
+}

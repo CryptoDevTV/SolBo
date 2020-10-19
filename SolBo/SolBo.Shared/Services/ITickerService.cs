@@ -5,6 +5,6 @@ namespace SolBo.Shared.Services
 {
     public interface ITickerService
     {
-        TickerPriceResponse GetPriceValue(AvailableStrategy availableStrategy);
+        TickerPriceResponse GetPriceValue(TradingJobAvailable availableStrategy);
     }
 }

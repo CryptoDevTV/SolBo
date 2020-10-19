@@ -12,7 +12,7 @@ namespace SolBo.Shared.Services.Implementations
         {
             _kucoinClient = kucoinClient;
         }
-        public TickerPriceResponse GetPriceValue(AvailableStrategy availableStrategy)
+        public TickerPriceResponse GetPriceValue(TradingJobAvailable availableStrategy)
         {
             var result = new TickerPriceResponse();
 

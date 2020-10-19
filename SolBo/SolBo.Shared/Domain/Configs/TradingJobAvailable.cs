@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SolBo.Shared.Domain.Configs
 {
-    public class AvailableStrategy
+    public class TradingJobAvailable
     {
         public int Id { get; set; }
         public string Symbol { get; set; }

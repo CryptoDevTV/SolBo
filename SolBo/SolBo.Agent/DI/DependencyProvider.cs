@@ -8,7 +8,7 @@ using Kucoin.Net.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SolBo.Agent.Jobs;
+using SolBo.Agent.Strategies;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Services;
@@ -35,8 +35,9 @@ namespace SolBo.Agent.DI
             });
             #endregion
 
-            #region Jobs
+            #region Strategies
             services.AddTransient<BuyDeepSellHighJob>();
+            services.AddTransient<RollingPriceJob>();
             #endregion
 
             #region Exchanges
