@@ -10,20 +10,7 @@ namespace Solbo.Strategy.Alfa
     {
         public string Name() => "Alfa";
         public Tuple<IJobDetail, TriggerBuilder> StrategyRuntime()
-        {
-            var jobDetail = JobBuilder.Create<StrategyJob>()
-                    .WithIdentity($"{Name()}Job")
-                    .Build();
-
-            jobDetail.JobDataMap["path"] = ConfigPath(Name());
-
-            var jobBuilder = TriggerBuilder.Create()
-                .WithIdentity($"{Name()}Trigger")
-                .StartNow();
-
-            return new Tuple<IJobDetail, TriggerBuilder>(jobDetail, jobBuilder);
-        }
-
+            => CreateStrategy<StrategyJob>(Name());
         public void Configure(IServiceCollection services)
         {
             services.AddSingleton<StrategyJob>();

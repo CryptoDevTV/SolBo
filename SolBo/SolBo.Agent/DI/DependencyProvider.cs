@@ -1,25 +1,13 @@
-﻿using Binance.Net;
-using Binance.Net.Interfaces;
-using Binance.Net.Objects.Spot;
-using CryptoExchange.Net.Authentication;
-using Kucoin.Net;
-using Kucoin.Net.Interfaces;
-using Kucoin.Net.Objects;
-using McMaster.NETCore.Plugins;
+﻿using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using Quartz;
 using SolBo.Shared.Domain.Configs;
-using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Services;
-using SolBo.Shared.Services.Implementations;
 using SolBo.Shared.Strategies;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace SolBo.Agent.DI
 {
@@ -29,6 +17,7 @@ namespace SolBo.Agent.DI
         {
             var services = new ServiceCollection();
 
+            #region Plugins
             foreach (var loader in loaders)
             {
                 foreach (var pluginType in loader
@@ -41,6 +30,7 @@ namespace SolBo.Agent.DI
                     plugin?.Configure(services);
                 }
             }
+            #endregion
 
             #region Logging
             services.AddLogging(builder =>
@@ -76,21 +66,6 @@ namespace SolBo.Agent.DI
             #region Services
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<ILoggingService, LoggingService>();
-
-            //services.AddTransient<IBinanceTickerService, BinanceTickerService>();
-            //services.AddTransient<IKucoinTickerService, KucoinTickerService>();
-            //services.AddTransient<IStorageService, FileStorageService>();
-            //services.AddTransient<IMarketService, MarketService>();
-            //services.AddTransient<IConfigurationService, ConfigurationService>();
-            #endregion
-
-            #region Notifications
-            //services.AddTransient<IPushOverNotificationService>(
-            //    s => new PushOverNotificationService(
-            //        app.Notifications.Pushover.Token,
-            //        app.Notifications.Pushover.Recipients,
-            //        app.Notifications.Pushover.Endpoint,
-            //        app.Notifications.Pushover.IsActive));
             #endregion
 
             var serviceProvider = services.BuildServiceProvider();

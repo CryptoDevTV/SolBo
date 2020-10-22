@@ -79,32 +79,35 @@ namespace SolBo.Agent
 
                         var job = app.Strategies.FirstOrDefault(s => s.Name == plugin?.Name());
 
-                        switch (job.IntervalType)
+                        if(!(job is null))
                         {
-                            case IntervalType.SECONDS:
-                                {
-                                    runtimeJob.Item2.WithSimpleSchedule(x => x
-                                        .WithIntervalInSeconds(job.Interval)
-                                        .RepeatForever());
-                                }
-                                break;
-                            case IntervalType.MINUTES:
-                                {
-                                    runtimeJob.Item2.WithSimpleSchedule(x => x
-                                        .WithIntervalInMinutes(job.Interval)
-                                        .RepeatForever());
-                                }
-                                break;
-                            case IntervalType.HOURS:
-                                {
-                                    runtimeJob.Item2.WithSimpleSchedule(x => x
-                                        .WithIntervalInHours(job.Interval)
-                                        .RepeatForever());
-                                }
-                                break;
-                        }
+                            switch (job.IntervalType)
+                            {
+                                case IntervalType.SECONDS:
+                                    {
+                                        runtimeJob.Item2.WithSimpleSchedule(x => x
+                                            .WithIntervalInSeconds(job.Interval)
+                                            .RepeatForever());
+                                    }
+                                    break;
+                                case IntervalType.MINUTES:
+                                    {
+                                        runtimeJob.Item2.WithSimpleSchedule(x => x
+                                            .WithIntervalInMinutes(job.Interval)
+                                            .RepeatForever());
+                                    }
+                                    break;
+                                case IntervalType.HOURS:
+                                    {
+                                        runtimeJob.Item2.WithSimpleSchedule(x => x
+                                            .WithIntervalInHours(job.Interval)
+                                            .RepeatForever());
+                                    }
+                                    break;
+                            }
 
-                        await _scheduler.ScheduleJob(runtimeJob.Item1, runtimeJob.Item2.Build());
+                            await _scheduler.ScheduleJob(runtimeJob.Item1, runtimeJob.Item2.Build());
+                        }
                     }
                 }
 
