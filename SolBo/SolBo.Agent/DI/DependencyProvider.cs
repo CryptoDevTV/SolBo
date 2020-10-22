@@ -23,9 +23,9 @@ namespace SolBo.Agent.DI
                 foreach (var pluginType in loader
                     .LoadDefaultAssembly()
                     .GetTypes()
-                    .Where(t => typeof(IStrategy).IsAssignableFrom(t) && !t.IsAbstract))
+                    .Where(t => typeof(IStrategyPlugin).IsAssignableFrom(t) && !t.IsAbstract))
                 {
-                    var plugin = Activator.CreateInstance(pluginType) as IStrategy;
+                    var plugin = Activator.CreateInstance(pluginType) as IStrategyPlugin;
 
                     plugin?.Configure(services);
                 }

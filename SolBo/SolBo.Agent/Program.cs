@@ -71,42 +71,47 @@ namespace SolBo.Agent
                     foreach (var pluginType in loader
                         .LoadDefaultAssembly()
                         .GetTypes()
-                        .Where(t => typeof(IStrategy).IsAssignableFrom(t) && !t.IsAbstract))
+                        .Where(t => typeof(IStrategyPlugin).IsAssignableFrom(t) && !t.IsAbstract))
                     {
-                        var plugin = Activator.CreateInstance(pluginType) as IStrategy;
+                        var strategy = Activator.CreateInstance(pluginType) as IStrategyPlugin;
 
-                        var runtimeJob = plugin?.StrategyRuntime();
+                        var strategyDefined = app.Strategies.FirstOrDefault(s => s.Name == strategy?.Name());
 
-                        var job = app.Strategies.FirstOrDefault(s => s.Name == plugin?.Name());
-
-                        if(!(job is null))
+                        if(!(strategyDefined is null))
                         {
-                            switch (job.IntervalType)
-                            {
-                                case IntervalType.SECONDS:
-                                    {
-                                        runtimeJob.Item2.WithSimpleSchedule(x => x
-                                            .WithIntervalInSeconds(job.Interval)
-                                            .RepeatForever());
-                                    }
-                                    break;
-                                case IntervalType.MINUTES:
-                                    {
-                                        runtimeJob.Item2.WithSimpleSchedule(x => x
-                                            .WithIntervalInMinutes(job.Interval)
-                                            .RepeatForever());
-                                    }
-                                    break;
-                                case IntervalType.HOURS:
-                                    {
-                                        runtimeJob.Item2.WithSimpleSchedule(x => x
-                                            .WithIntervalInHours(job.Interval)
-                                            .RepeatForever());
-                                    }
-                                    break;
-                            }
+                            var runtimeJobs = strategy?.StrategyRuntime(strategyDefined.Pairs);
 
-                            await _scheduler.ScheduleJob(runtimeJob.Item1, runtimeJob.Item2.Build());
+                            foreach (var runtime in runtimeJobs)
+                            {
+                                var job = strategyDefined.Pairs.FirstOrDefault(j => j.Symbol == runtime.Item3);
+
+                                switch (job.IntervalType)
+                                {
+                                    case IntervalType.SECONDS:
+                                        {
+                                            runtime.Item2.WithSimpleSchedule(x => x
+                                                .WithIntervalInSeconds(job.Interval)
+                                                .RepeatForever());
+                                        }
+                                        break;
+                                    case IntervalType.MINUTES:
+                                        {
+                                            runtime.Item2.WithSimpleSchedule(x => x
+                                                .WithIntervalInMinutes(job.Interval)
+                                                .RepeatForever());
+                                        }
+                                        break;
+                                    case IntervalType.HOURS:
+                                        {
+                                            runtime.Item2.WithSimpleSchedule(x => x
+                                                .WithIntervalInHours(job.Interval)
+                                                .RepeatForever());
+                                        }
+                                        break;
+                                }
+
+                                await _scheduler.ScheduleJob(runtime.Item1, runtime.Item2.Build());
+                            }
                         }
                     }
                 }
@@ -147,7 +152,7 @@ namespace SolBo.Agent
                 {
                     var loader = PluginLoader.CreateFromAssemblyFile(
                         pluginDll,
-                        sharedTypes: new[] { typeof(IStrategy), typeof(IServiceCollection) });
+                        sharedTypes: new[] { typeof(IStrategyPlugin), typeof(IServiceCollection) });
                     loaders.Add(loader);
                 }
             }

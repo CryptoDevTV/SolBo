@@ -1,4 +1,8 @@
 ﻿{
-  "pair": "ETHUSDT",
-  "text": "beta"
+  "pairs": [
+    {
+      "symbol": "ADABTC",
+      "text": "beta_up"
+    }
+  ]
 }

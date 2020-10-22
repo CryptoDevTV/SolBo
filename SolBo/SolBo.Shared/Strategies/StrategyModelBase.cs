@@ -2,6 +2,6 @@
 {
     public abstract class StrategyModelBase
     {
-        public string Pair { get; set; }
+        public string Symbol { get; set; }
     }
 }

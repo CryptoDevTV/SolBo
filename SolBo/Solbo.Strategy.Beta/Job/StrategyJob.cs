@@ -1,6 +1,7 @@
 ﻿using Quartz;
 using Solbo.Strategy.Beta.Models;
 using SolBo.Shared.Services;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Solbo.Strategy.Beta.Job
@@ -19,9 +20,13 @@ namespace Solbo.Strategy.Beta.Job
         public async Task Execute(IJobExecutionContext context)
         {
             var path = context.JobDetail.JobDataMap["path"] as string;
-            var jobArgs = await _fileService.GetAsync<StrategyModel>(path);
+            var jobArgs = await _fileService.GetAsync<StrategyRootModel>(path);
 
-            _loggingService.Info($"{jobArgs.Text}");
+            var symbol = context.JobDetail.JobDataMap["symbol"] as string;
+
+            var jobPerSymbol = jobArgs.Pairs.FirstOrDefault(j => j.Symbol == symbol);
+
+            _loggingService.Info($"{jobPerSymbol.Text} - {jobPerSymbol.Symbol}");
         }
     }
 }

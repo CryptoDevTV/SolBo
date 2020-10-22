@@ -2,7 +2,7 @@
 
 namespace Solbo.Strategy.Alfa.Models
 {
-    internal class StrategyModel : StrategyModelBase
+    public class StrategyModel : StrategyModelBase
     {
         public string Header { get; set; }
     }

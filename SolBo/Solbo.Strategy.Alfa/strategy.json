@@ -1,4 +1,12 @@
 ﻿{
-  "pair": "BTCUSDC",
-  "header": "alfa"
+  "pairs": [
+    {
+      "symbol": "BTCUSDC",
+      "header": "alfa_up"
+    },
+    {
+      "symbol": "ETHUSDC",
+      "header": "alfa_down"
+    }
+  ]
 }

@@ -1,11 +1,10 @@
-﻿using SolBo.Shared.Domain.Enums;
+﻿using System.Collections.Generic;
 
 namespace SolBo.Shared.Domain.Configs
 {
     public class Strategy
     {
-        public int Interval { get; set; }
-        public IntervalType IntervalType { get; set; }
         public string Name { get; set; }
+        public IEnumerable<Pair> Pairs { get; set; }
     }
 }

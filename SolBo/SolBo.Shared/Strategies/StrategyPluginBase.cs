@@ -9,19 +9,20 @@ namespace SolBo.Shared.Strategies
         protected string ConfigPath(string pluginName)
             => Path.Combine(AppContext.BaseDirectory, "strategies", pluginName, "strategy.json");
 
-        protected Tuple<IJobDetail, TriggerBuilder> CreateStrategy<T>(string name) where T : IJob
+        protected Tuple<IJobDetail, TriggerBuilder, string> CreateStrategy<T>(string name, string symbol) where T : IJob
         {
             var jobDetail = JobBuilder.Create<T>()
-                    .WithIdentity($"{name}Job")
+                    .WithIdentity($"{name}_{symbol}_Job")
                     .Build();
 
             jobDetail.JobDataMap["path"] = ConfigPath(name);
+            jobDetail.JobDataMap["symbol"] = symbol;
 
             var jobBuilder = TriggerBuilder.Create()
-                .WithIdentity($"{name}Trigger")
+                .WithIdentity($"{name}_{symbol}_Trigger")
                 .StartNow();
 
-            return new Tuple<IJobDetail, TriggerBuilder>(jobDetail, jobBuilder);
+            return new Tuple<IJobDetail, TriggerBuilder, string>(jobDetail, jobBuilder, symbol);
         }
     }
 }
