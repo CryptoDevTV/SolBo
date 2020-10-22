@@ -5,7 +5,19 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolBo.Agent", "SolBo.Agent\SolBo.Agent.csproj", "{B6FF67CF-5BCF-4013-B300-FD2F15B4C2FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolBo.Shared", "SolBo.Shared\SolBo.Shared.csproj", "{7C3AEF23-C071-46CA-BEEF-F1B4F87716B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolBo.Shared", "SolBo.Shared\SolBo.Shared.csproj", "{7C3AEF23-C071-46CA-BEEF-F1B4F87716B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{47712424-4143-4946-9F0D-1B79900F5503}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solbo.Notifications.Pushover", "Solbo.Notifications.Pushover\Solbo.Notifications.Pushover.csproj", "{7772F500-6C5B-4D4C-B0A4-95488C049496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solbo.Notifications.Email", "Solbo.Notifications.Email\Solbo.Notifications.Email.csproj", "{5D578067-1E61-439B-ABA5-64ACEEC393F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Strategies", "Strategies", "{4AC41F4A-BCC8-42D6-804D-47C85EA46289}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solbo.Strategy.Alfa", "Solbo.Strategy.Alfa\Solbo.Strategy.Alfa.csproj", "{75F5D23A-013E-4F45-84C2-AFC5A518E63E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solbo.Strategy.Beta", "Solbo.Strategy.Beta\Solbo.Strategy.Beta.csproj", "{6BFEE29C-0D51-4EBA-8B93-7F1AB4211E29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +33,31 @@ Global
 		{7C3AEF23-C071-46CA-BEEF-F1B4F87716B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C3AEF23-C071-46CA-BEEF-F1B4F87716B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C3AEF23-C071-46CA-BEEF-F1B4F87716B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7772F500-6C5B-4D4C-B0A4-95488C049496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7772F500-6C5B-4D4C-B0A4-95488C049496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7772F500-6C5B-4D4C-B0A4-95488C049496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7772F500-6C5B-4D4C-B0A4-95488C049496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D578067-1E61-439B-ABA5-64ACEEC393F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D578067-1E61-439B-ABA5-64ACEEC393F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D578067-1E61-439B-ABA5-64ACEEC393F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D578067-1E61-439B-ABA5-64ACEEC393F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75F5D23A-013E-4F45-84C2-AFC5A518E63E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75F5D23A-013E-4F45-84C2-AFC5A518E63E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75F5D23A-013E-4F45-84C2-AFC5A518E63E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75F5D23A-013E-4F45-84C2-AFC5A518E63E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BFEE29C-0D51-4EBA-8B93-7F1AB4211E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BFEE29C-0D51-4EBA-8B93-7F1AB4211E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BFEE29C-0D51-4EBA-8B93-7F1AB4211E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BFEE29C-0D51-4EBA-8B93-7F1AB4211E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7772F500-6C5B-4D4C-B0A4-95488C049496} = {47712424-4143-4946-9F0D-1B79900F5503}
+		{5D578067-1E61-439B-ABA5-64ACEEC393F0} = {47712424-4143-4946-9F0D-1B79900F5503}
+		{75F5D23A-013E-4F45-84C2-AFC5A518E63E} = {4AC41F4A-BCC8-42D6-804D-47C85EA46289}
+		{6BFEE29C-0D51-4EBA-8B93-7F1AB4211E29} = {4AC41F4A-BCC8-42D6-804D-47C85EA46289}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4E13582-FF69-49A7-8091-99633929D6E9}

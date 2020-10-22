@@ -1,17 +1,20 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using McMaster.NETCore.Plugins;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using Quartz;
 using Quartz.Impl;
 using SolBo.Agent.DI;
 using SolBo.Agent.Factories;
-using SolBo.Agent.Strategies;
 using SolBo.Shared.Domain.Configs;
-using SolBo.Shared.Extensions;
-using SolBo.Shared.Services;
+using SolBo.Shared.Domain.Enums;
+using SolBo.Shared.Strategies;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Permissions;
-using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SolBo.Agent
@@ -25,18 +28,19 @@ namespace SolBo.Agent
 
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
-        private static IFileService _fileService;
-
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static async Task<int> Main()
         {
+            var cancellationTokenSource = new CancellationTokenSource();
+
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
 
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => cancellationTokenSource.Cancel();
+            Console.CancelKeyPress += (s, e) => cancellationTokenSource.Cancel();
+
             LogManager.Configuration.Variables["fileName"] = $"{appId}-{DateTime.UtcNow:ddMMyyyy}.log";
             LogManager.Configuration.Variables["archiveFileName"] = $"{appId}-{DateTime.UtcNow:ddMMyyyy}.log";
-
-            _fileService = new FileService();
 
             var cfgBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
@@ -48,7 +52,9 @@ namespace SolBo.Agent
 
             try
             {
-                var servicesProvider = DependencyProvider.Get(app);
+                var loaders = GetPluginLoaders();
+
+                var servicesProvider = DependencyProvider.Get(app, loaders);
 
                 var jobFactory = new JobFactory(servicesProvider);
 
@@ -60,83 +66,53 @@ namespace SolBo.Agent
 
                 await _scheduler.Start();
 
-                #region Strategies
-                if(app.Strategies.AnyAndNotNull())
+                foreach (var loader in loaders)
                 {
-                    foreach (var strategy in app.Strategies)
+                    foreach (var pluginType in loader
+                        .LoadDefaultAssembly()
+                        .GetTypes()
+                        .Where(t => typeof(IStrategy).IsAssignableFrom(t) && !t.IsAbstract))
                     {
-                        if (string.Equals(strategy.Name, "BuyDeepSellHigh"))
+                        var plugin = Activator.CreateInstance(pluginType) as IStrategy;
+
+                        var runtimeJob = plugin?.StrategyRuntime();
+
+                        var job = app.Strategies.FirstOrDefault(s => s.Name == plugin?.Name());
+
+                        switch (job.IntervalType)
                         {
-                            var filePath = $"_{strategy.Name}.json";
-                            var strategyDefinition = await _fileService.GetAsync<BuyDeepSellHighStrategy>(filePath);
-
-                            if (strategyDefinition.Jobs.AnyAndNotNull())
-                            {
-                                foreach (var job in strategyDefinition.Jobs)
+                            case IntervalType.SECONDS:
                                 {
-                                    if(job.IsActive)
-                                    {
-                                        var jobId = $"{strategy.Name}_{job.Id}";
-
-                                        var jobDetail = JobBuilder.Create<BuyDeepSellHighJob>()
-                                            .WithIdentity(jobId, strategy.Name)
-                                            .Build();
-
-                                        jobDetail.JobDataMap["args"] = JsonSerializer.Serialize(job);
-
-                                        var jobBuilder = TriggerBuilder.Create()
-                                             .WithIdentity($"{jobId}_t", strategy.Name)
-                                             .WithSimpleSchedule(x => x
-                                                .WithIntervalInMinutes(job.IntervalInMinutes)
-                                                .RepeatForever())
-                                             .StartNow();
-
-
-                                        await _scheduler.ScheduleJob(jobDetail, jobBuilder.Build());
-                                    }
+                                    runtimeJob.Item2.WithSimpleSchedule(x => x
+                                        .WithIntervalInSeconds(job.Interval)
+                                        .RepeatForever());
                                 }
-                            }
-                        }
-                        if (string.Equals(strategy.Name, "RollingPrice"))
-                        {
-                            var filePath = $"_{strategy.Name}.json";
-                            var strategyDefinition = await _fileService.GetAsync<RollingPriceStrategy>(filePath);
-
-                            if (strategyDefinition.Jobs.AnyAndNotNull())
-                            {
-                                foreach (var job in strategyDefinition.Jobs)
+                                break;
+                            case IntervalType.MINUTES:
                                 {
-                                    if(job.IsActive)
-                                    {
-                                        var jobId = $"{strategy.Name}_{job.Id}";
-
-                                        var jobDetail = JobBuilder.Create<RollingPriceJob>()
-                                            .WithIdentity(jobId, strategy.Name)
-                                            .Build();
-
-                                        jobDetail.JobDataMap["args"] = JsonSerializer.Serialize(job);
-
-                                        var jobBuilder = TriggerBuilder.Create()
-                                            .WithIdentity($"{jobId}_t", strategy.Name)
-                                            .WithSimpleSchedule(x => x
-                                                .WithIntervalInMinutes(job.IntervalInMinutes)
-                                                .RepeatForever())
-                                            .StartNow();
-
-                                        await _scheduler.ScheduleJob(jobDetail, jobBuilder.Build());
-                                    }
+                                    runtimeJob.Item2.WithSimpleSchedule(x => x
+                                        .WithIntervalInMinutes(job.Interval)
+                                        .RepeatForever());
                                 }
-                            }
+                                break;
+                            case IntervalType.HOURS:
+                                {
+                                    runtimeJob.Item2.WithSimpleSchedule(x => x
+                                        .WithIntervalInHours(job.Interval)
+                                        .RepeatForever());
+                                }
+                                break;
                         }
+
+                        await _scheduler.ScheduleJob(runtimeJob.Item1, runtimeJob.Item2.Build());
                     }
                 }
-                #endregion
 
                 Logger.Info($"Version: {app.Version}");
 
                 await Task.Delay(TimeSpan.FromSeconds(30));
 
-                Console.Read();
+                await Task.Delay(-1, cancellationTokenSource.Token).ContinueWith(t => { });
             }
             catch (SchedulerException ex)
             {
@@ -148,11 +124,32 @@ namespace SolBo.Agent
             return 0;
         }
 
-        static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
+        private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
             Logger.Fatal($"{e.Message}");
             Logger.Fatal($"{args.IsTerminating}");
+        }
+
+        private static List<PluginLoader> GetPluginLoaders()
+        {
+            var loaders = new List<PluginLoader>();
+
+            var pluginsDir = Path.Combine(AppContext.BaseDirectory, "strategies");
+            foreach (var dir in Directory.GetDirectories(pluginsDir))
+            {
+                var dirName = Path.GetFileName(dir);
+                var pluginDll = Path.Combine(dir, $"Solbo.Strategy.{dirName}.dll");
+                if (File.Exists(pluginDll))
+                {
+                    var loader = PluginLoader.CreateFromAssemblyFile(
+                        pluginDll,
+                        sharedTypes: new[] { typeof(IStrategy), typeof(IServiceCollection) });
+                    loaders.Add(loader);
+                }
+            }
+
+            return loaders;
         }
     }
 }

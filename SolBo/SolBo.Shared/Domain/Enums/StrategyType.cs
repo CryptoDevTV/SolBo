@@ -2,12 +2,12 @@
 
 namespace SolBo.Shared.Domain.Enums
 {
-    public enum StrategiesType
+    public enum StrategyType
     {
-        [Description("BUY DEEP SELL HIGH")]
+        [Description("BuyDeepSellHigh")]
         BUY_DEEP_SELL_HIGH = 0,
 
-        [Description("ROLLING PRICE")]
+        [Description("RollingPrice")]
         ROLLING_PRICE = 1
     }
 }

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Quartz" Version="3.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SolBo.Shared\SolBo.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="strategy.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\SolBo.Agent\bin\Debug\netcoreapp3.1\strategies\Beta&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)\strategy.json&quot; &quot;$(SolutionDir)\SolBo.Agent\bin\Debug\netcoreapp3.1\strategies\Beta&quot;" />
+  </Target>
+
+</Project>

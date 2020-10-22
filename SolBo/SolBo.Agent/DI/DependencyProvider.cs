@@ -5,23 +5,42 @@ using CryptoExchange.Net.Authentication;
 using Kucoin.Net;
 using Kucoin.Net.Interfaces;
 using Kucoin.Net.Objects;
+using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SolBo.Agent.Strategies;
+using Quartz;
 using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Services;
 using SolBo.Shared.Services.Implementations;
+using SolBo.Shared.Strategies;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace SolBo.Agent.DI
 {
     public class DependencyProvider
     {
-        public static IServiceProvider Get(App app)
+        public static IServiceProvider Get(App app, List<PluginLoader> loaders)
         {
             var services = new ServiceCollection();
+
+            foreach (var loader in loaders)
+            {
+                foreach (var pluginType in loader
+                    .LoadDefaultAssembly()
+                    .GetTypes()
+                    .Where(t => typeof(IStrategy).IsAssignableFrom(t) && !t.IsAbstract))
+                {
+                    var plugin = Activator.CreateInstance(pluginType) as IStrategy;
+
+                    plugin?.Configure(services);
+                }
+            }
 
             #region Logging
             services.AddLogging(builder =>
@@ -35,45 +54,43 @@ namespace SolBo.Agent.DI
             });
             #endregion
 
-            #region Strategies
-            services.AddTransient<BuyDeepSellHighJob>();
-            services.AddTransient<RollingPriceJob>();
-            #endregion
-
             #region Exchanges
-            services.AddTransient<IBinanceClient, BinanceClient>();
-            if (app.Exchange.Type == ExchangeType.Binance && !app.Exchange.IsInTestMode)
-            {
-                services.AddTransient<IBinanceClient>(s => new BinanceClient(new BinanceClientOptions
-                {
-                    ApiCredentials = new ApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret)
-                }));
-            }
-            services.AddTransient<IKucoinClient, KucoinClient>();
-            if (app.Exchange.Type == ExchangeType.KuCoin && !app.Exchange.IsInTestMode)
-            {
-                services.AddTransient<IKucoinClient>(s => new KucoinClient(new KucoinClientOptions
-                {
-                    ApiCredentials = new KucoinApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret, app.Exchange.PassPhrase)
-                }));
-            }
+            //services.AddTransient<IBinanceClient, BinanceClient>();
+            //if (app.Exchange.Type == ExchangeType.Binance && !app.Exchange.IsInTestMode)
+            //{
+            //    services.AddTransient<IBinanceClient>(s => new BinanceClient(new BinanceClientOptions
+            //    {
+            //        ApiCredentials = new ApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret)
+            //    }));
+            //}
+            //services.AddTransient<IKucoinClient, KucoinClient>();
+            //if (app.Exchange.Type == ExchangeType.KuCoin && !app.Exchange.IsInTestMode)
+            //{
+            //    services.AddTransient<IKucoinClient>(s => new KucoinClient(new KucoinClientOptions
+            //    {
+            //        ApiCredentials = new KucoinApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret, app.Exchange.PassPhrase)
+            //    }));
+            //}
             #endregion
 
             #region Services
-            services.AddTransient<IBinanceTickerService, BinanceTickerService>();
-            services.AddTransient<IKucoinTickerService, KucoinTickerService>();
-            services.AddTransient<IStorageService, FileStorageService>();
-            services.AddTransient<IMarketService, MarketService>();
-            services.AddTransient<IConfigurationService, ConfigurationService>();
+            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ILoggingService, LoggingService>();
+
+            //services.AddTransient<IBinanceTickerService, BinanceTickerService>();
+            //services.AddTransient<IKucoinTickerService, KucoinTickerService>();
+            //services.AddTransient<IStorageService, FileStorageService>();
+            //services.AddTransient<IMarketService, MarketService>();
+            //services.AddTransient<IConfigurationService, ConfigurationService>();
             #endregion
 
             #region Notifications
-            services.AddTransient<IPushOverNotificationService>(
-                s => new PushOverNotificationService(
-                    app.Notifications.Pushover.Token,
-                    app.Notifications.Pushover.Recipients,
-                    app.Notifications.Pushover.Endpoint,
-                    app.Notifications.Pushover.IsActive));
+            //services.AddTransient<IPushOverNotificationService>(
+            //    s => new PushOverNotificationService(
+            //        app.Notifications.Pushover.Token,
+            //        app.Notifications.Pushover.Recipients,
+            //        app.Notifications.Pushover.Endpoint,
+            //        app.Notifications.Pushover.IsActive));
             #endregion
 
             var serviceProvider = services.BuildServiceProvider();

@@ -22,11 +22,11 @@ namespace SolBo.Agent.Strategies
     [DisallowConcurrentExecution]
     public class BuyDeepSellHighJob : IJob
     {
-        public StrategiesType StrategiesType => StrategiesType.BUY_DEEP_SELL_HIGH;
+        public StrategyType StrategiesType => StrategyType.BUY_DEEP_SELL_HIGH;
         private static readonly Logger Logger = LogManager.GetLogger("SOLBO");
 
-        //private readonly IBinanceClient _binanceClient;
-        //private readonly IKucoinClient _kucoinClient;
+        private readonly IBinanceClient _binanceClient;
+        private readonly IKucoinClient _kucoinClient;
 
         //private readonly IStorageService _storageService;
         //private readonly IMarketService _marketService;
@@ -35,7 +35,15 @@ namespace SolBo.Agent.Strategies
         //private readonly IBinanceTickerService _binanceTickerService;
         //private readonly IKucoinTickerService _kucoinTickerService;
 
-        //private readonly ICollection<IRule> _rules = new HashSet<IRule>();
+        private readonly ICollection<IRule> _rules = new HashSet<IRule>();
+
+        public BuyDeepSellHighJob(
+            IBinanceClient binanceClient,
+            IKucoinClient kucoinClient)
+        {
+            _binanceClient = binanceClient;
+            _kucoinClient = kucoinClient;
+        }
 
         //public BuyDeepSellHighJob(
         //    IBinanceClient binanceClient,
@@ -59,22 +67,14 @@ namespace SolBo.Agent.Strategies
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var botArgs = context.JobDetail.JobDataMap["args"] as string;
-            var job = JsonSerializer.Deserialize<BuyDeepSellHigh>(botArgs);
+            var jobArgs = context.JobDetail.JobDataMap["args"] as string;
+            var job = JsonSerializer.Deserialize<BuyDeepSellHigh>(jobArgs);
+
+            var botArgs = context.JobDetail.JobDataMap["exchange"] as string;
+            var exchange = JsonSerializer.Deserialize<Exchange>(botArgs);
             try
             {
-                Logger.Info($"BDSH - {job.Id} - {job.Symbol} - {job.SellType.GetDescription()}");
-                //var configFileName = context.JobDetail.JobDataMap["FileName"] as string;
-
-                //var selectedExchange = new Exchange
-                //{
-                //    ApiKey = context.JobDetail.JobDataMap["ApiKey"] as string,
-                //    ApiSecret = context.JobDetail.JobDataMap["ApiSecret"] as string,
-                //    PassPhrase = context.JobDetail.JobDataMap["PassPhrase"] as string,
-                //    Type = context.JobDetail.JobDataMap["ExchangeType"] as ExchangeType?,
-                //};
-
-                //var readConfig = await _schedulerService.GetConfigAsync(configFileName);
+                Logger.Info($"BDSH - {job.Id} - {job.Symbol} - {job.SellType.GetDescription()} on {exchange.Type.GetDescription()}");
 
                 //if (readConfig.ReadSucces)
                 //{
