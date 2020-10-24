@@ -1,4 +1,13 @@
 ﻿{
+  "exchange": {
+    "activeexchangetype": 1,
+    "kucoin": {
+      "exchangetype": 1,
+      "apikey": "kucoin_apikey_here",
+      "apisecret": "kucoin_apisecret_here",
+      "passphrase": "kucoin_passphrase_here"
+    }
+  },
   "pairs": [
     {
       "symbol": "ADABTC",

@@ -7,6 +7,5 @@ namespace SolBo.Shared.Domain.Configs
         public string Version { get; set; }
         public IEnumerable<Strategy> Strategies { get; set; }
         public Notifications Notifications { get; set; }
-        public Exchange Exchange { get; set; }
     }
 }

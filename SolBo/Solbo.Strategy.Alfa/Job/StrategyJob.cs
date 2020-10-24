@@ -1,5 +1,6 @@
 ﻿using Quartz;
 using Solbo.Strategy.Alfa.Models;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Services;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,11 @@ namespace Solbo.Strategy.Alfa.Job
 
             var jobPerSymbol = jobArgs.Pairs.FirstOrDefault(j => j.Symbol == symbol);
 
-            _loggingService.Info($"{jobPerSymbol.Header} - {jobPerSymbol.Symbol}");
+            _loggingService.Info($"" +
+                $"{jobPerSymbol.Header} - " +
+                $"{jobPerSymbol.Symbol} - " +
+                $"{jobArgs.Exchange.ActiveExchangeType.GetDescription()} - " +
+                $"{jobArgs.Exchange.Binance.ToString()}");
         }
     }
 }

@@ -1,4 +1,12 @@
 ﻿{
+  "exchange": {
+    "activeexchangetype": 0,
+    "binance": {
+      "exchangetype": 0,
+      "apikey": "binance_apikey_here",
+      "apisecret": "binance_apisecret_here"
+    }
+  },
   "pairs": [
     {
       "symbol": "BTCUSDC",
