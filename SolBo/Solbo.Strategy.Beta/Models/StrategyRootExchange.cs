@@ -1,6 +1,6 @@
 ﻿using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Strategies;
-using SolBo.Shared.Strategies.Exchanges;
+using SolBo.Shared.Strategies.Predefined.Exchanges;
 
 namespace Solbo.Strategy.Beta.Models
 {

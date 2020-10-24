@@ -16,6 +16,7 @@ namespace SolBo.Shared.Strategies
                     .Build();
 
             jobDetail.JobDataMap["path"] = ConfigPath(name);
+            jobDetail.JobDataMap["name"] = name;
             jobDetail.JobDataMap["symbol"] = symbol;
 
             var jobBuilder = TriggerBuilder.Create()

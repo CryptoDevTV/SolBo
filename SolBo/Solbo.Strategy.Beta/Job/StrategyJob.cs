@@ -1,16 +1,23 @@
 ﻿using Quartz;
 using Solbo.Strategy.Beta.Models;
-using SolBo.Shared.Extensions;
+using Solbo.Strategy.Beta.Rules;
+using Solbo.Strategy.Beta.Verificators;
 using SolBo.Shared.Services;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Solbo.Strategy.Beta.Job
 {
+    [DisallowConcurrentExecution]
     public class StrategyJob : IJob
     {
         private readonly IFileService _fileService;
         private readonly ILoggingService _loggingService;
+
+        private string _name;
+        private readonly ICollection<IBetaRules> _rules = new HashSet<IBetaRules>();
+
         public StrategyJob(
             IFileService fileService,
             ILoggingService loggingService)
@@ -20,18 +27,31 @@ namespace Solbo.Strategy.Beta.Job
         }
         public async Task Execute(IJobExecutionContext context)
         {
-            var path = context.JobDetail.JobDataMap["path"] as string;
-            var jobArgs = await _fileService.GetAsync<StrategyRootModel>(path);
+            try
+            {
+                _name = context.JobDetail.JobDataMap["name"] as string;
+                var path = context.JobDetail.JobDataMap["path"] as string;
+                var jobArgs = await _fileService.GetAsync<StrategyRootModel>(path);
 
-            var symbol = context.JobDetail.JobDataMap["symbol"] as string;
+                _rules.Add(new StrategyRootExchangeVerificator());
+                _rules.Add(new StrategyExchangeKucoinVerificator());
 
-            var jobPerSymbol = jobArgs.Pairs.FirstOrDefault(j => j.Symbol == symbol);
+                foreach (var item in _rules)
+                {
+                    var result = item.Result(jobArgs);
 
-            _loggingService.Info($"" +
-                $"{jobPerSymbol.Text} - " +
-                $"{jobPerSymbol.Symbol} - " +
-                $"{jobArgs.Exchange.ActiveExchangeType.GetDescription()} - " +
-                $"{jobArgs.Exchange.Kucoin}");
+                    if (!result.Success)
+                    {
+                        _loggingService.Error($"{_name} - {result.Message}"); break;
+                    }
+                }
+                _loggingService.Info($"{_name} - END JOB | RULES - {_rules.Count}");
+                _rules.Clear();
+            }
+            catch (JobExecutionException e)
+            {
+                _loggingService.Error($"{_name} => Message => {e.Message}{Environment.NewLine} StackTrace => {e.StackTrace}");
+            }
         }
     }
 }

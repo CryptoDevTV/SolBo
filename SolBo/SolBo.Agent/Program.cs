@@ -132,6 +132,8 @@ namespace SolBo.Agent
                 Logger.Fatal($"{ex.Message}");
             }
 
+            await _scheduler.Shutdown();
+
             LogManager.Shutdown();
 
             return 0;

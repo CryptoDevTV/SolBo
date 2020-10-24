@@ -1,6 +1,6 @@
 ﻿using SolBo.Shared.Domain.Enums;
 
-namespace SolBo.Shared.Strategies.Exchanges
+namespace SolBo.Shared.Strategies.Predefined.Exchanges
 {
     public class StrategyExchangeKucoin
     {
