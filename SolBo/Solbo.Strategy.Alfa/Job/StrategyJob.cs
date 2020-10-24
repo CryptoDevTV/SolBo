@@ -31,7 +31,7 @@ namespace Solbo.Strategy.Alfa.Job
                 $"{jobPerSymbol.Header} - " +
                 $"{jobPerSymbol.Symbol} - " +
                 $"{jobArgs.Exchange.ActiveExchangeType.GetDescription()} - " +
-                $"{jobArgs.Exchange.Binance.ToString()}");
+                $"{jobArgs.Exchange.Binance}");
         }
     }
 }

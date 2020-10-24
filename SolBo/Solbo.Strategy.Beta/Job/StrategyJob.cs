@@ -31,7 +31,7 @@ namespace Solbo.Strategy.Beta.Job
                 $"{jobPerSymbol.Text} - " +
                 $"{jobPerSymbol.Symbol} - " +
                 $"{jobArgs.Exchange.ActiveExchangeType.GetDescription()} - " +
-                $"{jobArgs.Exchange.Kucoin.ToString()}");
+                $"{jobArgs.Exchange.Kucoin}");
         }
     }
 }
