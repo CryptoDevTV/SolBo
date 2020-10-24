@@ -4,13 +4,16 @@ namespace SolBo.Shared.Domain.Enums
 {
     public enum IntervalType
     {
+        [Description("ONETIME")]
+        ONETIME = 0,
+
         [Description("SECONDS")]
-        SECONDS = 0,
+        SECONDS = 1,
 
         [Description("MINUTES")]
-        MINUTES = 1,
+        MINUTES = 2,
 
         [Description("HOURS")]
-        HOURS = 2,
+        HOURS = 3,
     }
 }

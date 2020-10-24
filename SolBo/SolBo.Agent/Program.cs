@@ -87,6 +87,11 @@ namespace SolBo.Agent
 
                                 switch (job.IntervalType)
                                 {
+                                    case IntervalType.ONETIME:
+                                        {
+                                            runtime.Item2.StartNow();
+                                        }
+                                        break;
                                     case IntervalType.SECONDS:
                                         {
                                             runtime.Item2.WithSimpleSchedule(x => x
