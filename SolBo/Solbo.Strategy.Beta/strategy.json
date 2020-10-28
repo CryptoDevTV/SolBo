@@ -12,6 +12,14 @@
     {
       "symbol": "ADABTC",
       "text": "beta_up"
+    },
+    {
+      "symbol": "ALGOBTC",
+      "text": "beta_down"
+    },
+    {
+      "symbol": "TESTBTC",
+      "text": "tst"
     }
   ]
 }

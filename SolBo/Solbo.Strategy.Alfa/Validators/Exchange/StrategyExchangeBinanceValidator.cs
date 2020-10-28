@@ -2,7 +2,7 @@
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Strategies.Predefined.Exchanges;
 
-namespace Solbo.Strategy.Alfa.Validators
+namespace Solbo.Strategy.Alfa.Validators.Exchange
 {
     public class StrategyExchangeBinanceValidator : AbstractValidator<StrategyExchangeBinance>
     {

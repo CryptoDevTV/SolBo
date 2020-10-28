@@ -10,7 +10,7 @@ namespace Solbo.Strategy.Alfa
 {
     internal class StrategyPlugin : StrategyPluginBase, IStrategyPlugin
     {
-        public string Name() => "Alfa";
+        public string Name() => $"Alfa";
         public IEnumerable<Tuple<IJobDetail, TriggerBuilder, string>> StrategyRuntime(IEnumerable<Pair> pairs)
         {
             var result = new List<Tuple<IJobDetail, TriggerBuilder, string>>();

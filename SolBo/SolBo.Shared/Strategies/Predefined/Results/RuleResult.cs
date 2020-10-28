@@ -1,16 +1,13 @@
-﻿using FluentValidation.Results;
-
-namespace SolBo.Shared.Strategies.Predefined.Results
+﻿namespace SolBo.Shared.Strategies.Predefined.Results
 {
     public class RuleResult : IRuleResult
     {
         public RuleResult() { }
-        public RuleResult(ValidationResult validationResult)
+        public RuleResult(string message)
         {
-            Success = validationResult.IsValid;
-            Message = validationResult.ToString();
+            Message = message;
         }
-        public string Message { get; set; }
-        public bool Success { get; set; }
+        public string Message { get; private set; }
+        public bool Success => string.IsNullOrWhiteSpace(Message);
     }
 }

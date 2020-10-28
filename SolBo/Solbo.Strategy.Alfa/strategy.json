@@ -10,11 +10,29 @@
   "pairs": [
     {
       "symbol": "BTCUSDC",
-      "header": "alfa_up"
+      "buydown": 4.2,
+      "sellup": 6.1,
+      "average": 3,
+      "stoplossdown": 12,
+      "fundpercentage": 90,
+      "clearonstartup": false,
+      "stopLosspausecycles": 3,
+      "averagetype": 1,
+      "selltype": 1,
+      "commissiontype": 1
     },
     {
       "symbol": "ETHUSDC",
-      "header": "alfa_down"
+      "buydown": 4.2,
+      "sellup": 6.1,
+      "average": 3,
+      "stoplossdown": 12,
+      "fundpercentage": 90,
+      "clearonstartup": false,
+      "stopLosspausecycles": 3,
+      "averagetype": 1,
+      "selltype": 1,
+      "commissiontype": 1
     }
   ]
 }

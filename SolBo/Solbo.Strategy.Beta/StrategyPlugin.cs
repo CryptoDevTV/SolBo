@@ -10,7 +10,7 @@ namespace Solbo.Strategy.Beta
 {
     internal class StrategyPlugin : StrategyPluginBase, IStrategyPlugin
     {
-        public string Name() => "Beta";
+        public string Name() => $"Beta";
         public IEnumerable<Tuple<IJobDetail, TriggerBuilder, string>> StrategyRuntime(IEnumerable<Pair> pairs)
         {
             var result = new List<Tuple<IJobDetail, TriggerBuilder, string>>();

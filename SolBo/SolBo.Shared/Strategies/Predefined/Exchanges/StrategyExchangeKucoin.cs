@@ -4,7 +4,7 @@ namespace SolBo.Shared.Strategies.Predefined.Exchanges
 {
     public class StrategyExchangeKucoin
     {
-        public ExchangeType ExchangeType => ExchangeType.KuCoin;
+        public ExchangeType ExchangeType { get; set; }
         public string ApiKey { get; set; }
         public string ApiSecret { get; set; }
         public string PassPhrase { get; set; }

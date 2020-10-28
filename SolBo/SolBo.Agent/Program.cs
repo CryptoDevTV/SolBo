@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Listener;
 using SolBo.Agent.DI;
 using SolBo.Agent.Factories;
 using SolBo.Shared.Domain.Configs;
@@ -49,6 +50,8 @@ namespace SolBo.Agent
             var configuration = cfgBuilder.Build();
 
             var app = configuration.Get<App>();
+
+            Logger.Info($"Version: {app.Version}");
 
             try
             {
@@ -115,13 +118,12 @@ namespace SolBo.Agent
                                         break;
                                 }
 
+                                await Task.Delay(TimeSpan.FromMilliseconds(500));
                                 await _scheduler.ScheduleJob(runtime.Item1, runtime.Item2.Build());
                             }
                         }
                     }
                 }
-
-                Logger.Info($"Version: {app.Version}");
 
                 await Task.Delay(TimeSpan.FromSeconds(30));
 

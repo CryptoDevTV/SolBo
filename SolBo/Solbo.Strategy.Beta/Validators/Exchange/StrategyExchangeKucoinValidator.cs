@@ -2,7 +2,7 @@
 using SolBo.Shared.Domain.Enums;
 using SolBo.Shared.Strategies.Predefined.Exchanges;
 
-namespace Solbo.Strategy.Beta.Validators
+namespace Solbo.Strategy.Beta.Validators.Exchange
 {
     public class StrategyExchangeKucoinValidator : AbstractValidator<StrategyExchangeKucoin>
     {

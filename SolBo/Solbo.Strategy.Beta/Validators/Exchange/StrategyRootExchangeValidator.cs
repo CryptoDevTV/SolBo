@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Solbo.Strategy.Beta.Models;
 
-namespace Solbo.Strategy.Beta.Validators
+namespace Solbo.Strategy.Beta.Validators.Exchange
 {
     public class StrategyRootExchangeValidator : AbstractValidator<StrategyRootExchange>
     {
