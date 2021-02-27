@@ -55,7 +55,7 @@ namespace SolBo.Shared.Rules.Mode.Production
 
                                 if (order.Data.DealQuantity != 0)
                                 {
-                                    var price = (order.Data.Funds / order.Data.DealQuantity).ToKucoinRound();
+                                    var price = ((order.Data.Funds ?? 0) / order.Data.DealQuantity).ToKucoinRound();
                                     Logger.Info(LogGenerator.TradeResultKucoin(MarketOrder, order.Data, price));
 
                                     solbot.Actions.BoughtPrice = price;
