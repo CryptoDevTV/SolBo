@@ -6,6 +6,7 @@ using SolBo.Shared.Extensions;
 using SolBo.Shared.Strategies.Predefined.Results;
 using System;
 using System.Linq;
+using System.Text.Json;
 
 namespace Solbo.Strategy.Alfa.Trading
 {
@@ -23,7 +24,6 @@ namespace Solbo.Strategy.Alfa.Trading
             try
             {
                 var exchangeInfo = _binanceClient.Spot.System.GetExchangeInfo();
-
                 if (exchangeInfo.Success)
                 {
                     var symbol = exchangeInfo
@@ -33,7 +33,7 @@ namespace Solbo.Strategy.Alfa.Trading
 
                     if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
                     {
-                        //symbol.BaseAsset
+                        strategyModel.Communication.SymbolParsed = JsonSerializer.Serialize(symbol);
                     }
                     else
                     {

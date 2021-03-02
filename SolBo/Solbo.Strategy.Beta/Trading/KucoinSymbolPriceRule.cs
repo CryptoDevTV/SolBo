@@ -21,10 +21,9 @@ namespace Solbo.Strategy.Beta.Trading
             try
             {
                 var priceResponse = _kucoinClient.GetTicker(strategyModel.Symbol);
-
                 if (priceResponse.Success)
                 {
-                    //priceResponse.Data.LastTradePrice.GetValueOrDefault()
+                    strategyModel.Communication.CurrentPrice = priceResponse.Data.LastTradePrice.GetValueOrDefault();
                 }
                 else
                 {

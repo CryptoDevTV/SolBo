@@ -6,6 +6,10 @@ namespace Solbo.Strategy.Alfa.Models
 {
     public class StrategyModel : StrategyModelBase
     {
+        public StrategyModel()
+        {
+            Communication = new StrategyCommunicationModel();
+        }
         public decimal BuyDown { get; set; }
         public decimal SellUp { get; set; }
         public int Average { get; set; }
@@ -20,5 +24,7 @@ namespace Solbo.Strategy.Alfa.Models
         [JsonIgnore]
         public bool IsStopLossOn
             => StopLossDown > 0;
+        [JsonIgnore]
+        public StrategyCommunicationModel Communication { get; set; }
     }
 }

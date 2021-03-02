@@ -5,6 +5,7 @@ using SolBo.Shared.Extensions;
 using SolBo.Shared.Strategies.Predefined.Results;
 using System;
 using System.Linq;
+using System.Text.Json;
 
 namespace Solbo.Strategy.Beta.Trading
 {
@@ -22,7 +23,6 @@ namespace Solbo.Strategy.Beta.Trading
             try
             {
                 var exchangeInfo = _kucoinClient.GetSymbols();
-
                 if (exchangeInfo.Success)
                 {
                     var symbol = exchangeInfo
@@ -31,7 +31,7 @@ namespace Solbo.Strategy.Beta.Trading
 
                     if (!(symbol is null) && symbol.EnableTrading)
                     {
-                        //symbol.BaseCurrency
+                        strategyModel.Communication.SymbolParsed = JsonSerializer.Serialize(symbol);
                     }
                     else
                     {

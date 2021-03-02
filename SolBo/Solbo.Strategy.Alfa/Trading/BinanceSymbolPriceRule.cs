@@ -15,7 +15,6 @@ namespace Solbo.Strategy.Alfa.Trading
         {
             _binanceClient = binanceClient;
         }
-
         public IRuleResult Result(StrategyModel strategyModel)
         {
             var errors = string.Empty;
@@ -24,7 +23,7 @@ namespace Solbo.Strategy.Alfa.Trading
                 var priceResponse = _binanceClient.Spot.Market.GetPrice(strategyModel.Symbol);
                 if (priceResponse.Success)
                 {
-                    //priceResponse.Data.Price
+                    strategyModel.Communication.CurrentPrice = priceResponse.Data.Price;
                 }
                 else
                 {
