@@ -1,6 +1,11 @@
-﻿using Quartz;
+﻿using Binance.Net;
+using Binance.Net.Interfaces;
+using Binance.Net.Objects.Spot;
+using CryptoExchange.Net.Authentication;
+using Quartz;
 using Solbo.Strategy.Alfa.Models;
 using Solbo.Strategy.Alfa.Rules;
+using Solbo.Strategy.Alfa.Trading;
 using Solbo.Strategy.Alfa.Verificators.Storage;
 using Solbo.Strategy.Alfa.Verificators.Strategy;
 using SolBo.Shared.Services;
@@ -11,12 +16,13 @@ using System.Threading.Tasks;
 
 namespace Solbo.Strategy.Alfa.Job
 {
-    [DisallowConcurrentExecution]
+    //[DisallowConcurrentExecution]
     public class StrategyJob : IJob
     {
         private readonly IFileService _fileService;
         private readonly ILoggingService _loggingService;
-
+        
+        private IBinanceClient _binanceClient;
         private ICollection<IAlfaRule> _rules;
         public StrategyJob(
             IFileService fileService,
@@ -39,8 +45,16 @@ namespace Solbo.Strategy.Alfa.Job
                 if (jobPerSymbol is null)
                     return;
 
+                _binanceClient = new BinanceClient(new BinanceClientOptions
+                {
+                    ApiCredentials = new ApiCredentials(jobArgs.Exchange.Binance.ApiKey, jobArgs.Exchange.Binance.ApiSecret)
+                });
+
                 _rules.Add(new StrategyModelVerificator());
                 _rules.Add(new ClearOnStartupVerificator(_fileService, context.PreviousFireTimeUtc, strategyName));
+
+                _rules.Add(new BinanceSymbolRule(_binanceClient));
+                _rules.Add(new BinanceSymbolPriceRule(_binanceClient));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

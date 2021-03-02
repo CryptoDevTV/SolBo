@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SolBo.Shared.Domain.Configs;
 using SolBo.Shared.Services;
 using SolBo.Shared.Strategies;
 using System;
@@ -13,7 +12,7 @@ namespace SolBo.Agent.DI
 {
     public class DependencyProvider
     {
-        public static IServiceProvider Get(App app, List<PluginLoader> loaders)
+        public static IServiceProvider Get(List<PluginLoader> loaders)
         {
             var services = new ServiceCollection();
 
@@ -42,25 +41,6 @@ namespace SolBo.Agent.DI
                     CaptureMessageProperties = true
                 });
             });
-            #endregion
-
-            #region Exchanges
-            //services.AddTransient<IBinanceClient, BinanceClient>();
-            //if (app.Exchange.Type == ExchangeType.Binance && !app.Exchange.IsInTestMode)
-            //{
-            //    services.AddTransient<IBinanceClient>(s => new BinanceClient(new BinanceClientOptions
-            //    {
-            //        ApiCredentials = new ApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret)
-            //    }));
-            //}
-            //services.AddTransient<IKucoinClient, KucoinClient>();
-            //if (app.Exchange.Type == ExchangeType.KuCoin && !app.Exchange.IsInTestMode)
-            //{
-            //    services.AddTransient<IKucoinClient>(s => new KucoinClient(new KucoinClientOptions
-            //    {
-            //        ApiCredentials = new KucoinApiCredentials(app.Exchange.ApiKey, app.Exchange.ApiSecret, app.Exchange.PassPhrase)
-            //    }));
-            //}
             #endregion
 
             #region Services

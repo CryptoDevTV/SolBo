@@ -1,6 +1,11 @@
-﻿using Quartz;
+﻿using Kucoin.Net;
+using Kucoin.Net.Interfaces;
+using Kucoin.Net.Objects;
+using Quartz;
 using Solbo.Strategy.Beta.Models;
 using Solbo.Strategy.Beta.Rules;
+using Solbo.Strategy.Beta.Trading;
+using Solbo.Strategy.Beta.Verificators.Storage;
 using Solbo.Strategy.Beta.Verificators.Strategy;
 using SolBo.Shared.Services;
 using System;
@@ -10,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Solbo.Strategy.Beta.Job
 {
-    [DisallowConcurrentExecution]
+    //[DisallowConcurrentExecution]
     public class StrategyJob : IJob
     {
         private readonly IFileService _fileService;
         private readonly ILoggingService _loggingService;
-
+        private IKucoinClient _kucoinClient;
         private ICollection<IBetaRules> _rules;
         public StrategyJob(
             IFileService fileService,
@@ -38,7 +43,16 @@ namespace Solbo.Strategy.Beta.Job
                 if (jobPerSymbol is null)
                     return;
 
+                _kucoinClient = new KucoinClient(new KucoinClientOptions
+                {
+                    ApiCredentials = new KucoinApiCredentials(jobArgs.Exchange.Kucoin.ApiKey, jobArgs.Exchange.Kucoin.ApiSecret, jobArgs.Exchange.Kucoin.PassPhrase)
+                });
+
                 _rules.Add(new StrategyModelVerificator());
+                _rules.Add(new ClearOnStartupVerificator(_fileService, context.PreviousFireTimeUtc, strategyName));
+
+                _rules.Add(new KucoinSymbolRule(_kucoinClient));
+                _rules.Add(new KucoinSymbolPriceRule(_kucoinClient));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

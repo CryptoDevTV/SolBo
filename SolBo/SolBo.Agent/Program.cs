@@ -56,7 +56,7 @@ namespace SolBo.Agent
             {
                 var loaders = GetPluginLoaders();
 
-                var servicesProvider = DependencyProvider.Get(app, loaders);
+                var servicesProvider = DependencyProvider.Get(loaders);
 
                 var jobFactory = new JobFactory(servicesProvider);
 

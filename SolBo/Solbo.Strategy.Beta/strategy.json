@@ -10,16 +10,30 @@
   },
   "pairs": [
     {
-      "symbol": "ADABTC",
-      "text": "beta_firstpair"
+      "symbol": "BTC-USDT",
+      "buydown": 9,
+      "sellup": 6.1,
+      "average": 3,
+      "fundpercentage": 90,
+      "averagetype": 1,
+      "selltype": 1,
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": true
     },
     {
-      "symbol": "ALGOBTC",
-      "text": "beta_secondpair"
-    },
-    {
-      "symbol": "ETHBTC",
-      "text": "beta_thirdpair"
+      "symbol": "ETH-USDT",
+      "buydown": 8,
+      "sellup": 5.1,
+      "average": 2,
+      "fundpercentage": 80,
+      "averagetype": 1,
+      "selltype": 1,
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": false
     }
   ]
 }
