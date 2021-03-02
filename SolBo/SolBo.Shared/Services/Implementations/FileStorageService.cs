@@ -18,13 +18,13 @@ namespace SolBo.Shared.Services.Implementations
 
         public string CreateBackup(string symbol)
         {
-            var backupPath = GlobalConfig.BackupPriceFile(symbol);
-            File.Copy(GlobalConfig.PriceFile(symbol), backupPath, true);
+            var backupPath = GlobalConfig.PriceFileBackup("",symbol);
+            File.Copy(GlobalConfig.PriceFile("",symbol), backupPath, true);
             return backupPath;
         }
 
         public bool Exist(string symbol)
-            => File.Exists(GlobalConfig.PriceFile(symbol));
+            => File.Exists(GlobalConfig.PriceFile("",symbol));
 
         public ICollection<decimal> GetValues()
         {

@@ -3,8 +3,8 @@ using SolBo.Shared.Strategies.Predefined.Results;
 
 namespace Solbo.Strategy.Alfa.Rules
 {
-    internal interface IAlfaRule
+    internal interface IExchangeRule
     {
-        IRuleResult Result(StrategyModel strategyModel);
+        IRuleResult Result(StrategyRootExchange strategyRootExchange);
     }
 }

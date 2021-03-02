@@ -5,12 +5,12 @@ using SolBo.Shared.Strategies.Predefined.Results;
 
 namespace Solbo.Strategy.Beta.Verificators.Exchange
 {
-    internal class StrategyExchangeKucoinVerificator : IBetaRules
+    internal class ExchangeKucoinVerificator : IExchangeRule
     {
-        public IRuleResult Result(StrategyRootModel strategyRootModel)
+        public IRuleResult Result(StrategyRootExchange strategyRootExchange)
         {
-            var validator = new StrategyExchangeKucoinValidator();
-            var result = validator.Validate(strategyRootModel.Exchange.Kucoin);
+            var validator = new ExchangeKucoinValidator();
+            var result = validator.Validate(strategyRootExchange.Kucoin);
 
             return new RuleResult(result.ToString());
         }

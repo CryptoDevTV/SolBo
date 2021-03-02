@@ -5,12 +5,12 @@ using SolBo.Shared.Strategies.Predefined.Results;
 
 namespace Solbo.Strategy.Alfa.Verificators.Exchange
 {
-    internal class StrategyRootExchangeVerificator : IAlfaRule
+    internal class ExchangeVerificator : IExchangeRule
     {
-        public IRuleResult Result(StrategyRootModel strategyRootModel)
+        public IRuleResult Result(StrategyRootExchange strategyRootExchange)
         {
-            var validator = new StrategyRootExchangeValidator();
-            var result = validator.Validate(strategyRootModel.Exchange);
+            var validator = new ExchangeValidator();
+            var result = validator.Validate(strategyRootExchange);
 
             return new RuleResult(result.ToString());
         }

@@ -3,9 +3,9 @@ using Solbo.Strategy.Alfa.Models;
 
 namespace Solbo.Strategy.Alfa.Validators.Exchange
 {
-    public class StrategyRootExchangeValidator : AbstractValidator<StrategyRootExchange>
+    public class ExchangeValidator : AbstractValidator<StrategyRootExchange>
     {
-        public StrategyRootExchangeValidator()
+        public ExchangeValidator()
         {
             RuleFor(ex => ex.Binance).NotNull();
             RuleFor(ex => ex.Binance.ExchangeType).Equal(ex => ex.ActiveExchangeType);

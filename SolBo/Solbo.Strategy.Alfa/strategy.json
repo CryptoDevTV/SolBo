@@ -3,36 +3,36 @@
     "activeexchangetype": 0,
     "binance": {
       "exchangetype": 0,
-      "apikey": "binance_apikey_here",
-      "apisecret": "binance_apisecret_here"
+      "apikey": "binance_apikey",
+      "apisecret": "binance_apisecret"
     }
   },
   "pairs": [
     {
       "symbol": "BTCUSDC",
-      "buydown": 4.2,
+      "buydown": 9,
       "sellup": 6.1,
       "average": 3,
-      "stoplossdown": 12,
       "fundpercentage": 90,
-      "clearonstartup": false,
-      "stopLosspausecycles": 3,
       "averagetype": 1,
       "selltype": 1,
-      "commissiontype": 1
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": false
     },
     {
       "symbol": "ETHUSDC",
-      "buydown": 4.2,
+      "buydown": 1,
       "sellup": 6.1,
       "average": 3,
-      "stoplossdown": 12,
       "fundpercentage": 90,
-      "clearonstartup": false,
-      "stopLosspausecycles": 3,
       "averagetype": 1,
       "selltype": 1,
-      "commissiontype": 1
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": false
     }
   ]
 }

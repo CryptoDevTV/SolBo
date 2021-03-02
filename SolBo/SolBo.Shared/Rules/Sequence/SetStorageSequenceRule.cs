@@ -15,7 +15,7 @@ namespace SolBo.Shared.Rules.Sequence
         }
         public IRuleResult RuleExecuted(Solbot solbot)
         {
-            var storagePath = GlobalConfig.PriceFile(solbot.Strategy.AvailableStrategy.Symbol);
+            var storagePath = GlobalConfig.PriceFile("",solbot.Strategy.AvailableStrategy.Symbol);
 
             var result = new SequencedRuleResult();
             try

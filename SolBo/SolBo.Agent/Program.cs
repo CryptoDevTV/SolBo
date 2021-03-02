@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Listener;
 using SolBo.Agent.DI;
 using SolBo.Agent.Factories;
 using SolBo.Shared.Domain.Configs;
@@ -80,15 +79,13 @@ namespace SolBo.Agent
 
                         var strategyDefined = app.Strategies.FirstOrDefault(s => s.Name == strategy?.Name());
 
-                        if(!(strategyDefined is null))
+                        if (!(strategyDefined is null))
                         {
-                            var runtimeJobs = strategy?.StrategyRuntime(strategyDefined.Pairs);
-
-                            foreach (var runtime in runtimeJobs)
+                            foreach (var pair in strategyDefined.Pairs)
                             {
-                                var job = strategyDefined.Pairs.FirstOrDefault(j => j.Symbol == runtime.Item3);
+                                var runtime = strategy?.StrategyRuntime(pair);
 
-                                switch (job.IntervalType)
+                                switch (pair.IntervalType)
                                 {
                                     case IntervalType.ONETIME:
                                         {
@@ -98,21 +95,21 @@ namespace SolBo.Agent
                                     case IntervalType.SECONDS:
                                         {
                                             runtime.Item2.WithSimpleSchedule(x => x
-                                                .WithIntervalInSeconds(job.Interval)
+                                                .WithIntervalInSeconds(pair.Interval)
                                                 .RepeatForever());
                                         }
                                         break;
                                     case IntervalType.MINUTES:
                                         {
                                             runtime.Item2.WithSimpleSchedule(x => x
-                                                .WithIntervalInMinutes(job.Interval)
+                                                .WithIntervalInMinutes(pair.Interval)
                                                 .RepeatForever());
                                         }
                                         break;
                                     case IntervalType.HOURS:
                                         {
                                             runtime.Item2.WithSimpleSchedule(x => x
-                                                .WithIntervalInHours(job.Interval)
+                                                .WithIntervalInHours(pair.Interval)
                                                 .RepeatForever());
                                         }
                                         break;

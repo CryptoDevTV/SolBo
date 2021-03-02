@@ -4,9 +4,9 @@ using SolBo.Shared.Strategies.Predefined.Exchanges;
 
 namespace Solbo.Strategy.Beta.Validators.Exchange
 {
-    public class StrategyExchangeKucoinValidator : AbstractValidator<StrategyExchangeKucoin>
+    public class ExchangeKucoinValidator : AbstractValidator<StrategyExchangeKucoin>
     {
-        public StrategyExchangeKucoinValidator()
+        public ExchangeKucoinValidator()
         {
             RuleFor(ex => ex.ApiKey).NotEmpty();
             RuleFor(ex => ex.ApiSecret).NotEmpty();

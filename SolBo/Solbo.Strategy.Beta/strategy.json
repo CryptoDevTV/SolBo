@@ -11,15 +11,15 @@
   "pairs": [
     {
       "symbol": "ADABTC",
-      "text": "beta_up"
+      "text": "beta_firstpair"
     },
     {
       "symbol": "ALGOBTC",
-      "text": "beta_down"
+      "text": "beta_secondpair"
     },
     {
-      "symbol": "TESTBTC",
-      "text": "tst"
+      "symbol": "ETHBTC",
+      "text": "beta_thirdpair"
     }
   ]
 }

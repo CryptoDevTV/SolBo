@@ -4,9 +4,9 @@ using SolBo.Shared.Strategies.Predefined.Exchanges;
 
 namespace Solbo.Strategy.Alfa.Validators.Exchange
 {
-    public class StrategyExchangeBinanceValidator : AbstractValidator<StrategyExchangeBinance>
+    public class ExchangeBinanceValidator : AbstractValidator<StrategyExchangeBinance>
     {
-        public StrategyExchangeBinanceValidator()
+        public ExchangeBinanceValidator()
         {
             RuleFor(ex => ex.ApiKey).NotEmpty();
             RuleFor(ex => ex.ApiSecret).NotEmpty();

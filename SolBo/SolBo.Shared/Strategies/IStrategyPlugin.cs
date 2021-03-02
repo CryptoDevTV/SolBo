@@ -2,14 +2,13 @@
 using Quartz;
 using SolBo.Shared.Domain.Configs;
 using System;
-using System.Collections.Generic;
 
 namespace SolBo.Shared.Strategies
 {
     public interface IStrategyPlugin
     {
         string Name();
-        IEnumerable<Tuple<IJobDetail, TriggerBuilder, string>> StrategyRuntime(IEnumerable<Pair> pairs);
+        Tuple<IJobDetail, TriggerBuilder, string> StrategyRuntime(Pair pair);
         void Configure(IServiceCollection services);
     }
 }

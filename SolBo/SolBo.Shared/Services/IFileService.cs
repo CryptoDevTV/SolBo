@@ -6,8 +6,11 @@ namespace SolBo.Shared.Services
 {
     public interface IFileService
     {
-        Task SetAsync<T>(string fileName, T objectToSerialize);
-        Task<T> GetAsync<T>(string fileName);
+        Task SerializeAsync<T>(string fileName, T objectToSerialize);
+        Task<T> DeserializeAsync<T>(string fileName);
+        bool Exist(string path);
+        void CreateBackup(string path, string backupPath);
+        void ClearFile(string path);
     }
 
     public class FileService : IFileService
@@ -21,17 +24,27 @@ namespace SolBo.Shared.Services
                 WriteIndented = true
             };
         }
-
-        public async Task<T> GetAsync<T>(string fileName)
+        public async Task<T> DeserializeAsync<T>(string fileName)
         {
             using FileStream fs = File.OpenRead(fileName);
             return await JsonSerializer.DeserializeAsync<T>(fs, _options);
         }
-
-        public async Task SetAsync<T>(string fileName, T objectToSerialize)
+        public async Task SerializeAsync<T>(string fileName, T objectToSerialize)
         {
             using FileStream fs = File.Create(fileName);
             await JsonSerializer.SerializeAsync(fs, objectToSerialize, options: _options);
+        }
+        public bool Exist(string path)
+            => File.Exists(path);
+        public void CreateBackup(string path, string backupPath)
+        {
+            File.Copy(path, backupPath, true);
+        }
+        public void ClearFile(string path)
+        {
+            FileStream fileStream = File.Open(path, FileMode.Open);
+            fileStream.SetLength(0);
+            fileStream.Close(); // This flushes the content, too.
         }
     }
 }

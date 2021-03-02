@@ -7,17 +7,14 @@ namespace Solbo.Strategy.Beta.Verificators.Strategy
 {
     internal class StrategyModelVerificator : IBetaRules
     {
-        public IRuleResult Result(StrategyRootModel strategyRootModel)
+        public IRuleResult Result(StrategyModel strategyModel)
         {
             var validator = new StrategyModelValidator();
             var errors = string.Empty;
-            foreach (var item in strategyRootModel.Pairs)
+            var result = validator.Validate(strategyModel);
+            if (!result.IsValid)
             {
-                var result = validator.Validate(item);
-                if (!result.IsValid)
-                {
-                    errors += $"{item.Symbol} - {result}";
-                }
+                errors = $"{result}";
             }
             return new RuleResult(errors);
         }
