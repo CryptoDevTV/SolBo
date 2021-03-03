@@ -55,6 +55,7 @@ namespace Solbo.Strategy.Alfa.Job
 
                 _rules.Add(new BinanceSymbolRule(_binanceClient));
                 _rules.Add(new BinanceSymbolPriceRule(_binanceClient));
+                _rules.Add(new SavePriceRule(_fileService));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

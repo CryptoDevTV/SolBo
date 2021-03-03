@@ -11,6 +11,7 @@ namespace SolBo.Shared.Services
         bool Exist(string path);
         void CreateBackup(string path, string backupPath);
         void ClearFile(string path);
+        void SaveValue(string filePath, decimal val);
     }
 
     public class FileService : IFileService
@@ -45,6 +46,11 @@ namespace SolBo.Shared.Services
             FileStream fileStream = File.Open(path, FileMode.Open);
             fileStream.SetLength(0);
             fileStream.Close(); // This flushes the content, too.
+        }
+        public void SaveValue(string filePath, decimal val)
+        {
+            using StreamWriter writer = new StreamWriter(filePath, true);
+            writer.WriteLine(val);
         }
     }
 }

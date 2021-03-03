@@ -53,6 +53,7 @@ namespace Solbo.Strategy.Beta.Job
 
                 _rules.Add(new KucoinSymbolRule(_kucoinClient));
                 _rules.Add(new KucoinSymbolPriceRule(_kucoinClient));
+                _rules.Add(new SavePriceRule(_fileService));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 
