@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,6 +15,7 @@ namespace SolBo.Shared.Services
         void CreateBackup(string path, string backupPath);
         void ClearFile(string path);
         void SaveValue(string filePath, decimal val);
+        IEnumerable<decimal> GetValues(string filePath, int numbersToTake = 0);
     }
 
     public class FileService : IFileService
@@ -51,6 +55,25 @@ namespace SolBo.Shared.Services
         {
             using StreamWriter writer = new StreamWriter(filePath, true);
             writer.WriteLine(val);
+        }
+
+        public IEnumerable<decimal> GetValues(string filePath, int numbersToTake = 0)
+        {
+            var queue = new Queue<decimal>(numbersToTake);
+
+            using FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using BufferedStream bs = new BufferedStream(fs);
+            using StreamReader sr = new StreamReader(bs);
+            while (!sr.EndOfStream)
+            {
+                if (queue.Count == numbersToTake)
+                {
+                    queue.Dequeue();
+                }
+
+                queue.Enqueue(Convert.ToDecimal(sr.ReadLine()));
+            }
+            return queue.ToList();
         }
     }
 }

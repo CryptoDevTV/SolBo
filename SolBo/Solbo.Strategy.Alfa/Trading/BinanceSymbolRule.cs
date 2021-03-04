@@ -6,7 +6,6 @@ using SolBo.Shared.Extensions;
 using SolBo.Shared.Strategies.Predefined.Results;
 using System;
 using System.Linq;
-using System.Text.Json;
 
 namespace Solbo.Strategy.Alfa.Trading
 {
@@ -33,7 +32,7 @@ namespace Solbo.Strategy.Alfa.Trading
 
                     if (!(symbol is null) && symbol.Status == SymbolStatus.Trading)
                     {
-                        strategyModel.Communication.SymbolParsed = JsonSerializer.Serialize(symbol);
+                        strategyModel.Communication.BinanceSymbol = symbol;
                     }
                     else
                     {

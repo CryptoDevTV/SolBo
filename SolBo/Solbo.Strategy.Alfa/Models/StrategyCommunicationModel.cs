@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Binance.Net.Objects.Spot.MarketData;
 
 namespace Solbo.Strategy.Alfa.Models
 {
     public class StrategyCommunicationModel
     {
         public decimal? CurrentPrice { get; set; }
-        public string SymbolParsed { get; set; }
+        public BinanceSymbol BinanceSymbol { get; set; }
+        public decimal CurrentAverage { get; set; }
     }
 }

@@ -15,9 +15,9 @@ namespace Solbo.Strategy.Alfa.Validators.Strategy
             RuleFor(m => m.FundPercentage).NotEmpty().GreaterThan(0).LessThanOrEqualTo(100);
             RuleFor(m => m.ClearOnStartup).Must(m => m == true || m == false);
             RuleFor(m => m.StopLossPauseCycles).NotEmpty().GreaterThanOrEqualTo(0);
-            RuleFor(m => m.AverageType).NotEmpty().IsInEnum();
-            RuleFor(m => m.SellType).NotEmpty().IsInEnum();
-            RuleFor(m => m.CommissionType).NotEmpty().IsInEnum();
+            RuleFor(m => m.AverageType).IsInEnum();
+            RuleFor(m => m.SellType).IsInEnum();
+            RuleFor(m => m.CommissionType).IsInEnum();
         }
     }
 }
