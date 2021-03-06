@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Solbo.Strategy.Beta.Trading
 {
-    public class AveragePriceRule : IBetaRules
+    public class AveragePriceRule : IBetaRule
     {
         private readonly IFileService _fileService;
         public AveragePriceRule(IFileService fileService)

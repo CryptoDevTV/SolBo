@@ -19,7 +19,7 @@
       "commissiontype": 1,
       "stoplossdown": 12,
       "stoplosspausecycles": 3,
-      "clearonstartup": false
+      "clearonstartup": true
     },
     {
       "symbol": "ETHUSDC",
@@ -32,7 +32,7 @@
       "commissiontype": 1,
       "stoplossdown": 12,
       "stoplosspausecycles": 3,
-      "clearonstartup": false
+      "clearonstartup": true
     }
   ]
 }

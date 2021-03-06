@@ -6,16 +6,16 @@ namespace SolBo.Shared.Strategies
 {
     public abstract class StrategyPluginBase
     {
-        protected string ConfigPath(string pluginName)
-            => Path.Combine(AppContext.BaseDirectory, "strategies", pluginName, "strategy.json");
-
+        private readonly string StrategiesFolder = "strategies";
+        protected string StrategyConfigPath(string pluginName)
+            => ConfigPath(pluginName, "strategy.json");
         protected Tuple<IJobDetail, TriggerBuilder, string> CreateStrategy<T>(string name, string symbol) where T : IJob
         {
             var jobDetail = JobBuilder.Create<T>()
                     .WithIdentity($"{name}_{symbol}_Job")
                     .Build();
 
-            jobDetail.JobDataMap["path"] = ConfigPath(name);
+            jobDetail.JobDataMap["path"] = StrategyConfigPath(name);
             jobDetail.JobDataMap["name"] = name;
             jobDetail.JobDataMap["symbol"] = symbol;
 
@@ -25,5 +25,7 @@ namespace SolBo.Shared.Strategies
 
             return new Tuple<IJobDetail, TriggerBuilder, string>(jobDetail, jobBuilder, symbol);
         }
+        private string ConfigPath(string pluginName, string fileName)
+            => Path.Combine(AppContext.BaseDirectory, StrategiesFolder, pluginName, fileName);
     }
 }

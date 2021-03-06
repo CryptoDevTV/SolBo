@@ -8,7 +8,7 @@ using System;
 
 namespace Solbo.Strategy.Beta.Trading
 {
-    public class SavePriceRule : IBetaRules
+    public class SavePriceRule : IBetaRule
     {
         private readonly IFileService _fileService;
         public SavePriceRule(IFileService fileService)

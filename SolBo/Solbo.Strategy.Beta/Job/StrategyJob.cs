@@ -21,7 +21,7 @@ namespace Solbo.Strategy.Beta.Job
         private readonly IFileService _fileService;
         private readonly ILoggingService _loggingService;
         private IKucoinClient _kucoinClient;
-        private ICollection<IBetaRules> _rules;
+        private ICollection<IBetaRule> _rules;
         public StrategyJob(
             IFileService fileService,
             ILoggingService loggingService)
@@ -31,13 +31,13 @@ namespace Solbo.Strategy.Beta.Job
         }
         public async Task Execute(IJobExecutionContext context)
         {
-            _rules = new HashSet<IBetaRules>();
+            _rules = new HashSet<IBetaRule>();
             try
             {
                 var strategyName = context.JobDetail.JobDataMap["name"] as string;
-                var path = context.JobDetail.JobDataMap["path"] as string;
-                var jobArgs = await _fileService.DeserializeAsync<StrategyRootModel>(path);
+                var strategyPath = context.JobDetail.JobDataMap["path"] as string;
                 var symbol = context.JobDetail.JobDataMap["symbol"] as string;
+                var jobArgs = await _fileService.DeserializeAsync<StrategyRootModel>(strategyPath);
                 var jobPerSymbol = jobArgs.Pairs.FirstOrDefault(j => j.Symbol == symbol);
 
                 if (jobPerSymbol is null)
@@ -55,6 +55,7 @@ namespace Solbo.Strategy.Beta.Job
                 _rules.Add(new KucoinSymbolPriceRule(_kucoinClient));
                 _rules.Add(new SavePriceRule(_fileService));
                 _rules.Add(new AveragePriceRule(_fileService));
+                _rules.Add(new CreateStorageRule(_fileService, strategyName));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

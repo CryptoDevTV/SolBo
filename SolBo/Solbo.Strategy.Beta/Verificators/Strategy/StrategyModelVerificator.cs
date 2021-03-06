@@ -5,7 +5,7 @@ using SolBo.Shared.Strategies.Predefined.Results;
 
 namespace Solbo.Strategy.Beta.Verificators.Strategy
 {
-    internal class StrategyModelVerificator : IBetaRules
+    internal class StrategyModelVerificator : IBetaRule
     {
         public IRuleResult Result(StrategyModel strategyModel)
         {

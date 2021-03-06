@@ -8,11 +8,11 @@ using System;
 
 namespace Solbo.Strategy.Alfa.Trading
 {
-    public class SavePriceRule : IAlfaRule
+    public class CreateStorageRule : IAlfaRule
     {
         private readonly IFileService _fileService;
         private readonly string _strategy;
-        public SavePriceRule(
+        public CreateStorageRule(
             IFileService fileService,
             string strategy)
         {
@@ -24,9 +24,20 @@ namespace Solbo.Strategy.Alfa.Trading
             var errors = string.Empty;
             try
             {
-                _fileService.SaveValue(
-                    GlobalConfig.PriceFile(_strategy, strategyModel.Symbol),
-                    strategyModel.Communication.CurrentPrice.GetValueOrDefault());
+                var storageFile = GlobalConfig.StorageFile(_strategy, strategyModel.Symbol);
+                if (!_fileService.Exist(storageFile))
+                {
+                    var newStorage = new StorageRootModel
+                    {
+                        Action = new StorageActionModel
+                        {
+                            BoughtPrice = 0m,
+                            StopLossCurrentCycle = 0,
+                            StopLossReached = false
+                        }
+                    };
+                    SyncExt.RunSync(() => _fileService.SerializeAsync(storageFile, newStorage));
+                }
             }
             catch (Exception ex)
             {

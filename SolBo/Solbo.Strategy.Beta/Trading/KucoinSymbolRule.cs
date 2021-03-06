@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Solbo.Strategy.Beta.Trading
 {
-    internal class KucoinSymbolRule : IBetaRules
+    internal class KucoinSymbolRule : IBetaRule
     {
         private readonly IKucoinClient _kucoinClient;
         public KucoinSymbolRule(

@@ -33,6 +33,22 @@ namespace Solbo.Strategy.Alfa.Verificators.Storage
                     _fileService.CreateBackup(priceFile, backupFile);
                     _fileService.ClearFile(priceFile);
                 }
+                var storageFile = GlobalConfig.StorageFile(_strategy, strategyModel.Symbol);
+                var backupStorageFile = GlobalConfig.StorageFileBackup(_strategy, strategyModel.Symbol);
+                if (_fileService.Exist(storageFile))
+                {
+                    _fileService.CreateBackup(storageFile, backupStorageFile);
+                    var newStorage = new StorageRootModel
+                    {
+                        Action = new StorageActionModel
+                        {
+                            BoughtPrice = 0m,
+                            StopLossCurrentCycle = 0,
+                            StopLossReached = false
+                        }
+                    };
+                    _fileService.SerializeAsync(storageFile, newStorage).RunSynchronously();
+                }
             }
             return new RuleResult(errors);
         }

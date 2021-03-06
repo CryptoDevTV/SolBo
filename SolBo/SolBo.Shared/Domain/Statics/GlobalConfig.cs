@@ -12,6 +12,13 @@ namespace SolBo.Shared.Domain.Statics
             var backupFileName = $"{symbol}_backup_{string.Format("{0:yyyyMMddHHmmss}", DateTime.Now)}";
             return Path.Combine(Directory.GetCurrentDirectory(), "strategies", strategy, $"{backupFileName}.txt");
         }
+        public static string StorageFile(string strategy, string symbol)
+            => Path.Combine(Directory.GetCurrentDirectory(), "strategies", strategy, $"storage_{symbol}.json");
+        public static string StorageFileBackup(string strategy, string symbol)
+        {
+            var backupFileName = $"storage_{symbol}_backup_{string.Format("{0:yyyyMMddHHmmss}", DateTime.Now)}";
+            return Path.Combine(Directory.GetCurrentDirectory(), "strategies", strategy, $"{backupFileName}.json");
+        }
         public static string AppFile(string symbol)
             => Path.Combine(Directory.GetCurrentDirectory(), $"{symbol}.json");
 

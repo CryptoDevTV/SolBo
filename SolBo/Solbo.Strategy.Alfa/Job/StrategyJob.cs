@@ -37,9 +37,9 @@ namespace Solbo.Strategy.Alfa.Job
             try
             {
                 var strategyName = context.JobDetail.JobDataMap["name"] as string;
-                var path = context.JobDetail.JobDataMap["path"] as string;
-                var jobArgs = await _fileService.DeserializeAsync<StrategyRootModel>(path);
+                var strategyPath = context.JobDetail.JobDataMap["path"] as string;
                 var symbol = context.JobDetail.JobDataMap["symbol"] as string;
+                var jobArgs = await _fileService.DeserializeAsync<StrategyRootModel>(strategyPath);
                 var jobPerSymbol = jobArgs.Pairs.FirstOrDefault(j => j.Symbol == symbol);
 
                 if (jobPerSymbol is null)
@@ -55,8 +55,9 @@ namespace Solbo.Strategy.Alfa.Job
 
                 _rules.Add(new BinanceSymbolRule(_binanceClient));
                 _rules.Add(new BinanceSymbolPriceRule(_binanceClient));
-                _rules.Add(new SavePriceRule(_fileService));
+                _rules.Add(new SavePriceRule(_fileService, strategyName));
                 _rules.Add(new AveragePriceRule(_fileService));
+                _rules.Add(new CreateStorageRule(_fileService, strategyName));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

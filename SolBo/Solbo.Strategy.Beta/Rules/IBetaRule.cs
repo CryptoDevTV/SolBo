@@ -3,7 +3,7 @@ using SolBo.Shared.Strategies.Predefined.Results;
 
 namespace Solbo.Strategy.Beta.Rules
 {
-    internal interface IBetaRules
+    internal interface IBetaRule
     {
         IRuleResult Result(StrategyModel strategyModel);
     }

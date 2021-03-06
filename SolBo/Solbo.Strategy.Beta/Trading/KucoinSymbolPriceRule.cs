@@ -7,7 +7,7 @@ using System;
 
 namespace Solbo.Strategy.Beta.Trading
 {
-    internal class KucoinSymbolPriceRule : IBetaRules
+    internal class KucoinSymbolPriceRule : IBetaRule
     {
         private readonly IKucoinClient _kucoinClient;
         public KucoinSymbolPriceRule(
