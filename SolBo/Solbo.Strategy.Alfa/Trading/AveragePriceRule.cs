@@ -23,21 +23,20 @@ namespace Solbo.Strategy.Alfa.Trading
             try
             {
                 var toTake = strategyModel.Average + 1;
+
                 var lastN = _fileService.GetValues(
                     GlobalConfig.PriceFile("Alfa", strategyModel.Symbol),
                     toTake);
-                var values = lastN;
-                if (strategyModel.AverageType == AverageType.WITH_CURRENT)
+
+                var values = strategyModel.AverageType == AverageType.WITH_CURRENT
+                        ? lastN.Skip(1)
+                        : lastN.SkipLast(1);
+
+                if (values.AnyAndNotNull() && !(strategyModel.Communication.BinanceSymbol is null))
                 {
-                    values = lastN.Skip(1);
-                }
-                else
-                {
-                    values = lastN.SkipLast(1);
-                }
-                if (!(strategyModel.Communication.BinanceSymbol is null))
-                {
-                    strategyModel.Communication.CurrentAverage = decimal.Round(values.Average(), strategyModel.Communication.BinanceSymbol.QuoteAssetPrecision);
+                    strategyModel.Communication.CurrentAverage = decimal.Round(
+                            values.Average(),
+                            strategyModel.Communication.BinanceSymbol.QuoteAssetPrecision);
                 }
             }
             catch (Exception ex)

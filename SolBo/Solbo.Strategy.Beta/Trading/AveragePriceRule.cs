@@ -23,23 +23,20 @@ namespace Solbo.Strategy.Beta.Trading
             try
             {
                 var toTake = strategyModel.Average + 1;
+
                 var lastN = _fileService.GetValues(
                     GlobalConfig.PriceFile("Beta", strategyModel.Symbol),
-                    strategyModel.Average);
-                var values = lastN;
-                if (strategyModel.AverageType == AverageType.WITH_CURRENT)
-                {
-                    values = lastN.Skip(1);
-                }
-                else
-                {
-                    values = lastN.SkipLast(1);
-                }
-                if (!(strategyModel.Communication.KucoinSymbol is null))
+                    toTake);
+
+                var values = strategyModel.AverageType == AverageType.WITH_CURRENT
+                        ? lastN.Skip(1)
+                        : lastN.SkipLast(1);
+
+                if (values.AnyAndNotNull() && !(strategyModel.Communication.KucoinSymbol is null))
                 {
                     strategyModel.Communication.CurrentAverage = decimal.Round(
-                        values.Average(),
-                        BitConverter.GetBytes(decimal.GetBits(strategyModel.Communication.KucoinSymbol.QuoteIncrement)[3])[2]);
+                            values.Average(),
+                            BitConverter.GetBytes(decimal.GetBits(strategyModel.Communication.KucoinSymbol.QuoteIncrement)[3])[2]);
                 }
             }
             catch (Exception ex)
