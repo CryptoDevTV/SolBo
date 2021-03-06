@@ -56,6 +56,7 @@ namespace Solbo.Strategy.Beta.Job
                 _rules.Add(new SavePriceRule(_fileService));
                 _rules.Add(new AveragePriceRule(_fileService));
                 _rules.Add(new CreateStorageRule(_fileService, strategyName));
+                _rules.Add(new ProceedStopLossRule(_fileService, strategyName));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 
