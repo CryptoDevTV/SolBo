@@ -232,3 +232,35 @@ Nazwa pliku: `strategy.json`
   ]
 }
 ```
+
+#### Opis działania strategii Alfa i Beta
+
+Strategie Alfa i Beta implementują dokładnie tę samą logikę, różnią się jedynie giełdą na jakiej jest ona automatyzowana tak jak to zostało opisane wcześniej.
+
+Strategie te składają się z dwóch sekcji:
+
+- `exchange` - sekcja opisująca giełdę, z której dana strategia korzysta
+- `pairs` - sekcja opisująca jedną lub więcej par i ich parametry, na jakich dana strategia będzie automatyzowana.
+
+Istotnym jest by dla każdej z tych strategii wartości `activeexchangetype` i `exchangetype` były sobie równe i przyjmowały wartości:
+
+- `0` dla giełdy [Binance](https://www.binance.com/en/register?ref=T0ANYAVJ) w strategii Alfa,
+- `1` dla giełdy [KuCoin](https://www.kucoin.com/ucenter/signup?rcode=2NNePfu) w strategii Beta
+
+Istotnym również jest by pary dla danej strategii zdefiniowane w pliku `appsettings.solbo-runtime.json` odpowiadały definicji w pliku `strategy.json` dla każdej z tych strategii.
+
+#### Opis pozostałych parametrów strategii Alfa i Beta
+
+Parametr 	| Opis 	| Przykładowa wartość 	| Typ
+------------|-------|-----------------------|-----
+**symbol**|symbol opisujący parę walutową (dostępną na giełdzie) np.`BTCUSDC` gdzie `BTC` to base asset, a `USDC` to quote asset (Binance) lub `BTC-USDT` gdzie `BTC` to base asset, a `USDT` to quote asset (Kucoin) |`BTCUSDC` lub `BTC-USDT`|obowiązkowe
+**buydown**|wartość procentowa lub bezwględna (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `BUY`|2|obowiązkowe
+**sellup**|wartość procentowa lub bezwględna (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca wzrost średniej ceny po której bot składa zlecenie `SELL`|5|obowiązkowe
+**average**|liczba ostatnio pobranych wartości do wyliczania średniej ceny tj. dla wartości `5` bot będzie wyliczał średnią arytmetyczną dla 5 ostatnio pobranych wartości kursu|5|obowiązkowe
+**averagetype**|wartość określająca czy ostatnio pobrana cena ma być uwzględniana w wyliczaniu średniej|**0** - jest uwzględniana, **1** - nie jest uwzględniana|obowiązkowe
+**fundpercentage**|część kapitału posiadanego na giełdze, którym bot będzie operował wyrażona w procentach|80|obowiązkowe
+**selltype**|wartość określająca czy *sellup* w przypadku **SELL** ma być wyliczana od ceny zakupu (**0**) czy od wartości wyliczonej średniej (**1**), analogicznie dla **STOPLOSS**|**0** - od ceny zakupu, **1** - od wyliczonej średniej|obowiązkowe
+**commissiontype**|wartość określająca czy bot ma śledzić zmianę ceny w ujęciu procentowym czy bezwględnym|**0** - wartości bezwzględne ceny, **1** - wartości procentowe|obowiązkowe
+**stoplossdown**|wartość procentowa lub bezwględna (liczba całkowita - np. `4` lub wymierna dodatnia - np. `3.2`) określająca spadek średniej ceny po której bot składa zlecenie `STOP LOSS`, gdy wartość ustawiona na `0`, `STOP LOSS` jest **wyłączony**|10|obowiązkowe
+**stoplosspausecycles**|wartość określające ile cykli bot czeka przed jakimkolwiek działaniem po zrealizowaniu zlecenia typu STOP LOSS|5|obowiązkowe
+**clearonstartup**|czyszczenie pliku przechowującego ceny dla danego symbolu, **true** - czyści plik i robi kopię zapasową poprzedniego przy uruchamianiu bota, **0** - nie czyści istniejącego pliku przy uruchomieniu, pobierane ceny są zapisywane do istniejącego pliku|true|obowiązkowe
