@@ -118,3 +118,117 @@ Pozostałe parametry dla pary to:
 - `interval` - wartość określająca konkretną liczbę sekund, minut lub godzin.
 
 ## W ramach danej strategii
+
+W celu poprawnego działania Solbo musi korzystać z przynajmniej jednej strategii zadeklarowanej w podstawowym pliku konfiguracyjnym - `appsettings.solbo-runtime.json`.
+Każda strategia to niezależny od innej plugin, który jest automatycznie wykrywany przez Solbo po uruchomieniu.
+
+Strategie, które mają być automatyzowane przez Solbo powinny znajdować się w katalogu `/strategies`, przykładowe położenie folderów na podstawie wyżej opisanego pliku `appsettings.solbo-runtime.json` powinno wyglądać jak poniżej:
+
+Katalog `Solbo`:
+
+- plik uruchomieniowy `Solbo.Agent`,
+- plik konfiguracyjny `appsettings.solbo-runtime.json`,
+- inne pliki wymgane przez Solbo..
+	- Katalog `strategies`:
+		- Katalog `Alfa` przechowujący pliki: 
+			- `Solbo.Strategy.Alfa.dll` - implementacja strategii Alfa,
+			- `strategy.json` - konfiguracja strategii Alfa
+		- Katalog `Beta` przechowujący pliki:
+			- `Solbo.Strategy.Beta.dll` - implementacja strategii Beta,
+			- `strategy.json` - konfiguracja strategii Beta
+
+
+### Alfa
+
+Przykładowy plik konfiguracyjny dla strategii Alfa, zgodny z podstawowym plikiem konfiguracyjnym:
+
+Nazwa pliku: `strategy.json`
+
+```
+{
+  "exchange": {
+    "activeexchangetype": 0,
+    "binance": {
+      "exchangetype": 0,
+      "apikey": "binance_apikey",
+      "apisecret": "binance_apisecret"
+    }
+  },
+  "pairs": [
+    {
+      "symbol": "BTCUSDC",
+      "buydown": 9,
+      "sellup": 6.1,
+      "average": 3,
+      "averagetype": 0,
+      "fundpercentage": 90,
+      "selltype": 1,
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": true
+    },
+    {
+      "symbol": "ETHUSDC",
+      "buydown": 8,
+      "sellup": 5.1,
+      "average": 2,
+      "averagetype": 1,
+      "fundpercentage": 80,
+      "selltype": 1,
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": true
+    }
+  ]
+}
+```
+
+### Beta
+
+Przykładowy plik konfiguracyjny dla strategii Alfa, zgodny z podstawowym plikiem konfiguracyjnym:
+
+Nazwa pliku: `strategy.json`
+
+```
+{
+  "exchange": {
+    "activeexchangetype": 1,
+    "kucoin": {
+      "exchangetype": 1,
+      "apikey": "kucoin_apikey_here",
+      "apisecret": "kucoin_apisecret_here",
+      "passphrase": "kucoin_passphrase_here"
+    }
+  },
+  "pairs": [
+    {
+      "symbol": "BTC-USDT",
+      "buydown": 9,
+      "sellup": 6.1,
+      "average": 3,
+      "averagetype": 1,
+      "fundpercentage": 90,
+      "selltype": 1,
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": true
+    },
+    {
+      "symbol": "ETH-USDT",
+      "buydown": 8,
+      "sellup": 5.1,
+      "average": 2,
+      "averagetype": 1,
+      "fundpercentage": 80,
+      "selltype": 1,
+      "commissiontype": 1,
+      "stoplossdown": 12,
+      "stoplosspausecycles": 3,
+      "clearonstartup": false
+    }
+  ]
+}
+```
