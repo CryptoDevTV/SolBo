@@ -17,20 +17,7 @@
       "fundpercentage": 90,
       "selltype": 1,
       "commissiontype": 1,
-      "stoplossdown": 12,
-      "stoplosspausecycles": 3,
-      "clearonstartup": true
-    },
-    {
-      "symbol": "ETHUSDC",
-      "buydown": 8,
-      "sellup": 5.1,
-      "average": 2,
-      "averagetype": 1,
-      "fundpercentage": 80,
-      "selltype": 1,
-      "commissiontype": 1,
-      "stoplossdown": 12,
+      "stoplossdown": 4,
       "stoplosspausecycles": 3,
       "clearonstartup": true
     }

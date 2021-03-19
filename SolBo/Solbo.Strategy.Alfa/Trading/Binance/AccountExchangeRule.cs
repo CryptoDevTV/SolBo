@@ -8,16 +8,23 @@ using System.Text;
 
 namespace Solbo.Strategy.Alfa.Trading.Binance
 {
-    public class SellExecuteRule : IAlfaRule
+    public class AccountExchangeRule : IAlfaRule
     {
         private readonly IBinanceClient _binanceClient;
-        public SellExecuteRule(
+        public AccountExchangeRule(
             IBinanceClient binanceClient)
         {
             _binanceClient = binanceClient;
         }
         public IRuleResult Result(StrategyModel strategyModel)
         {
+            var accountInfo = _binanceClient.General.GetAccountInfo();
+
+            if (accountInfo.Success)
+            {
+
+            }
+
             throw new NotImplementedException();
         }
     }

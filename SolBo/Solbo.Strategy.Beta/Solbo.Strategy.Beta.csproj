@@ -19,10 +19,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Trading\Kucoin\" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\SolBo.Agent\bin\Debug\netcoreapp3.1\strategies\Beta&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)\strategy.json&quot; &quot;$(SolutionDir)\SolBo.Agent\bin\Debug\netcoreapp3.1\strategies\Beta&quot;" />
   </Target>

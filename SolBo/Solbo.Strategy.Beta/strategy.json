@@ -21,19 +21,6 @@
       "stoplossdown": 12,
       "stoplosspausecycles": 3,
       "clearonstartup": true
-    },
-    {
-      "symbol": "ETH-USDT",
-      "buydown": 8,
-      "sellup": 5.1,
-      "average": 2,
-      "averagetype": 1,
-      "fundpercentage": 80,
-      "selltype": 1,
-      "commissiontype": 1,
-      "stoplossdown": 12,
-      "stoplosspausecycles": 3,
-      "clearonstartup": false
     }
   ]
 }

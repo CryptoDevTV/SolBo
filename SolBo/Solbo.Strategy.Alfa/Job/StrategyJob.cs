@@ -6,6 +6,7 @@ using Quartz;
 using Solbo.Strategy.Alfa.Models;
 using Solbo.Strategy.Alfa.Rules;
 using Solbo.Strategy.Alfa.Trading;
+using Solbo.Strategy.Alfa.Trading.Binance;
 using Solbo.Strategy.Alfa.Verificators.Storage;
 using Solbo.Strategy.Alfa.Verificators.Strategy;
 using SolBo.Shared.Services;
@@ -16,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace Solbo.Strategy.Alfa.Job
 {
-    //[DisallowConcurrentExecution]
     public class StrategyJob : IJob
     {
         private readonly IFileService _fileService;
@@ -59,6 +59,15 @@ namespace Solbo.Strategy.Alfa.Job
                 _rules.Add(new AveragePriceRule(_fileService));
                 _rules.Add(new CreateStorageRule(_fileService, strategyName));
                 _rules.Add(new ProceedStopLossRule(_fileService, strategyName));
+
+                _rules.Add(new AccountExchangeRule(_binanceClient));
+
+                if(jobPerSymbol.IsStopLossOn)
+                {
+                    _rules.Add(new StopLossStepRule());
+                    _rules.Add(new StopLossPriceRule());
+                    _rules.Add(new StopLossExecuteRule(_binanceClient));
+                }
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

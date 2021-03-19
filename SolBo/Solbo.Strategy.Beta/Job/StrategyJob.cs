@@ -5,6 +5,7 @@ using Quartz;
 using Solbo.Strategy.Beta.Models;
 using Solbo.Strategy.Beta.Rules;
 using Solbo.Strategy.Beta.Trading;
+using Solbo.Strategy.Beta.Trading.Kucoin;
 using Solbo.Strategy.Beta.Verificators.Storage;
 using Solbo.Strategy.Beta.Verificators.Strategy;
 using SolBo.Shared.Services;
@@ -15,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace Solbo.Strategy.Beta.Job
 {
-    //[DisallowConcurrentExecution]
     public class StrategyJob : IJob
     {
         private readonly IFileService _fileService;
@@ -57,6 +57,15 @@ namespace Solbo.Strategy.Beta.Job
                 _rules.Add(new AveragePriceRule(_fileService));
                 _rules.Add(new CreateStorageRule(_fileService, strategyName));
                 _rules.Add(new ProceedStopLossRule(_fileService, strategyName));
+
+                _rules.Add(new AccountExchangeRule(_kucoinClient));
+
+                if (jobPerSymbol.IsStopLossOn)
+                {
+                    _rules.Add(new StopLossStepRule());
+                    _rules.Add(new StopLossPriceRule());
+                    _rules.Add(new StopLossExecuteRule(_kucoinClient));
+                }
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 
