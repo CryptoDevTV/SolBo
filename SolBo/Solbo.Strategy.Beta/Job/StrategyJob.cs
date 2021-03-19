@@ -62,10 +62,18 @@ namespace Solbo.Strategy.Beta.Job
 
                 if (jobPerSymbol.IsStopLossOn)
                 {
-                    _rules.Add(new StopLossStepRule());
+                    _rules.Add(new StopLossStepRule(_fileService, strategyName));
                     _rules.Add(new StopLossPriceRule());
                     _rules.Add(new StopLossExecuteRule(_kucoinClient));
                 }
+
+                _rules.Add(new SellStepRule(_fileService, strategyName));
+                _rules.Add(new SellPriceRule());
+                _rules.Add(new SellExecuteRule(_kucoinClient));
+
+                _rules.Add(new BuyStepRule(_fileService, strategyName));
+                _rules.Add(new BuyPriceRule());
+                _rules.Add(new BuyExecuteRule(_kucoinClient));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 

@@ -1,9 +1,8 @@
 ﻿using Solbo.Strategy.Beta.Models;
 using Solbo.Strategy.Beta.Rules;
+using SolBo.Shared.Extensions;
 using SolBo.Shared.Strategies.Predefined.Results;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Solbo.Strategy.Beta.Trading.Kucoin
 {
@@ -11,7 +10,19 @@ namespace Solbo.Strategy.Beta.Trading.Kucoin
     {
         public IRuleResult Result(StrategyModel strategyModel)
         {
-            throw new NotImplementedException();
+            var errors = string.Empty;
+            try
+            {
+                if (strategyModel.Communication.IsPossibleStopLoss)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                errors += ex.GetFullMessage();
+            }
+            return new RuleResult(errors);
         }
     }
 }

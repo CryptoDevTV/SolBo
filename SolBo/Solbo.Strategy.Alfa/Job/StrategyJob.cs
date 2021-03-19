@@ -21,7 +21,7 @@ namespace Solbo.Strategy.Alfa.Job
     {
         private readonly IFileService _fileService;
         private readonly ILoggingService _loggingService;
-        
+
         private IBinanceClient _binanceClient;
         private ICollection<IAlfaRule> _rules;
         public StrategyJob(
@@ -62,12 +62,20 @@ namespace Solbo.Strategy.Alfa.Job
 
                 _rules.Add(new AccountExchangeRule(_binanceClient));
 
-                if(jobPerSymbol.IsStopLossOn)
+                if (jobPerSymbol.IsStopLossOn)
                 {
-                    _rules.Add(new StopLossStepRule());
+                    _rules.Add(new StopLossStepRule(_fileService, strategyName));
                     _rules.Add(new StopLossPriceRule());
                     _rules.Add(new StopLossExecuteRule(_binanceClient));
                 }
+
+                _rules.Add(new SellStepRule(_fileService, strategyName));
+                _rules.Add(new SellPriceRule());
+                _rules.Add(new SellExecuteRule(_binanceClient));
+
+                _rules.Add(new BuyStepRule(_fileService, strategyName));
+                _rules.Add(new BuyPriceRule());
+                _rules.Add(new BuyExecuteRule(_binanceClient));
 
                 _loggingService.Info($"{context.JobDetail.Key.Name} - START JOB - TASKS ({_rules.Count})");
 
