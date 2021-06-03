@@ -16,13 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Binance.Net" Version="6.12.0" />
-    <PackageReference Include="Kucoin.Net" Version="2.3.4" />
-    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.3.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.12" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.12" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.1" />
-    <PackageReference Include="Quartz" Version="3.2.4" />
+    <PackageReference Include="Binance.Net" Version="6.13.3" />
+    <PackageReference Include="Kucoin.Net" Version="2.3.9" />
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.15" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.15" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.2" />
+    <PackageReference Include="Quartz" Version="3.3.2" />
     <PackageReference Include="Scrutor" Version="3.3.0" />
   </ItemGroup>
 

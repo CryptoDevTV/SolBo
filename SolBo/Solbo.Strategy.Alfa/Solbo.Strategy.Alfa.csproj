@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="9.5.3" />
-    <PackageReference Include="Quartz" Version="3.2.4" />
+    <PackageReference Include="FluentValidation" Version="10.2.3" />
+    <PackageReference Include="Quartz" Version="3.3.2" />
   </ItemGroup>
 
   <ItemGroup>
